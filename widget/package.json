@@ -1,0 +1,19 @@
+{
+  "name": "@layerzerolabs/transfer-widget",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "element.mjs",
+  "module": "element.mjs",
+  "files": [
+    "./element.mjs",
+    "./element.mjs.sha384",
+    "./element.css",
+    "./index.html"
+  ],
+  "scripts": {
+    "start": "npx serve ."
+  },
+  "devDependencies": {},
+  "dependencies": {}
+}

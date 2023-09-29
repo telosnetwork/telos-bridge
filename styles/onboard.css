@@ -1,0 +1,189 @@
+:root {
+  /* CUSTOMIZE THE COLOR  PALLETTE */
+  /* --onboard-white: white; */
+  /* --onboard-black: black; */
+  /* --onboard-primary-1: #2f80ed; */
+  --onboard-primary-100: transparent;
+  /* --onboard-primary-200: #d0d4f7; */
+  --onboard-primary-300: #fff;
+  /* --onboard-primary-400: #929bed; */
+  /* --onboard-primary-500: #6370e5; */
+  /* --onboard-primary-600: #454ea0; */
+  /* --onboard-primary-700: #323873; */
+  /* --onboard-gray-100: #ebebed; */
+  /* --onboard-gray-200: #c2c4c9; */
+  /* --onboard-gray-300: #999ca5; */
+  /* --onboard-gray-400: #707481; */
+  /* --onboard-gray-500: #33394b; */
+  --onboard-gray-600: #757575;
+  /* --onboard-gray-700: #1a1d26; */
+  /* --onboard-success-100: #d1fae3; */
+  /* --onboard-success-200: #baf7d5; */
+  /* --onboard-success-300: #a4f4c6; */
+  /* --onboard-success-400: #8df2b8; */
+  /* --onboard-success-500: #5aec99; */
+  /* --onboard-success-600: #18ce66; */
+  /* --onboard-success-700: #129b4d; */
+  /* --onboard-danger-100: #ffe5e6; */
+  /* --onboard-danger-200: #ffcccc; */
+  /* --onboard-danger-300: #ffb3b3; */
+  /* --onboard-danger-400: #ff8080; */
+  /* --onboard-danger-500: #ff4f4f; */
+  /* --onboard-danger-600: #cc0000; */
+  /* --onboard-danger-700: #660000; */
+  /* --onboard-warning-100: #ffefcc; */
+  /* --onboard-warning-200: #ffe7b3; */
+  /* --onboard-warning-300: #ffd780; */
+  /* --onboard-warning-400: #ffc74c; */
+  /* --onboard-warning-500: #ffaf00; */
+  /* --onboard-warning-600: #cc8c00; */
+  /* --onboard-warning-700: #664600; */
+
+  /* CUSTOMIZE ACCOUNT CENTER*/
+  /* --account-center-z-index */
+  /* --account-center-minimized-background */
+  /* --account-center-maximized-upper-background */
+  /* --account-center-maximized-network-section */
+  /* --account-center-maximized-app-info-section */
+  /* --account-center-minimized-address-color */
+  /* --account-center-maximized-address-color */
+  /* --account-center-maximized-account-section-background-hover */
+  /* --account-center-maximized-action-background-hover */
+  /* --account-center-minimized-chain-select-background */
+  /* --account-center-network-selector-color */
+  /* --account-center-maximized-network-selector-color */
+  /* --account-center-minimized-network-selector-color */
+  /* --account-center-app-btn-text-color */
+  /* --account-center-app-btn-background */
+  /* --account-center-app-btn-font-family */
+
+  /* CUSTOMIZE SECTIONS OF THE CONNECT MODAL */
+  /* --onboard-connect-content-width */
+  /* --onboard-connect-content-height */
+  /* --onboard-wallet-columns */
+  --onboard-connect-sidebar-background: #161616;
+  --onboard-connect-sidebar-color: #757575;
+  /* --onboard-connect-sidebar-progress-background */
+  --onboard-connect-sidebar-progress-color: #8ae06c;
+  --onboard-connect-header-background: #222222;
+  --onboard-connect-header-color: #ffffff;
+  --onboard-main-scroll-container-background: #222222;
+  /* --onboard-link-color */
+  --onboard-close-button-background: transparent;
+  --onboard-close-button-color: #fff;
+  /* --onboard-checkbox-background */
+  /* --onboard-checkbox-color */
+  --onboard-wallet-button-background: transparent;
+  /* --onboard-wallet-button-background-hover */
+  --onboard-wallet-button-color: #acacac;
+  --onboard-wallet-button-color-hover: #fff;
+  --onboard-wallet-button-border-color: #333;
+  --onboard-wallet-button-border-radius: 0;
+  /* --onboard-wallet-button-box-shadow */
+  --onboard-wallet-app-icon-border-color: transparent;
+
+  /* CUSTOMIZE THE SHARED MODAL */
+  --onboard-modal-background: #222222;
+  /* --onboard-modal-color */
+
+  /* CUSTOMIZE THE CONNECT MODAL */
+  --onboard-modal-border-radius: 0;
+  /* --onboard-modal-backdrop */
+  /* --onboard-modal-box-shadow */
+
+  /* CUSTOMIZE THE ACTION REQUIRED MODAL */
+  /* --onboard-action-required-modal-background */
+
+  /* FONTS */
+  --onboard-font-family-normal: 'Roboto Mono';
+  --onboard-font-family-semibold: 'Roboto Mono';
+  --onboard-font-family-light: 'Roboto Mono';
+
+  /* --onboard-font-size-1: 3rem; */
+  /* --onboard-font-size-2: 2.25rem; */
+  /* --onboard-font-size-3: 1.5rem; */
+  /* --onboard-font-size-4: 1.25rem; */
+  --onboard-font-size-5: 0.875rem;
+  --onboard-font-size-6: 0.75rem;
+  /* --onboard-font-size-7: 0.75rem; */
+
+  /* SPACING */
+  /* --onboard-spacing-1: 3rem; */
+  /* --onboard-spacing-2: 2rem; */
+  /* --onboard-spacing-3: 1.5rem; */
+  /* --onboard-spacing-4: 1rem; */
+  /* --onboard-spacing-5: 0.5rem; */
+
+  /* BORDER RADIUS */
+  --onboard-border-radius-1: 0;
+  --onboard-border-radius-2: 0;
+  --onboard-border-radius-3: 0;
+
+  /* SHADOWS */
+  /* --onboard-shadow-0: none; */
+  /* --onboard-shadow-1: 0px 4px 12px rgba(0, 0, 0, 0.1); */
+  /* --onboard-shadow-2: inset 0px -1px 0px rgba(0, 0, 0, 0.1); */
+
+  /* MAIN MODAL POSITIONING */
+  /* --onboard-modal-z-index */
+  /* --onboard-modal-top */
+  /* --onboard-modal-bottom */
+  /* --onboard-modal-right */
+  /* --onboard-modal-left */
+
+  /* HD WALLET ACCOUNT SELECT MODAL POSITIONING */
+  /* --onboard-account-select-modal-z-index */
+  /* --onboard-account-select-modal-top */
+  /* --onboard-account-select-modal-bottom */
+  /* --onboard-account-select-modal-right */
+  /* --onboard-account-select-modal-left */
+
+  /* MAGIC WALLET MODAL POSITIONING */
+  /* --onboard-login-modal-z-index */
+  /* --onboard-login-modal-top */
+  /* --onboard-login-modal-bottom */
+  /* --onboard-login-modal-right */
+  /* --onboard-login-modal-left */
+
+  /* HARDWARE WALLET STYLES  */
+  /* *if not set will fallback to variables with `--onboard` prefix shown above */
+
+  /* COLORS */
+  /* --account-select-modal-white: white; */
+  /* --account-select-modal-black: black; */
+  /* --account-select-modal-primary-100: #eff1fc; */
+  /* --account-select-modal-primary-200: #d0d4f7; */
+  /* --account-select-modal-primary-300: #b1b8f2; */
+  /* --account-select-modal-primary-500: #6370e5; */
+  /* --account-select-modal-primary-600: #454ea0; */
+  /* --account-select-modal-gray-100: #ebebed; */
+  /* --account-select-modal-gray-200: #c2c4c9; */
+  /* --account-select-modal-gray-300: #999ca5; */
+  /* --account-select-modal-gray-500: #33394b; */
+  /* --account-select-modal-gray-700: #1a1d26; */
+  /* --account-select-modal-danger-500: #ff4f4f; */
+
+  /* FONTS */
+  /* --account-select-modal-font-family-normal: Sofia Pro; */
+  /* --account-select-modal-font-family-light: Sofia Pro Light; */
+  /* --account-select-modal-font-size-5: 1rem; */
+  /* --account-select-modal-font-size-7: .75rem; */
+  /* --account-select-modal-font-line-height-1: 24px; */
+
+  /* SPACING */
+  /* --account-select-modal-margin-4: 1rem; */
+  /* --account-select-modal-margin-5: 0.5rem; */
+
+  /* notify STYLES */
+  /* --notify-onboard-font-family-normal */
+  /* --notify-onboard-font-size-5 */
+  /* --notify-onboard-gray-300 */
+  /* --notify-onboard-gray-600 */
+  /* --notify-onboard-border-radius */
+  /* --notify-onboard-font-size-7 */
+  /* --notify-onboard-font-size-6 */
+  /* --notify-onboard-line-height-4 */
+  /* --notify-onboard-primary-100 */
+  /* --notify-onboard-primary-400 */
+  /* --notify-onboard-main-padding */
+}
