@@ -8,14 +8,13 @@ interface CustomHtmlHeadProps {
   url?: string;
 }
 
-const titleBase = 'LayerZero';
-const defaultTitle = `${titleBase}`;
+
 const defaultDescription = '';
 const keywords = 'layerzero, blockchain, crypto, message, transaction, omnichain, bridge';
 
 export const CustomHtmlHead = (props: CustomHtmlHeadProps) => {
-  const {title, description = defaultDescription, url} = props;
-  const metaTitle = title ? `${title} | ${titleBase}` : defaultTitle;
+  const {description = defaultDescription, url} = props;
+  const metaTitle = 'Telos Bridge';
   const theme = useTheme();
   return (
     <Head>

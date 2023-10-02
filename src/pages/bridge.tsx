@@ -25,7 +25,7 @@ const BridgePage: NextPageWithLayout = () => {
 
 BridgePage.getLayout = (page) => (
   <PageLayout centered header={<AppHeader />} footer={<AppFooter />}>
-    <CustomHtmlHead title='Bridge' />
+    <CustomHtmlHead />
     {page}
   </PageLayout>
 );

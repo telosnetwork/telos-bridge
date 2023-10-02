@@ -7,6 +7,7 @@ import {createTheme, ThemeProvider} from '@/core/ui/system';
 const STORE_KEY = 'theme-preference';
 
 export const THEMES = {
+  'Telos Dark': createTheme({...baseTheme, palette: Palettes.telosDarkPalette}),
   'LayerZero Dark': createTheme({...baseTheme, palette: Palettes.lzDarkPalette}),
   'LayerZero Light': createTheme({...baseTheme, palette: Palettes.lzLightPalette}),
   Aptos: createTheme({...baseTheme, palette: Palettes.aptosPalette}),
