@@ -36,15 +36,15 @@ export const CustomHtmlHead = (props: CustomHtmlHeadProps) => {
       <meta name='publisher' content={'LayerZero'} />
       <meta name='keywords' content={keywords} />
       <meta name='distribution' content='web' />
-      {/* <meta name='og:image' content={'/share.png'} />
       <link rel='apple-touch-icon' href='/apple-touch-icon.png' />
       <link rel='apple-touch-icon' sizes='16x16' href='/favicon-16x16.png' />
       <link rel='apple-touch-icon' sizes='32x32' href='/favicon-32x32.png' />
       <link rel='apple-touch-icon' sizes='180x180' href='/apple-touch-icon.png' />
-      <link rel='mask-icon' color='#000000' href='/safari-pinned-tab.svg' />
       <link rel='icon' type='image/png' sizes='32x32' href='/favicon-32x32.png' />
       <link rel='icon' type='image/png' sizes='16x16' href='/favicon-16x16.png' />
       <link rel='shortcut icon' href='/favicon.ico' />
+      {/* <meta name='og:image' content={'/share.png'} />
+      <link rel='mask-icon' color='#000000' href='/safari-pinned-tab.svg' />
       <link rel='manifest' href='/site.webmanifest' /> */}
       <meta name='msapplication-TileColor' content={theme.palette.primary.main ?? '#000000'} />
       <meta name='theme-color' content={theme.palette.primary.main ?? '#000000'} />
