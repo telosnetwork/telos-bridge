@@ -3,14 +3,11 @@ import dynamic from 'next/dynamic';
 import Image from 'next/legacy/image';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
+import { useEffect } from 'react';
 
-import {useToggle} from '@/core/hooks/useToggle';
-import {AVAILABLE_THEMES, useUserThemePreference} from '@/core/hooks/useUserThemePreference';
+import {useUserThemePreference} from '@/core/hooks/useUserThemePreference';
 import {Bar} from '@/core/ui/Bar';
-import {Button} from '@/core/ui/Button';
 import {Icon} from '@/core/ui/Icon';
-import {ListItem as ModalListItem} from '@/core/ui/ListItem';
-import {Modal, ModalProps} from '@/core/ui/Modal';
 import {Box, styled} from '@/core/ui/system';
 
 import {DesktopOnly, MobileOnly} from './PageLayout';
@@ -43,21 +40,29 @@ const Logo = styled(Image, {name: 'Logo'})(({theme}) => ({
 export const AppHeader = observer(() => {
   const router = useRouter();
   const {pathname} = router;
-  const themeModal = useToggle();
+  const { changeUserThemePreference } = useUserThemePreference();
+  const logoStyle = {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: '16px',
+  };
+
+  useEffect(() => {
+    changeUserThemePreference('Telos Dark');
+  }, [changeUserThemePreference]);
 
   return (
     <Bar>
       <Bar.Section sx={{gap: {md: 6}}}>
-        {/* <Logo src={'/static/logo.png'} width={112} height={35} alt='' /> */}
         <Link href='/bridge' passHref legacyBehavior>
-          <NavLink pathname={pathname}>Bridge</NavLink>
+          <NavLink pathname={pathname} style={logoStyle}>
+            <Logo src={'/static/logo--tlos-acorn.svg'} width={48} height={48} alt='Telos Blockchain Logo' />
+            Telos Bridge
+          </NavLink>
         </Link>
       </Bar.Section>
       <Bar.Section>
-        <Button variant='secondary' size='md' onClick={themeModal.open} sx={{typography: 'p2'}}>
-          Change theme
-        </Button>
-        <ThemeSelectModal open={themeModal.value} onClose={themeModal.close} />
         <DesktopOnly>
           <ConnectButtons />
         </DesktopOnly>
@@ -75,54 +80,30 @@ export const AppFooter = () => {
         </Bar.Section>
       </MobileOnly>
       <Bar.Section sx={{minWidth: '300px'}}>
-        <a href='https://layerzero.network' target='_blank' rel='noreferrer'>
-          <Logo src={'/static/layerzero.svg'} height={24} width={88} alt='logo' />
+        <a href='https://telos.net' target='_blank' rel='noreferrer'>
+          <Logo src={'/static/logo--telos-full.svg'} height={24} width={88} alt='logo' />
         </a>
       </Bar.Section>
       <Bar.Section sx={{typography: 'p3'}}>
         <Box
           component='a'
-          href='https://layerzero.network'
+          href='https://telos.net'
           sx={{typography: 'link', display: 'flex', alignItems: 'center', gap: 1}}
           target='_blank'
         >
           <Icon type='globe' size={16} />
-          layerzero.network
+          telos.net
         </Box>
         <Box
           component='a'
-          href='https://layerzero.gitbook.io/'
+          href='https://docs.telos.net/'
           sx={{typography: 'link', display: 'flex', alignItems: 'center', gap: 1}}
           target='_blank'
         >
           <Icon type='file' size={16} />
-          Gitbook
+          Telos Docs
         </Box>
       </Bar.Section>
     </Bar>
-  );
-};
-
-const ThemeSelectModal = (props: Omit<ModalProps, 'title' | 'children'>) => {
-  const {changeUserThemePreference} = useUserThemePreference();
-  const {open, onClose} = props;
-  return (
-    <Modal
-      title='Select theme'
-      open={open}
-      onClose={onClose}
-      onOpenAutoFocus={(e) => e.preventDefault()}
-    >
-      {AVAILABLE_THEMES.map((theme) => (
-        <ModalListItem
-          key={theme}
-          onClick={() => {
-            changeUserThemePreference(theme);
-            onClose();
-          }}
-          bottomLeft={theme}
-        />
-      ))}
-    </Modal>
   );
 };
