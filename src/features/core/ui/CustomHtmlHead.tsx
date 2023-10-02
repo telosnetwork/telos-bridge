@@ -10,7 +10,7 @@ interface CustomHtmlHeadProps {
 
 
 const defaultDescription = '';
-const keywords = 'layerzero, blockchain, crypto, message, transaction, omnichain, bridge';
+const keywords = 'telos, tlos, blockchain, crypto, message, transaction, omnichain, bridge';
 
 export const CustomHtmlHead = (props: CustomHtmlHeadProps) => {
   const {description = defaultDescription, url} = props;
@@ -31,9 +31,9 @@ export const CustomHtmlHead = (props: CustomHtmlHeadProps) => {
       <meta charSet='utf-8' />
       <meta name='language' content='english' />
       <meta httpEquiv='content-type' content='text/html' />
-      <meta name='author' content={'LayerZero'} />
-      <meta name='designer' content={'LayerZero'} />
-      <meta name='publisher' content={'LayerZero'} />
+      <meta name='author' content={'Telos'} />
+      <meta name='designer' content={'Telos'} />
+      <meta name='publisher' content={'Telos'} />
       <meta name='keywords' content={keywords} />
       <meta name='distribution' content='web' />
       <link rel='apple-touch-icon' href='/apple-touch-icon.png' />
@@ -50,7 +50,7 @@ export const CustomHtmlHead = (props: CustomHtmlHeadProps) => {
       <meta name='theme-color' content={theme.palette.primary.main ?? '#000000'} />
       <meta name='viewport' content='width=device-width, minimum-scale=1, initial-scale=1.0' />
       <meta name='twitter:card' content='summary' />
-      <meta name='twitter:site' content='@LayerZero_Labs' />
+      <meta name='twitter:site' content='@HelloTelos' />
     </Head>
   );
 };
