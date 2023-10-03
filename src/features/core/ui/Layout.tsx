@@ -80,8 +80,8 @@ export const AppFooter = () => {
         </Bar.Section>
       </MobileOnly>
       <Bar.Section sx={{minWidth: '300px'}}>
-        <a href='https://telos.net' target='_blank' rel='noreferrer'>
-          <Logo src={'/static/logo--telos-full.svg'} height={24} width={88} alt='logo' />
+        <a href='https://layerzero.network' target='_blank' rel='noreferrer'>
+          <Logo src={'/static/layerzero.svg'} height={24} width={88} alt='logo' />
         </a>
       </Bar.Section>
       <Bar.Section sx={{typography: 'p3'}}>
