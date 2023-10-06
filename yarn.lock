@@ -2321,6 +2321,16 @@
     p-memoize "4.0.4"
     promise.obj "^0.2.0"
 
+"@layerzerolabs/ui-bridge-oft-wrapper@~0.1.20":
+  version "0.1.21"
+  resolved "https://registry.yarnpkg.com/@layerzerolabs/ui-bridge-oft-wrapper/-/ui-bridge-oft-wrapper-0.1.21.tgz#28952b90f58c7e76f1ce8004d5cc17f58d864cb7"
+  integrity sha512-DJqLpmXFomPEuAa6rj6IB5EuProcm/F1YqFSRi50HZQw7mWT30Yj/NAPA+BlBQGfgN1nyQRLZjUobM/r40aQWg==
+
+"@layerzerolabs/ui-bridge-oft@~0.1.17":
+  version "0.1.17"
+  resolved "https://registry.yarnpkg.com/@layerzerolabs/ui-bridge-oft/-/ui-bridge-oft-0.1.17.tgz#900e3474d24b73024d008d287eaf0129ac4a10d0"
+  integrity sha512-g8Id6ekdreaKlLzMqYTlSyxwVxzi7qQGjuLJD8+RaY2urXsAxdSojdew2KuGFEAGcwXABritu6XECVRZ7cDkLQ==
+
 "@layerzerolabs/ui-bridge-onft@^0.1.7":
   version "0.1.7"
   resolved "https://registry.yarnpkg.com/@layerzerolabs/ui-bridge-onft/-/ui-bridge-onft-0.1.7.tgz#b0a63fc29ea9bde9dc11a99a2ac2cc0974ceaa38"

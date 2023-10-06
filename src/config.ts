@@ -4,6 +4,8 @@ import {AppConfig, createAppConfig} from '@layerzerolabs/ui-app-config';
 import {WrappedTokenBridgeConfig} from '@layerzerolabs/ui-bridge-wrapped-token';
 import {Token} from '@layerzerolabs/ui-core';
 
+import {OnftBridgeConfig, OnftStandard} from '@layerzerolabs/ui-bridge-onft';
+
 export const wrapped_mainnet: WrappedTokenBridgeConfig = {
   version: 2,
   original: [
@@ -94,12 +96,99 @@ export const wrapped_testnet: WrappedTokenBridgeConfig = {
   ],
 };
 
+export const erc721_testnet: OnftBridgeConfig = {
+  contracts: [
+    {
+      standard: OnftStandard.ERC721,
+      address: '0xcb196127954be0b0555da5dc51432e3f8499c809',
+      chainId: 10102,
+      symbol: 'LZ721',
+      name: 'LayerZero Example ERC721',
+    },
+    {
+      standard: OnftStandard.ERC721,
+      address: '0x27918c6f5f8aed9a6dd714685daf88b582596a58',
+      chainId: 10106,
+      symbol: 'LZ721',
+      name: 'LayerZero Example ERC721',
+    },
+    {
+      standard: OnftStandard.ERC721,
+      address: '0xD8D015FbA330A12490BdAe2642b6a75F8a0bB5E5',
+      chainId: 10143,
+      symbol: 'LZ721',
+      name: 'LayerZero Example ERC721',
+    },
+  ],
+  proxy: [
+    {
+      chainId: 10143,
+      address: '0x84F041620FC54d43f18AdEe0745C5DCc84AFaC50',
+    },
+  ],
+};
+
+export const erc1155_testnet: OnftBridgeConfig = {
+  contracts: [
+    {
+      address: '0xFc13c28024Ac57B0FbfF311FccFF2dA452B7Ff26',
+      chainId: ChainId.FUJI,
+      standard: OnftStandard.ERC1155,
+    },
+    {
+      address: '0xf9fe722d05DA63265ACd909fe01BbB49701c2506',
+      chainId: ChainId.BSC_TESTNET,
+      standard: OnftStandard.ERC1155,
+    },
+    {
+      address: '0x9748733678AB402e3B0464213D7f629709A87260',
+      chainId: ChainId.ARBITRUM_GOERLI,
+      standard: OnftStandard.ERC1155,
+    },
+  ],
+  proxy: [
+    {
+      address: '0xeBc2aFc3DE72a17f42962E912d03DbA5ee8af898',
+      chainId: ChainId.FUJI,
+    },
+  ],
+};
+
+const PEPE_MAINNET = {
+  version: 2,
+  tokens: [
+    new Token(ChainId.ARBITRUM, '0x25d887Ce7a35172C62FeBFD67a1856F20FaEbB00', 18, 'PEPE'),
+    new Token(ChainId.ETHEREUM, '0x6982508145454Ce325dDbE47a25d4ec3d2311933', 18, 'PEPE'),
+    new Token(ChainId.BSC, '0x25d887Ce7a35172C62FeBFD67a1856F20FaEbB00', 18, 'PEPE'),
+  ],
+  proxy: [
+    {
+      chainId: ChainId.ETHEREUM,
+      address: '0x25d887Ce7a35172C62FeBFD67a1856F20FaEbB00',
+    },
+  ],
+  fee: true,
+  sharedDecimals: 4,
+};
+
 export const appConfig: AppConfig = createAppConfig({
   bridge: {
+    aptos: [
+      //
+    ],
+    oft: [
+      //
+      // PEPE_MAINNET
+    ],
     wrappedToken: [
       //
       wrapped_mainnet,
       // wrapped_testnet,
+    ],
+    onft: [
+      //
+      erc721_testnet,
+      erc1155_testnet,
     ],
   },
 });

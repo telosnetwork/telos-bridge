@@ -39,6 +39,8 @@
     "@layerzerolabs/ui-app-config": "~0.1.14",
     "@layerzerolabs/ui-aptos": "~1.0.7",
     "@layerzerolabs/ui-bridge-aptos": "~0.1.9",
+    "@layerzerolabs/ui-bridge-oft": "~0.1.17",
+    "@layerzerolabs/ui-bridge-oft-wrapper": "~0.1.20",
     "@layerzerolabs/ui-bridge-onft": "^0.1.7",
     "@layerzerolabs/ui-bridge-sdk": "~1.0.6",
     "@layerzerolabs/ui-bridge-wrapped-token": "~0.1.12",
