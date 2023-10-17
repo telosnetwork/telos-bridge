@@ -29,9 +29,9 @@ export const wrapped_mainnet: WrappedTokenBridgeConfig = {
       // ETH
       new Coin(ChainId.ETHEREUM, 18, 'ETH'),
       // WETH
-      new Token(ChainId.TELOS, '0xA0fB8cd450c8Fd3a11901876cD5f17eB47C6bc50', 18, 'WETH'),
-      new Token(ChainId.ARBITRUM, '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1', 18, 'WETH'),
-      new Token(ChainId.POLYGON, '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619', 18, 'WETH'),
+      new Token(ChainId.TELOS, '0xA0fB8cd450c8Fd3a11901876cD5f17eB47C6bc50', 18, 'ETH'),
+      new Token(ChainId.ARBITRUM, '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1', 18, 'ETH'),
+      new Token(ChainId.POLYGON, '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619', 18, 'ETH'),
     ],
     [
       // USDT
@@ -48,7 +48,7 @@ export const wrapped_mainnet: WrappedTokenBridgeConfig = {
       // BNB
       new Coin(ChainId.BSC, 18, 'BNB'),
       // WBNB
-      new Token(ChainId.TELOS, '0x26Ed0F16e777C94A6FE798F9E20298034930Bae8', 18, 'WBNB'),
+      new Token(ChainId.TELOS, '0x26Ed0F16e777C94A6FE798F9E20298034930Bae8', 18, 'BNB'),
     ],
   ],
 };
