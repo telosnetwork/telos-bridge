@@ -17,9 +17,12 @@ export const tokenList = createTokenList([
   ['USDT', 'USDT', '0xc2132D05D31c914a87C6611C10748AEb04B58e8F', 6, 'polygon', 825, 'tether'],
   ['USDT', 'USDT', '0x9702230A8Ea53601f5cD2dc00fDBc13d4dF4A8c7', 6, 'avalanche', 825, 'tether'],
 
+  // ETH
+  ['ETH', 'ETH', null, 18, 'ethereum', 1027, 'ethereum'],
+
   // WETH
   ['WETH', 'Wrapped Ether', '0xA0fB8cd450c8Fd3a11901876cD5f17eB47C6bc50', 18, 'telos', 2396, 'weth'], // prettier-ignore
-  ['WETH', 'Wrapped Ether', '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2', 18, 'ethereum', 2396, 'weth'], // prettier-ignore
+  //['WETH', 'Wrapped Ether', '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2', 18, 'ethereum', 2396, 'weth'], // prettier-ignore
   ['WETH', 'Wrapped Ether', '0x82af49447d8a07e3bd95bd0d56f35241523fbab1', 18, 'arbitrum', 2396, 'weth'], // prettier-ignore
 
   // BTC.b
@@ -30,9 +33,12 @@ export const tokenList = createTokenList([
   ['BTC.b', 'BTC.b', '0x2297aebd383787a160dd0d9f71508148769342e3', 8, 'arbitrum', 1, 'bitcoin-avalanche-bridged-btc-b'], // prettier-ignore
   ['BTC.b', 'BTC.b', '0x152b9d0fdc40c096757f570a51e494bd4b943e50', 8, 'avalanche', 1, 'bitcoin-avalanche-bridged-btc-b'], // prettier-ignore
 
+  // BNB
+  ['BNB', 'BNB', null, 18, 'bsc', 1, 'binancecoin'],
+
   // WBNB
   ['WBNB', 'WBNB', '0x26Ed0F16e777C94A6FE798F9E20298034930Bae8', 18, 'telos', 1, 'wbnb'],
-  ['WBNB', 'WBNB', '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c', 18, 'bsc', 1, 'wbnb'],
+  //['WBNB', 'WBNB', '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c', 18, 'bsc', 1, 'wbnb'],
 ]);
 
 type TokenListItemTuple = [

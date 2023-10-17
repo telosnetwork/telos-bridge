@@ -2,7 +2,7 @@ import {ChainId} from '@layerzerolabs/lz-sdk';
 import {AppConfig, createAppConfig} from '@layerzerolabs/ui-app-config';
 
 import {WrappedTokenBridgeConfig} from '@layerzerolabs/ui-bridge-wrapped-token';
-import {Token} from '@layerzerolabs/ui-core';
+import {Coin, Token} from '@layerzerolabs/ui-core';
 
 export const wrapped_mainnet: WrappedTokenBridgeConfig = {
   version: 2,
@@ -26,11 +26,12 @@ export const wrapped_mainnet: WrappedTokenBridgeConfig = {
       new Token(ChainId.BSC, '0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d', 18, 'USDC'),
     ],
     [
+      // ETH
+      new Coin(ChainId.ETHEREUM, 18, 'ETH'),
       // WETH
-      new Token(ChainId.TELOS, '0xA0fB8cd450c8Fd3a11901876cD5f17eB47C6bc50', 18, 'WETH'),
-      new Token(ChainId.ETHEREUM, '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', 18, 'WETH'),
-      new Token(ChainId.ARBITRUM, '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1', 18, 'WETH'),
-      new Token(ChainId.POLYGON, '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619', 18, 'WETH'),
+      new Token(ChainId.TELOS, '0xA0fB8cd450c8Fd3a11901876cD5f17eB47C6bc50', 18, 'ETH'),
+      new Token(ChainId.ARBITRUM, '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1', 18, 'ETH'),
+      new Token(ChainId.POLYGON, '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619', 18, 'ETH'),
     ],
     [
       // USDT
@@ -44,9 +45,10 @@ export const wrapped_mainnet: WrappedTokenBridgeConfig = {
       new Token(ChainId.AVALANCHE, '0x152b9d0FdC40C096757F570A51E494bd4b943E50', 8, 'BTC.b'),
     ],
     [
+      // BNB
+      new Coin(ChainId.BSC, 18, 'BNB'),
       // WBNB
-      new Token(ChainId.TELOS, '0x26Ed0F16e777C94A6FE798F9E20298034930Bae8', 18, 'WBNB'),
-      new Token(ChainId.BSC, '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c', 18, 'WBNB'),
+      new Token(ChainId.TELOS, '0x26Ed0F16e777C94A6FE798F9E20298034930Bae8', 18, 'BNB'),
     ],
   ],
 };
