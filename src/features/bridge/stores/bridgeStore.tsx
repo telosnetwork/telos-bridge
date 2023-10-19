@@ -310,8 +310,8 @@ export class BridgeStore {
       return srcBalance;
     }
     if (isEvmChainId(srcChainId)) {
-      if (srcBalance.currency.symbol !== 'ETH') return srcBalance;
       if (!srcNativeCost) return undefined;
+      if (!srcBalance.currency.equals(srcNativeCost.currency)) return srcBalance;
       const maxAmount = srcBalance.subtract(srcNativeCost);
       if (maxAmount.greaterThan(0)) return maxAmount;
     }
