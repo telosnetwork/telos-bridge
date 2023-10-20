@@ -1,6 +1,5 @@
 import {ChainId} from '@layerzerolabs/lz-sdk';
 import {AppConfig, createAppConfig} from '@layerzerolabs/ui-app-config';
-
 import {WrappedTokenBridgeConfig} from '@layerzerolabs/ui-bridge-wrapped-token';
 import {Coin, Token} from '@layerzerolabs/ui-core';
 
@@ -28,9 +27,9 @@ export const wrapped_mainnet: WrappedTokenBridgeConfig = {
     [
       // ETH
       new Coin(ChainId.ETHEREUM, 18, 'ETH'),
+      new Coin(ChainId.ARBITRUM, 18, 'ETH'),
       // WETH
       new Token(ChainId.TELOS, '0xA0fB8cd450c8Fd3a11901876cD5f17eB47C6bc50', 18, 'ETH'),
-      new Token(ChainId.ARBITRUM, '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1', 18, 'ETH'),
       new Token(ChainId.POLYGON, '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619', 18, 'ETH'),
     ],
     [
