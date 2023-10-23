@@ -7,6 +7,7 @@ import {
   Currency,
   CurrencyAmount,
   FeeQuote,
+  Fraction,
   getExpectedDate,
   getNativeCurrency,
   getScanLink,
@@ -310,8 +311,8 @@ export class BridgeStore {
       return srcBalance;
     }
     if (isEvmChainId(srcChainId)) {
-      if (srcBalance.currency.symbol !== 'ETH') return srcBalance;
       if (!srcNativeCost) return undefined;
+      if (!srcBalance.currency.equals(srcNativeCost.currency)) return srcBalance;
       const maxAmount = srcBalance.subtract(srcNativeCost);
       if (maxAmount.greaterThan(0)) return maxAmount;
     }
@@ -811,8 +812,17 @@ export class BridgeStore {
     if (!transferApi) return;
     if (!adapterParams) return;
 
+    // We want to introduce a buffer to avoid any gas price fluctuations
+    // to affect the user experience
+    //
+    // The user will be refunded so this increase does not affect the actual price
+    const multiplier = new Fraction(110, 100);
+
     yield (this.promise.messageFee = fromPromise(
-      transferApi.getMessageFee(srcCurrency, dstCurrency, adapterParams),
+      transferApi.getMessageFee(srcCurrency, dstCurrency, adapterParams).then((fee) => ({
+        nativeFee: fee.nativeFee.multiply(multiplier),
+        zroFee: fee.zroFee.multiply(multiplier),
+      })),
     ));
   });
 
