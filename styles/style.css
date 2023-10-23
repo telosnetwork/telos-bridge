@@ -86,7 +86,7 @@ h6 {
   opacity: 30%;
   background-image:
     linear-gradient(to bottom, #071033, 70%, transparent),
-    linear-gradient(to right, #8B4599 20%, #6A87C5, #71bd97, #4A5894, #6696C5, #37788D);
+    linear-gradient(130deg, #8B4599 20%, #6A87C5, #71bd97, #4A5894, #6696C5, #37788D);
   background-size: 100% 100%;
   background-repeat: no-repeat;
 }
