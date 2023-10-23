@@ -63,3 +63,30 @@ h6 {
 #__next {
   isolation: isolate;
 }
+
+.app-background {
+  background: #071033;
+  position: fixed;
+  content: "";
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.app-background::after {
+  position: absolute;
+  content: "";
+  top: 0;
+  right: -24px;
+  bottom: -24px;
+  left: -24px;
+  margin: auto;
+  filter: blur(24px);
+  opacity: 30%;
+  background-image:
+    linear-gradient(to bottom, #071033, 70%, transparent),
+    linear-gradient(to right, #8B4599 20%, #6A87C5, #71bd97, #4A5894, #6696C5, #37788D);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}

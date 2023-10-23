@@ -27,7 +27,7 @@ export const telosDarkPalette = {
   divider: 'rgba(250, 250, 250, 0.12)',
   background: {
     paper: '#1A1E1D',
-    default: '#071033',  // Dark purple
+    default: '#ffffff00',  // see styles.css > .app-background
   },
 };
 
