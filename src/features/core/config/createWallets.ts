@@ -32,7 +32,7 @@ export function createWallets(chains: ChainId[]): Record<string, Wallet<unknown>
 
   // Get projectId from WalletConnect cloud https://docs.walletconnect.com/advanced/migration-from-v1.x/dapps#ethereum-provider
   wallets.walletConnect = new WalletConnect({
-    projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID as string, // eztodo add this to readme
+    projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID as string,
     showQrModal: true,
     optionalChains: evmChains,
     rpcMap: {
