@@ -13,6 +13,10 @@ type ArrayOneOrMore<T> = {
 } & Array<T>;
 
 const TELOS_MAINNET_CHAIN_ID = 40;
+const POLYGON_MAINNET_CHAIN_ID = 137;
+const ARBITRUM_ONE_MAINNET_CHAIN_ID = 42161;
+const BNB_MAINNET_CHAIN_ID = 56;
+const AVALANCHE_MAINNET_CHAIN_ID = 43114;
 
 export function createWallets(chains: ChainId[]): Record<string, Wallet<unknown>> {
   const wallets: Record<string, Wallet<unknown>> = {};
@@ -33,6 +37,10 @@ export function createWallets(chains: ChainId[]): Record<string, Wallet<unknown>
     optionalChains: evmChains,
     rpcMap: {
       [TELOS_MAINNET_CHAIN_ID]: 'https://mainnet.telos.net:443/evm',
+      [POLYGON_MAINNET_CHAIN_ID]: 'https://polygon-rpc.com/',
+      [ARBITRUM_ONE_MAINNET_CHAIN_ID]: 'https://arb1.arbitrum.io/rpc',
+      [BNB_MAINNET_CHAIN_ID]: 'https://bsc-dataseed.binance.org/',
+      [AVALANCHE_MAINNET_CHAIN_ID]: 'https://api.avax.network/ext/bc/C/rpc',
     },
   });
 
