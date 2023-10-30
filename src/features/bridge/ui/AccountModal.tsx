@@ -14,7 +14,7 @@ import {Box, SxProps} from '@/core/ui/system';
 import {Tabs} from '@/core/ui/Tabs';
 import {WalletIcon} from '@/core/ui/WalletIcon';
 import {formatAddress} from '@/core/utils/formatAddress';
-import { isMobile } from '@/core/utils/platform';
+import {isMobile} from '@/core/utils/platform';
 
 import {TransactionItem} from './TransactionItem';
 
