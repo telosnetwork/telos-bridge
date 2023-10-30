@@ -14,6 +14,7 @@ import {Box, SxProps} from '@/core/ui/system';
 import {Tabs} from '@/core/ui/Tabs';
 import {WalletIcon} from '@/core/ui/WalletIcon';
 import {formatAddress} from '@/core/utils/formatAddress';
+import { isMobile } from '@/core/utils/platform';
 
 import {TransactionItem} from './TransactionItem';
 
@@ -150,10 +151,50 @@ const InputStateAdornment: React.FC<{type?: 'pending' | 'success' | 'error'}> = 
 const WalletItem: React.FC<{
   wallet: Wallet<unknown>;
 }> = observer(({wallet}) => {
+  const mobile = isMobile();
+
+  if (wallet.type === 'Brave' || (wallet.type === 'Core' && mobile)) {
+    // https://github.com/telosnetwork/telos-bridge/issues/20
+    return null;
+  }
+
+  let buttonText;
+
+  if (wallet.isConnecting) {
+    buttonText = 'Connecting...';
+  } else if (wallet.isConnected && wallet.address) {
+    buttonText = `${formatAddress(wallet.address, 16)}`;
+  } else if (wallet.isAvailable) {
+    buttonText = `Connect ${wallet.type}`;
+  } else if (!mobile) {
+    buttonText = `Get ${wallet.type} Wallet`;
+  } else {
+    buttonText = `Continue on ${wallet.type}`;
+  }
+
+  function handleButtonClick() {
+    if (wallet.isConnected) {
+      wallet.disconnect();
+      return;
+    }
+    if (wallet.isAvailable) {
+      wallet.connect();
+      return;
+    }
+
+    if (wallet.type === 'MetaMask') {
+      window.open('https://metamask.app.link/dapp/bridge.telos.net');
+    } else if (wallet.type ==='CoinBase') {
+      window.open('https://go.cb-w.com/dapp?cb_url=bridge.telos.net');
+    } else if (wallet.type === 'Phantom') {
+      window.open('https://phantom.app/ul/');
+    }
+  }
+
   return (
     <Button
       variant='incognito'
-      onClick={wallet.isConnected ? wallet.disconnect : wallet.connect}
+      onClick={handleButtonClick}
       sx={{
         width: '100%',
         display: 'flex',
@@ -166,13 +207,7 @@ const WalletItem: React.FC<{
     >
       <WalletIcon type={wallet.type} />
       <Box typography='p2' sx={{ml: 2}}>
-        {wallet.isConnecting
-          ? 'Connecting...'
-          : wallet.isConnected && wallet.address
-          ? `${formatAddress(wallet.address, 16)}`
-          : wallet.isAvailable
-          ? `Connect ${wallet.type}`
-          : `Get ${wallet.type} Wallet`}
+        {buttonText}
       </Box>
     </Button>
   );
