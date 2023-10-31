@@ -72,7 +72,7 @@
     "mobx": "^6.6.0",
     "mobx-react": "^7.6.0",
     "mobx-utils": "^6.0.6",
-    "next": "13.4.19",
+    "next": "13.5.1",
     "petra-plugin-wallet-adapter": "^0.1.5",
     "react": "18.2.0",
     "react-dom": "18.2.0",
