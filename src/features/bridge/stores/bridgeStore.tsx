@@ -348,6 +348,8 @@ export class BridgeStore {
     return castCurrencyAmountUnsafe(afterSlippage, dstCurrency);
   }
   get dstNativeAmount(): CurrencyAmount | undefined {
+    // eslint-disable-next-line no-debugger
+    debugger;
     const {dstNativeAmount, dstChainId} = this.form;
     if (!dstChainId) return undefined;
     const native = getNativeCurrency(dstChainId);

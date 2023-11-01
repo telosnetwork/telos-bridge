@@ -76,10 +76,12 @@ export const wrapped_testnet: WrappedTokenBridgeConfig = {
     [
       // WETH
       new Token(ChainId.TELOS_TESTNET, '0xe83F5959A58cb21E3B3B1682a898143C3f4AFEe0', 18, 'WETH'),
+      new Token(ChainId.GOERLI, '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6', 18, 'WETH'),
     ],
     [
       // USDT
-      new Token(ChainId.GOERLI, '0xdddacBBFa219b9579596886032b826552c8E9810', 6, 'USDT'),
+      // new Token(ChainId.GOERLI, '0xdddacBBFa219b9579596886032b826552c8E9810', 6, 'USDT'),
+      new Token(ChainId.GOERLI, '0xC2C527C0CACF457746Bd31B2a698Fe89de2b6d49', 6, 'USDT'),
       new Token(ChainId.MUMBAI, '0x6cc732BB947569e5560F380c8d3E24844bA2DDb3', 6, 'USDT'),
       new Token(ChainId.TELOS_TESTNET, '0xe1aFB545B5701D884a674d90b31927BBd0fcA380', 6, 'USDT'),
     ],
