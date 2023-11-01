@@ -98,9 +98,8 @@ export const wrapped_testnet: WrappedTokenBridgeConfig = {
 export const appConfig: AppConfig = createAppConfig({
   bridge: {
     wrappedToken: [
-      //
-      wrapped_mainnet,
-      // wrapped_testnet,
+      // wrapped_mainnet,
+      wrapped_testnet,
     ],
   },
 });
