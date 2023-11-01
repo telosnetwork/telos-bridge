@@ -154,3 +154,9 @@ DISTRIBUTING THE SOFTWARE BE LIABLE FOR ANY DAMAGES OR OTHER
 LIABILITY, WHETHER IN CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT
 OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
+
+## Deployment Links
+
+Main Net: [https://bridge.telos.net](https://bridge.telos.net)  [![Netlify Status](https://api.netlify.com/api/v1/badges/0b94e491-064e-4673-a45d-0a31b506c3cd/deploy-status)](https://app.netlify.com/sites/telos-bridge/deploys)
+
+Test Net: [https://telos-bridge-testnet.netlify.app](https://telos-bridge-testnet.netlify.app)   [![Netlify Status](https://api.netlify.com/api/v1/badges/6c67c3cd-036f-4744-9633-037f82436efc/deploy-status)](https://app.netlify.com/sites/telos-bridge-testnet/deploys)
