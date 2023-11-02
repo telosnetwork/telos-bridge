@@ -29,6 +29,9 @@ async function checkAndFix() {
       const chainId = chainIds[network]
       const result = await endpoint.hasStoredPayload(chainId, trustedRemote)
       console.log(`${network} has stored payload = ${result}`)
+      // TODO: if result === true, clear payload: https://layerzero.gitbook.io/docs/evm-guides/error-messages/storedpayload
+      //   I believe we'd use the read function `storedPayload` with the same parameters to get the payload value itself
+      //   and then call `retryPayload` with that payload value
     } catch (e) {
       console.error(e)
     }
