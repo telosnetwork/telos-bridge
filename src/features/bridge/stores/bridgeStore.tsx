@@ -1,4 +1,3 @@
-/* eslint-disable no-debugger */
 import {ChainId} from '@layerzerolabs/lz-sdk';
 import {waitForMessageReceived} from '@layerzerolabs/scan-client';
 import type {BridgeApi, TransferInput} from '@layerzerolabs/ui-bridge-sdk';
@@ -349,12 +348,8 @@ export class BridgeStore {
     return castCurrencyAmountUnsafe(afterSlippage, dstCurrency);
   }
   get dstNativeAmount(): CurrencyAmount | undefined {
-    // eslint-disable-next-line no-debugger
-    debugger;
     const {dstNativeAmount, dstChainId} = this.form;
     if (!dstChainId) return undefined;
-    // eslint-disable-next-line no-debugger
-    debugger;
     const native = getNativeCurrency(dstChainId);
     const zero = CurrencyAmount.fromRawAmount(native, 0);
 
@@ -469,9 +464,7 @@ export class BridgeStore {
   async updateAllowance(): Promise<unknown> {
     this.promise.allowance = undefined;
     const {transferApi, srcAddress} = this;
-    debugger;
     const {srcCurrency} = this.form;
-    debugger;
     if (!transferApi) return;
     if (!srcAddress) return;
     if (!srcCurrency) return;
