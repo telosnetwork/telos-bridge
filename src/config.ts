@@ -1,54 +1,55 @@
 import {ChainId} from '@layerzerolabs/lz-sdk';
 import {AppConfig, createAppConfig} from '@layerzerolabs/ui-app-config';
-
 import {WrappedTokenBridgeConfig} from '@layerzerolabs/ui-bridge-wrapped-token';
-import {Token} from '@layerzerolabs/ui-core';
+import {Coin, Token} from '@layerzerolabs/ui-core';
 
 import {OnftBridgeConfig, OnftStandard} from '@layerzerolabs/ui-bridge-onft';
 
 export const wrapped_mainnet: WrappedTokenBridgeConfig = {
   version: 2,
   original: [
-    {address: '0x826efc453E95bE36Af2bf867D36f9241c8BeeE16', chainId: ChainId.ETHEREUM},
-    {address: '0x826efc453E95bE36Af2bf867D36f9241c8BeeE16', chainId: ChainId.ARBITRUM},
-    {address: '0x826efc453E95bE36Af2bf867D36f9241c8BeeE16', chainId: ChainId.BSC},
-    {address: '0x826efc453E95bE36Af2bf867D36f9241c8BeeE16', chainId: ChainId.POLYGON},
-    {address: '0x826efc453E95bE36Af2bf867D36f9241c8BeeE16', chainId: ChainId.AVALANCHE},
+    {address: '0x9c5ebCbE531aA81bD82013aBF97401f5C6111d76', chainId: ChainId.ETHEREUM},
+    {address: '0x9c5ebCbE531aA81bD82013aBF97401f5C6111d76', chainId: ChainId.ARBITRUM},
+    {address: '0x9c5ebCbE531aA81bD82013aBF97401f5C6111d76', chainId: ChainId.BSC},
+    {address: '0x9c5ebCbE531aA81bD82013aBF97401f5C6111d76', chainId: ChainId.POLYGON},
+    {address: '0x9c5ebCbE531aA81bD82013aBF97401f5C6111d76', chainId: ChainId.AVALANCHE},
   ],
   wrapped: {
-    address: '0x826efc453E95bE36Af2bf867D36f9241c8BeeE16',
+    address: '0x9c5ebCbE531aA81bD82013aBF97401f5C6111d76',
     chainId: ChainId.TELOS,
   },
   tokens: [
     [
       // USDC
-      new Token(ChainId.TELOS, '0x9aBbAd0228A4c948afdBD1364c3159D9Ac8f6FcB', 6, 'USDC'),
+      new Token(ChainId.TELOS, '0x8D97Cea50351Fb4329d591682b148D43a0C3611b', 6, 'USDC'),
       new Token(ChainId.ETHEREUM, '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', 6, 'USDC'),
       new Token(ChainId.ARBITRUM, '0xaf88d065e77c8cC2239327C5EDb3A432268e5831', 6, 'USDC'),
       new Token(ChainId.BSC, '0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d', 18, 'USDC'),
     ],
     [
+      // ETH
+      new Coin(ChainId.ETHEREUM, 18, 'ETH'),
+      new Coin(ChainId.ARBITRUM, 18, 'ETH'),
       // WETH
-      new Token(ChainId.TELOS, '0xc54B4634a5a8bb1dCce6F98A15c533B2D185557E', 18, 'WETH'),
-      new Token(ChainId.ETHEREUM, '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', 18, 'WETH'),
-      new Token(ChainId.ARBITRUM, '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1', 18, 'WETH'),
-      new Token(ChainId.POLYGON, '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619', 18, 'WETH'),
+      new Token(ChainId.TELOS, '0xA0fB8cd450c8Fd3a11901876cD5f17eB47C6bc50', 18, 'ETH'),
+      new Token(ChainId.POLYGON, '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619', 18, 'ETH'),
     ],
     [
       // USDT
-      new Token(ChainId.TELOS, '0xEf6f18604172a23152E5Ac96368f6dFab5Bc60d4', 6, 'USDT'),
+      new Token(ChainId.TELOS, '0x975Ed13fa16857E83e7C493C7741D556eaaD4A3f', 6, 'USDT'),
       new Token(ChainId.ETHEREUM, '0xdAC17F958D2ee523a2206206994597C13D831ec7', 6, 'USDT'),
       new Token(ChainId.POLYGON, '0xc2132d05d31c914a87c6611c10748aeb04b58e8f', 6, 'USDT'),
     ],
     [
       // BTC.b
-      new Token(ChainId.TELOS, '0x4c016A662A38ea4d16FB3048693bbF8088F42977', 8, 'BTC.b'),
+      new Token(ChainId.TELOS, '0x7627b27594bc71e6Ab0fCE755aE8931EB1E12DAC', 8, 'BTC.b'),
       new Token(ChainId.AVALANCHE, '0x152b9d0FdC40C096757F570A51E494bd4b943E50', 8, 'BTC.b'),
     ],
     [
+      // BNB
+      new Coin(ChainId.BSC, 18, 'BNB'),
       // WBNB
-      new Token(ChainId.TELOS, '0x7aDed24d5A83Af69aaABfc3178dCE783dc1Ac29C', 18, 'WBNB'),
-      new Token(ChainId.BSC, '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c', 18, 'WBNB'),
+      new Token(ChainId.TELOS, '0x26Ed0F16e777C94A6FE798F9E20298034930Bae8', 18, 'BNB'),
     ],
   ],
 };

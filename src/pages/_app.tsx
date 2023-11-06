@@ -45,6 +45,7 @@ const App = observer(({Component, pageProps}: AppPropsWithLayout) => {
     <JsonRpcProviderContext.Provider value={multicallProvider}>
       <QueryClientProvider client={queryClient}>
         <UserThemePreferenceProvider>
+          <div className="app-background"></div>
           <ToastProvider>
             <GlobalStyles
               styles={(theme: Theme) => ({
