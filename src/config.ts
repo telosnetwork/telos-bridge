@@ -155,17 +155,32 @@ export const erc1155_testnet: OnftBridgeConfig = {
   ],
 };
 
-const PEPE_MAINNET = {
+const LVC = {
   version: 2,
   tokens: [
-    new Token(ChainId.ARBITRUM, '0x25d887Ce7a35172C62FeBFD67a1856F20FaEbB00', 18, 'PEPE'),
-    new Token(ChainId.ETHEREUM, '0x6982508145454Ce325dDbE47a25d4ec3d2311933', 18, 'PEPE'),
-    new Token(ChainId.BSC, '0x25d887Ce7a35172C62FeBFD67a1856F20FaEbB00', 18, 'PEPE'),
+    new Token(ChainId.TELOS,'0x48D9CDF4343d95E3B8d8F2BfcFdAE9d495f90cCA', 18, 'LVC' ),
+    new Token(ChainId.ZKCONSENSYS, '0x7d637d806b750B9C9f5d8e4e3634AA6639246924', 18, 'LVC'),
   ],
   proxy: [
     {
-      chainId: ChainId.ETHEREUM,
-      address: '0x25d887Ce7a35172C62FeBFD67a1856F20FaEbB00',
+      chainId: ChainId.TELOS,
+      address: '0x48D9CDF4343d95E3B8d8F2BfcFdAE9d495f90cCA',
+    },
+  ],
+  fee: true,
+  sharedDecimals: 4,
+};
+
+const VC = {
+  version: 2,
+  tokens: [
+    new Token(ChainId.TELOS, '0x038b198152a83102F6380ee17d9Fbd69cde9797F', 18, 'VC'),
+    new Token(ChainId.ZKSYNC, '0xcB61BC4aE1613abf8662B7003BaD0E2aa3F7D746', 18, 'VC'),
+  ],
+  proxy: [
+    {
+      chainId: ChainId.TELOS,
+      address: '0x038b198152a83102F6380ee17d9Fbd69cde9797F',
     },
   ],
   fee: true,
@@ -174,20 +189,16 @@ const PEPE_MAINNET = {
 
 export const appConfig: AppConfig = createAppConfig({
   bridge: {
-    aptos: [
-      //
-    ],
+    aptos: [],
     oft: [
-      //
-      // PEPE_MAINNET
+      LVC,
+      VC,
     ],
     wrappedToken: [
-      //
       wrapped_mainnet,
       // wrapped_testnet,
     ],
     onft: [
-      //
       erc721_testnet,
       erc1155_testnet,
     ],
