@@ -158,34 +158,59 @@ export const erc1155_testnet: OnftBridgeConfig = {
 const LVC = {
   version: 2,
   tokens: [
-    new Token(ChainId.TELOS,'0x48D9CDF4343d95E3B8d8F2BfcFdAE9d495f90cCA', 18, 'LVC' ),
-    new Token(ChainId.ZKCONSENSYS, '0x7d637d806b750B9C9f5d8e4e3634AA6639246924', 18, 'LVC'),
+    new Token(ChainId.ZKCONSENSYS, '0xcc22F6AA610D1b2a0e89EF228079cB3e1831b1D1' , 18, 'LVC' ), //Linea
+    new Token(ChainId.TELOS, '0x7d637d806b750B9C9f5d8e4e3634AA6639246924', 18, 'LVC'),
   ],
   proxy: [
+    { chainId: ChainId.TELOS,
+      address: '0x7d637d806b750B9C9f5d8e4e3634AA6639246924'
+    },
     {
-      chainId: ChainId.TELOS,
-      address: '0x48D9CDF4343d95E3B8d8F2BfcFdAE9d495f90cCA',
+      chainId: ChainId.ZKCONSENSYS, //Linea
+      address: '0x48D9CDF4343d95E3B8d8F2BfcFdAE9d495f90cCA', 
     },
   ],
-  fee: true,
+  fee: false,
   sharedDecimals: 4,
 };
 
 const VC = {
   version: 2,
   tokens: [
-    new Token(ChainId.TELOS, '0x038b198152a83102F6380ee17d9Fbd69cde9797F', 18, 'VC'),
-    new Token(ChainId.ZKSYNC, '0xcB61BC4aE1613abf8662B7003BaD0E2aa3F7D746', 18, 'VC'),
+    new Token(ChainId.TELOS, '0xcB61BC4aE1613abf8662B7003BaD0E2aa3F7D746', 18, 'VC'),
+    new Token(ChainId.ZKSYNC, '0x85D84c774CF8e9fF85342684b0E795Df72A24908', 18, 'VC'),
   ],
   proxy: [
     {
       chainId: ChainId.TELOS,
-      address: '0x038b198152a83102F6380ee17d9Fbd69cde9797F',
+      address: '0xcB61BC4aE1613abf8662B7003BaD0E2aa3F7D746',
     },
+    { chainId: ChainId.ZKSYNC,
+      address: '0x038b198152a83102F6380ee17d9Fbd69cde9797F'
+    }
   ],
-  fee: true,
+  fee: false,
   sharedDecimals: 4,
 };
+
+const BANANA = {
+  version: 2,
+  tokens: [
+    new Token(ChainId.TELOS, '0x7097Ee02465FB494841740B1a2b63c21Eed655E7', 18, 'BANANA' ),
+    new Token(ChainId.BSC, '0x7097Ee02465FB494841740B1a2b63c21Eed655E7', 18, 'BANANA')
+  ],
+  proxy: [
+    {
+      chainId: ChainId.TELOS,
+      address: '0xcB61BC4aE1613abf8662B7003BaD0E2aa3F7D746',
+    },
+    { chainId: ChainId.BSC,
+      address: '0x7097Ee02465FB494841740B1a2b63c21Eed655E7'
+    }
+  ],
+  fee: false,
+  sharedDecimals: 4,
+}
 
 export const appConfig: AppConfig = createAppConfig({
   bridge: {
@@ -193,6 +218,7 @@ export const appConfig: AppConfig = createAppConfig({
     oft: [
       LVC,
       VC,
+      BANANA,
     ],
     wrappedToken: [
       wrapped_mainnet,
