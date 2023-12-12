@@ -189,7 +189,7 @@ const VC = {
       address: '0x038b198152a83102F6380ee17d9Fbd69cde9797F'
     }
   ],
-  fee: false,
+  fee: true,
   sharedDecimals: 4,
 };
 
@@ -208,7 +208,7 @@ const BANANA = {
       address: '0x7097Ee02465FB494841740B1a2b63c21Eed655E7'
     }
   ],
-  fee: false,
+  fee: true,
   sharedDecimals: 4,
 }
 

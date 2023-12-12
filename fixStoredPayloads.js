@@ -6,7 +6,7 @@ const {Contract} = require('ethers')
 const originalTokenBridge = '0x9c5ebCbE531aA81bD82013aBF97401f5C6111d76'
 const wrappedTokenBridge = '0x9c5ebCbE531aA81bD82013aBF97401f5C6111d76'
 const endpointAddress = '0x66A71Dcef29A0fFBDBE3c6a460a3B5BC225Cd675'
-const rpc = 'https://mainnet.telos.net/evm'
+const rpc = 'https://mainnet15a.telos.net/evm'
 const provider = ethers.getDefaultProvider(rpc)
 const trustedRemote = ethers.utils.solidityPack(
   ['address','address'],
