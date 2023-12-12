@@ -170,7 +170,7 @@ const LVC = {
       address: '0x48D9CDF4343d95E3B8d8F2BfcFdAE9d495f90cCA', 
     },
   ],
-  fee: false,
+  fee: true,
   sharedDecimals: 4,
 };
 
@@ -196,8 +196,8 @@ const VC = {
 const BANANA = {
   version: 2,
   tokens: [
-    new Token(ChainId.TELOS, '0x7097Ee02465FB494841740B1a2b63c21Eed655E7', 18, 'BANANA' ),
-    new Token(ChainId.BSC, '0x7097Ee02465FB494841740B1a2b63c21Eed655E7', 18, 'BANANA')
+    new Token(ChainId.TELOS, '0x7097Ee02465FB494841740B1a2b63c21Eed655E7', 4, 'BANANA' ),
+    new Token(ChainId.BSC, '0x7097Ee02465FB494841740B1a2b63c21Eed655E7', 4, 'BANANA')
   ],
   proxy: [
     {
