@@ -7,7 +7,6 @@ import memoize from 'micro-memoize';
 export const multicallUtils: Partial<Record<ChainId, string>> = {
   [ChainId.FANTOM]: '0xD4CC286D0a66C9a47111C085F7fd1A0256feE27a',
   [ChainId.METIS]: '0x954eb2A2df3b4Bd45048583925EE9b9E3bB5F488',
-  // [ChainId.TELOS]: '0xdDCbf776dF3dE60163066A5ddDF2277cB445E0F3'
   // [ChainId.TELOS]: '0xd6930Fe78c44759014cb3b51f3042B406aa7239B' // testnet
   [ChainId.TELOS]: '0x2983CC20CE4Fb2C12F1F56B7a3f153a43C0A5307' // mainnet
 };
