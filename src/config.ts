@@ -170,7 +170,7 @@ const LVC = {
       address: '0x48D9CDF4343d95E3B8d8F2BfcFdAE9d495f90cCA', 
     },
   ],
-  fee: true,
+  fee: false,
   sharedDecimals: 4,
 };
 
@@ -189,7 +189,7 @@ const VC = {
       address: '0x038b198152a83102F6380ee17d9Fbd69cde9797F'
     }
   ],
-  fee: true,
+  fee: false,
   sharedDecimals: 4,
 };
 
@@ -208,7 +208,7 @@ const BANANA = {
       address: '0x7097Ee02465FB494841740B1a2b63c21Eed655E7'
     }
   ],
-  fee: true,
+  fee: false,
   sharedDecimals: 4,
 }
 
@@ -225,8 +225,8 @@ export const appConfig: AppConfig = createAppConfig({
       // wrapped_testnet,
     ],
     onft: [
-      erc721_testnet,
-      erc1155_testnet,
+      // erc721_testnet,
+      // erc1155_testnet,
     ],
   },
 });
