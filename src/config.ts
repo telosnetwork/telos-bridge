@@ -156,7 +156,7 @@ export const erc1155_testnet: OnftBridgeConfig = {
 };
 
 const LVC = {
-  version: 2,
+  version: 1,
   tokens: [
     new Token(ChainId.ZKCONSENSYS, '0xcc22F6AA610D1b2a0e89EF228079cB3e1831b1D1' , 18, 'LVC' ), //Linea
     new Token(ChainId.TELOS, '0x7d637d806b750B9C9f5d8e4e3634AA6639246924', 18, 'LVC'),
@@ -175,7 +175,7 @@ const LVC = {
 };
 
 const VC = {
-  version: 2,
+  version: 1,
   tokens: [
     new Token(ChainId.TELOS, '0xcB61BC4aE1613abf8662B7003BaD0E2aa3F7D746', 18, 'VC'),
     new Token(ChainId.ZKSYNC, '0x85D84c774CF8e9fF85342684b0E795Df72A24908', 18, 'VC'),

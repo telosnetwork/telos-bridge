@@ -13,8 +13,6 @@ export const multicallUtils: Partial<Record<ChainId, string>> = {
 
 export const createMulticallProviderFactory = (providerFactory: ProviderFactory) => {
   const multicallProviderFactory: ProviderFactory = memoize((chainId: ChainId) => {
-    // // eslint-disable-next-line no-debugger
-    // debugger;
     const provider = providerFactory(chainId);
     // by default MulticallProvider ensures multicall contract is deployed at `0xd130B43062D875a4B7aF3f8fc036Bc6e9D3E1B3E`
     // if the chain is not supported - it will forward calls to underlying provider
