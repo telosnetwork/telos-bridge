@@ -1,4 +1,7 @@
+[context.environment]
+  NODE_VERSION = "18"
+
 [[redirects]]
   from = "/*"
   to = "/bridge"
-
+  status = 200
