@@ -155,8 +155,6 @@ export const erc1155_testnet: OnftBridgeConfig = {
   ],
 };
 
-// OFT tokens
-
 const BANANA = {
   version: 2,
   tokens: [
@@ -199,7 +197,7 @@ const VC = {
   version: 1,
   tokens: [
     new Token(ChainId.TELOS, '0xcB61BC4aE1613abf8662B7003BaD0E2aa3F7D746', 18, 'VC'),
-    new Token(ChainId.ZKSYNC, '0x85D84c774CF8e9fF85342684b0E795Df72A24908', 18, 'VC'),
+    new Token(ChainId.ZKSYNC, '0x99bBE51be7cCe6C8b84883148fD3D12aCe5787F2', 18, 'VC'),
   ],
   proxy: [
     {
