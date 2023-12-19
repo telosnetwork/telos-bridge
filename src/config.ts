@@ -231,6 +231,10 @@ const RF  = {
   sharedDecimals: 4,
 }
 
+const oftTokenList = [ 'BANANA', 'LVC', 'VC', 'RF'];
+
+export const isOFT = (tokenSymbol: string) => oftTokenList.includes(tokenSymbol);
+
 export const appConfig: AppConfig = createAppConfig({
   bridge: {
     aptos: [],
