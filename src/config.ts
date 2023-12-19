@@ -155,43 +155,7 @@ export const erc1155_testnet: OnftBridgeConfig = {
   ],
 };
 
-const LVC = {
-  version: 1,
-  tokens: [
-    new Token(ChainId.ZKCONSENSYS, '0xcc22F6AA610D1b2a0e89EF228079cB3e1831b1D1' , 18, 'LVC' ), //Linea
-    new Token(ChainId.TELOS, '0x7d637d806b750B9C9f5d8e4e3634AA6639246924', 18, 'LVC'),
-  ],
-  proxy: [
-    { chainId: ChainId.TELOS,
-      address: '0x7d637d806b750B9C9f5d8e4e3634AA6639246924'
-    },
-    {
-      chainId: ChainId.ZKCONSENSYS, //Linea
-      address: '0x48D9CDF4343d95E3B8d8F2BfcFdAE9d495f90cCA', 
-    },
-  ],
-  fee: false,
-  sharedDecimals: 4,
-};
-
-const VC = {
-  version: 1,
-  tokens: [
-    new Token(ChainId.TELOS, '0xcB61BC4aE1613abf8662B7003BaD0E2aa3F7D746', 18, 'VC'),
-    new Token(ChainId.ZKSYNC, '0x85D84c774CF8e9fF85342684b0E795Df72A24908', 18, 'VC'),
-  ],
-  proxy: [
-    {
-      chainId: ChainId.TELOS,
-      address: '0xcB61BC4aE1613abf8662B7003BaD0E2aa3F7D746',
-    },
-    { chainId: ChainId.ZKSYNC,
-      address: '0x038b198152a83102F6380ee17d9Fbd69cde9797F'
-    }
-  ],
-  fee: false,
-  sharedDecimals: 4,
-};
+// OFT tokens
 
 const BANANA = {
   version: 2,
@@ -212,13 +176,71 @@ const BANANA = {
   sharedDecimals: 4,
 }
 
+const LVC = {
+  version: 1,
+  tokens: [
+    new Token(ChainId.ZKCONSENSYS, '0xcc22F6AA610D1b2a0e89EF228079cB3e1831b1D1', 18, 'LVC'),
+    new Token(ChainId.TELOS, '0x7d637d806b750B9C9f5d8e4e3634AA6639246924', 18, 'LVC'),
+  ],
+  proxy: [
+    { chainId: ChainId.TELOS,
+      address: '0x7d637d806b750B9C9f5d8e4e3634AA6639246924',
+    },
+    {
+      chainId: ChainId.ZKCONSENSYS,
+      address: '0x48D9CDF4343d95E3B8d8F2BfcFdAE9d495f90cCA', 
+    },
+  ],
+  fee: false,
+  sharedDecimals: 4,
+};
+
+const VC = {
+  version: 1,
+  tokens: [
+    new Token(ChainId.TELOS, '0xcB61BC4aE1613abf8662B7003BaD0E2aa3F7D746', 18, 'VC'),
+    new Token(ChainId.ZKSYNC, '0x85D84c774CF8e9fF85342684b0E795Df72A24908', 18, 'VC'),
+  ],
+  proxy: [
+    {
+      chainId: ChainId.TELOS,
+      address: '0xcB61BC4aE1613abf8662B7003BaD0E2aa3F7D746',
+    },
+    { chainId: ChainId.ZKSYNC,
+      address: '0x038b198152a83102F6380ee17d9Fbd69cde9797F',
+    }
+  ],
+  fee: false,
+  sharedDecimals: 4,
+};
+
+const RF  = {
+  version: 1,
+  tokens: [
+    new Token(ChainId.ZKSYNC, '0x5f7CBcb391d33988DAD74D6Fd683AadDA1123E4D', 18, 'RF'),
+    new Token(ChainId.TELOS, '0xb99C43d3bce4c8Ad9B95a4A178B04a7391b2a6EB', 18, 'RF'),
+  ],
+  proxy: [
+    {
+      chainId: ChainId.TELOS,
+      address: '0xb99C43d3bce4c8Ad9B95a4A178B04a7391b2a6EB',
+    },
+    { chainId: ChainId.ZKSYNC,
+      address: '0xF5430284e7418891E3A0477D7598a3aA861D5c1D',
+    }
+  ],
+  fee: false,
+  sharedDecimals: 4,
+}
+
 export const appConfig: AppConfig = createAppConfig({
   bridge: {
     aptos: [],
     oft: [
+      BANANA,
       LVC,
       VC,
-      BANANA,
+      RF,
     ],
     wrappedToken: [
       wrapped_mainnet,
