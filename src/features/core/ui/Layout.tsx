@@ -57,7 +57,7 @@ export const AppHeader = observer(() => {
       <Bar.Section sx={{gap: {md: 6}}}>
         <Link href='/bridge' passHref legacyBehavior>
           <NavLink pathname={pathname} style={logoStyle} >
-            <Logo src={'/static/logo--telos-bridge-landscape.svg'} width={200} height={40} alt='Telos Blockchain Logo' priority={true} />
+            <Logo src={'/static/telos-logo.png'} width={95} height={112} alt='Telos Blockchain Logo' priority={true} />
           </NavLink>
         </Link>
         {/* <Link href='/bridge' passHref legacyBehavior>
