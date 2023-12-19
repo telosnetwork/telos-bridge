@@ -34,7 +34,6 @@ export function useDefaultSrcCurrency() {
     if (form.srcCurrency) return;
     if (form.dstCurrency) return;
     const {srcCurrencyOptions} = bridgeStore;
-
     const balances = srcCurrencyOptions
       .filter((o) => o.currency.chainId === srcChainId)
       .map(({currency}) => balanceStore.getBalance(currency, address))

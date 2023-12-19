@@ -21,6 +21,7 @@
     ],
     "paths": {
       "@/bridge/*": ["./src/features/bridge/*"],
+      "@/onft/*": ["./src/features/onft/*"],
       "@/core/*": ["./src/features/core/*"],
       "@/public/*": ["./public/*"]
     }

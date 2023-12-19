@@ -807,6 +807,7 @@ export class BridgeStore {
 
     const {srcCurrency, dstCurrency} = this.form;
     const {transferApi, adapterParams} = this;
+
     if (!srcCurrency) return;
     if (!dstCurrency) return;
     if (!transferApi) return;

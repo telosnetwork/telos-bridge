@@ -3,6 +3,8 @@ import {AppConfig, createAppConfig} from '@layerzerolabs/ui-app-config';
 import {WrappedTokenBridgeConfig} from '@layerzerolabs/ui-bridge-wrapped-token';
 import {Coin, Token} from '@layerzerolabs/ui-core';
 
+import {OnftBridgeConfig, OnftStandard} from '@layerzerolabs/ui-bridge-onft';
+
 export const wrapped_mainnet: WrappedTokenBridgeConfig = {
   version: 2,
   original: [
@@ -95,12 +97,156 @@ export const wrapped_testnet: WrappedTokenBridgeConfig = {
   ],
 };
 
+export const erc721_testnet: OnftBridgeConfig = {
+  contracts: [
+    {
+      standard: OnftStandard.ERC721,
+      address: '0xcb196127954be0b0555da5dc51432e3f8499c809',
+      chainId: 10102,
+      symbol: 'LZ721',
+      name: 'LayerZero Example ERC721',
+    },
+    {
+      standard: OnftStandard.ERC721,
+      address: '0x27918c6f5f8aed9a6dd714685daf88b582596a58',
+      chainId: 10106,
+      symbol: 'LZ721',
+      name: 'LayerZero Example ERC721',
+    },
+    {
+      standard: OnftStandard.ERC721,
+      address: '0xD8D015FbA330A12490BdAe2642b6a75F8a0bB5E5',
+      chainId: 10143,
+      symbol: 'LZ721',
+      name: 'LayerZero Example ERC721',
+    },
+  ],
+  proxy: [
+    {
+      chainId: 10143,
+      address: '0x84F041620FC54d43f18AdEe0745C5DCc84AFaC50',
+    },
+  ],
+};
+
+export const erc1155_testnet: OnftBridgeConfig = {
+  contracts: [
+    {
+      address: '0xFc13c28024Ac57B0FbfF311FccFF2dA452B7Ff26',
+      chainId: ChainId.FUJI,
+      standard: OnftStandard.ERC1155,
+    },
+    {
+      address: '0xf9fe722d05DA63265ACd909fe01BbB49701c2506',
+      chainId: ChainId.BSC_TESTNET,
+      standard: OnftStandard.ERC1155,
+    },
+    {
+      address: '0x9748733678AB402e3B0464213D7f629709A87260',
+      chainId: ChainId.ARBITRUM_GOERLI,
+      standard: OnftStandard.ERC1155,
+    },
+  ],
+  proxy: [
+    {
+      address: '0xeBc2aFc3DE72a17f42962E912d03DbA5ee8af898',
+      chainId: ChainId.FUJI,
+    },
+  ],
+};
+
+const BANANA = {
+  version: 2,
+  tokens: [
+    new Token(ChainId.TELOS, '0x7097Ee02465FB494841740B1a2b63c21Eed655E7', 4, 'BANANA' ),
+    new Token(ChainId.BSC, '0x7097Ee02465FB494841740B1a2b63c21Eed655E7', 4, 'BANANA')
+  ],
+  proxy: [
+    {
+      chainId: ChainId.TELOS,
+      address: '0x46893403C4aD778d7FDA0CdFCe355a0A7dba3333',
+    },
+    { chainId: ChainId.BSC,
+      address: '0x7097Ee02465FB494841740B1a2b63c21Eed655E7'
+    }
+  ],
+  fee: false,
+  sharedDecimals: 4,
+}
+
+const LVC = {
+  version: 1,
+  tokens: [
+    new Token(ChainId.ZKCONSENSYS, '0xcc22F6AA610D1b2a0e89EF228079cB3e1831b1D1', 18, 'LVC'),
+    new Token(ChainId.TELOS, '0x7d637d806b750B9C9f5d8e4e3634AA6639246924', 18, 'LVC'),
+  ],
+  proxy: [
+    { chainId: ChainId.TELOS,
+      address: '0x7d637d806b750B9C9f5d8e4e3634AA6639246924',
+    },
+    {
+      chainId: ChainId.ZKCONSENSYS,
+      address: '0x48D9CDF4343d95E3B8d8F2BfcFdAE9d495f90cCA', 
+    },
+  ],
+  fee: false,
+  sharedDecimals: 4,
+};
+
+const VC = {
+  version: 1,
+  tokens: [
+    new Token(ChainId.TELOS, '0xcB61BC4aE1613abf8662B7003BaD0E2aa3F7D746', 18, 'VC'),
+    new Token(ChainId.ZKSYNC, '0x99bBE51be7cCe6C8b84883148fD3D12aCe5787F2', 18, 'VC'),
+  ],
+  proxy: [
+    {
+      chainId: ChainId.TELOS,
+      address: '0xcB61BC4aE1613abf8662B7003BaD0E2aa3F7D746',
+    },
+    { chainId: ChainId.ZKSYNC,
+      address: '0x038b198152a83102F6380ee17d9Fbd69cde9797F',
+    }
+  ],
+  fee: false,
+  sharedDecimals: 4,
+};
+
+const RF  = {
+  version: 1,
+  tokens: [
+    new Token(ChainId.ZKSYNC, '0x5f7CBcb391d33988DAD74D6Fd683AadDA1123E4D', 18, 'RF'),
+    new Token(ChainId.TELOS, '0xb99C43d3bce4c8Ad9B95a4A178B04a7391b2a6EB', 18, 'RF'),
+  ],
+  proxy: [
+    {
+      chainId: ChainId.TELOS,
+      address: '0xb99C43d3bce4c8Ad9B95a4A178B04a7391b2a6EB',
+    },
+    { chainId: ChainId.ZKSYNC,
+      address: '0xF5430284e7418891E3A0477D7598a3aA861D5c1D',
+    }
+  ],
+  fee: false,
+  sharedDecimals: 4,
+}
+
 export const appConfig: AppConfig = createAppConfig({
   bridge: {
+    aptos: [],
+    oft: [
+      BANANA,
+      LVC,
+      VC,
+      // RF,
+    ],
     wrappedToken: [
-      //
       wrapped_mainnet,
       // wrapped_testnet,
+    ],
+    onft: [
+      // erc721_testnet,
+      // erc1155_testnet,
     ],
   },
 });
