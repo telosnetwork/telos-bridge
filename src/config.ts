@@ -242,7 +242,7 @@ export const appConfig: AppConfig = createAppConfig({
       BANANA,
       LVC,
       VC,
-      // RF,
+      RF,
     ],
     wrappedToken: [
       wrapped_mainnet,
