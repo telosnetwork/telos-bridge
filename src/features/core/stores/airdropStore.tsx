@@ -1,5 +1,5 @@
 import {ChainId} from '@layerzerolabs/lz-sdk';
-import {CurrencyAmount, DefaultAirdropProvider} from '@layerzerolabs/ui-core';
+import {Currency, CurrencyAmount, DefaultAirdropProvider, getNativeCurrency} from '@layerzerolabs/ui-core';
 import assert from 'assert';
 import {flow, makeAutoObservable, ObservableMap} from 'mobx';
 
@@ -10,7 +10,17 @@ export class AirdropStore {
     makeAutoObservable(this, {}, {autoBind: true});
   }
   getDefault(dstChainId: ChainId): CurrencyAmount | undefined {
-    return this.defaultAmount.get(String(dstChainId));
+    const defaultGasOnDst = this.defaultAmount.get(String(dstChainId));
+ 
+    // set default gas on destination value to .05 TLOS (max allowed) if unset
+    if (defaultGasOnDst?.numerator.toString() === '0' && dstChainId === ChainId.TELOS){
+      const dstNativeCurrency = getNativeCurrency(ChainId.TELOS);
+      const defaultAmount = CurrencyAmount.fromRawAmount(dstNativeCurrency as Currency, 50000000000000000); 
+      this.defaultAmount.set(String(ChainId.TELOS), defaultAmount);
+      return defaultAmount;
+    }
+ 
+    return defaultGasOnDst;
   }
   addProviders(providers: DefaultAirdropProvider[]) {
     this.providers.push(...providers);
