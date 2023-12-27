@@ -15,7 +15,7 @@ export class AirdropStore {
     // set default gas on destination value to .05 TLOS (max allowed) if unset
     if (defaultGasOnDst?.numerator.toString() === '0' && dstChainId === ChainId.TELOS){
       const dstNativeCurrency = getNativeCurrency(ChainId.TELOS);
-      const defaultAmount = CurrencyAmount.fromRawAmount(dstNativeCurrency as Currency, 50000000000000000); 
+      const defaultAmount = CurrencyAmount.fromRawAmount(dstNativeCurrency, 50000000000000000); 
       this.defaultAmount.set(String(ChainId.TELOS), defaultAmount);
       return defaultAmount;
     }
