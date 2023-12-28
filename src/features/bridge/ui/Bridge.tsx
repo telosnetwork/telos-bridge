@@ -19,6 +19,8 @@ import {GasOnDestinationButton} from './GasOnDestinationButton';
 import {NetworkSelect} from './NetworkSelect';
 import {SlippageButton} from './SlippageButton';
 
+import { isOFT } from '../../../config';
+
 export const Bridge = observer(() => {
   const {
     errors,
@@ -137,7 +139,26 @@ export const Bridge = observer(() => {
       </InputsGroup>
       <Details
         sx={{my: '24px'}}
-        items={[
+        items={ isOFT(bridgeStore.form.srcCurrency?.symbol as string) ? [
+          {
+            label: 'Gas on destination',
+            value: <GasOnDestinationButton />,
+          },
+          {
+            label: 'You will receive',
+            value: outputAmount
+              ? outputAmount.toExact() + ' ' + fiatStore.getSymbol(outputAmount.currency)
+              : '--',
+          },
+          {
+            label: 'Fee',
+            value: feeFiat
+              ? feeFiat.value.toFixed(2) + ' USD'
+              : nativeFee
+              ? nativeFee.toSignificant(8) + ' ' + fiatStore.getSymbol(nativeFee.currency)
+              : '--',
+          }
+        ] : [
           {
             label: 'Gas on destination',
             value: <GasOnDestinationButton />,

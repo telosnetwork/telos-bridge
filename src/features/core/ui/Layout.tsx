@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
-import { useEffect } from 'react';
+import {useEffect} from 'react';
 
 import {useUserThemePreference} from '@/core/hooks/useUserThemePreference';
 import {Bar} from '@/core/ui/Bar';
@@ -40,7 +40,7 @@ const Logo = styled(Image, {name: 'Logo'})(({theme}) => ({
 export const AppHeader = observer(() => {
   const router = useRouter();
   const {pathname} = router;
-  const { changeUserThemePreference } = useUserThemePreference();
+  const {changeUserThemePreference} = useUserThemePreference();
   const logoStyle = {
     display: 'flex',
     justifyContent: 'center',
@@ -54,12 +54,21 @@ export const AppHeader = observer(() => {
 
   return (
     <Bar>
-      <Bar.Section sx={{gap: {md: 6}}}>
+      <Bar.Section sx={{gap: {md: 6}, width:{xs: "100%", sm: 'unset'}}}>
         <Link href='/bridge' passHref legacyBehavior>
-          <NavLink pathname={pathname} style={logoStyle} >
-            <Logo src={'/static/logo--telos-bridge-landscape.svg'} width={200} height={40} alt='Telos Blockchain Logo' priority={true} />
+          <NavLink sx={{ margin: {xs: 'auto'}}} pathname={pathname} style={logoStyle}>
+            <Logo src={'/static/telos-logo.png'} width={95} height={112} alt='Telos Blockchain Logo' priority={true} />
           </NavLink>
         </Link>
+        {/* <Link href='/bridge' passHref legacyBehavior>
+          <NavLink pathname={pathname}>Bridge</NavLink>
+        </Link>
+        <Link href='/oft' passHref legacyBehavior>
+          <NavLink pathname={pathname}>OFT</NavLink>
+        </Link>
+        <Link href='/onft' passHref legacyBehavior>
+          <NavLink pathname={pathname}>ONFT</NavLink>
+        </Link> */}
       </Bar.Section>
       <Bar.Section>
         <DesktopOnly>
