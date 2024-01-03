@@ -233,6 +233,26 @@ const RF  = {
   sharedDecimals: 4,
 }
 
+const TLOS = {
+  version: 2,
+  tokens: [
+    new Token(ChainId.FUJI, '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E', 18, 'TLOS'),
+    new Token(ChainId.TELOS_TESTNET, '0xAEa017740a2e7608F873CB130e7B3c335A4a1940', 18, 'TLOS')
+  ],
+  proxy: [
+    {
+      chainId: ChainId.FUJI,
+      address: '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E'
+    },
+    {
+      chainId: ChainId.TELOS_TESTNET,
+      address: '0xAEa017740a2e7608F873CB130e7B3c335A4a1940'
+    }
+  ],
+  fee: false,
+  sharedDecimals: 6,
+}
+
 const oftTokenList = [ 'BANANA', 'LVC', 'VC', 'RF'];
 
 export const isOFT = (tokenSymbol: string) => oftTokenList.includes(tokenSymbol);
@@ -245,6 +265,7 @@ export const appConfig: AppConfig = createAppConfig({
       // LVC,
       // VC,
       // RF,
+      TLOS
     ],
     wrappedToken: [
       // wrapped_mainnet,
