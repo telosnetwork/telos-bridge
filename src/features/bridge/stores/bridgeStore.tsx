@@ -101,10 +101,11 @@ export class BridgeStore {
     );
   }
 
+  // preferred order of network selection list
+  static chainOrder = [ChainId.TELOS, ChainId.ETHEREUM, ChainId.BSC, ChainId.POLYGON, ChainId.ZKSYNC, ChainId.ZKCONSENSYS, ChainId.AVALANCHE,  ChainId.ARBITRUM];
+
   static sortChains(chains: ChainId[]): ChainId[] {
-    // desired order of network selection list
-    const chainOrder = [ChainId.TELOS, ChainId.ETHEREUM, ChainId.POLYGON, ChainId.BSC, ChainId.ZKSYNC, ChainId.ZKCONSENSYS, ChainId.AVALANCHE,  ChainId.ARBITRUM];
-    return chains.sort((a,b) => chainOrder.indexOf(b) - chainOrder.indexOf(a));
+    return chains.sort((a,b) => this.chainOrder.indexOf(b) - this.chainOrder.indexOf(a));
   }
 
   // views

@@ -10,6 +10,7 @@ import {NetworkIcon} from '@/core/ui/NetworkIcon';
 import {SearchBar} from '@/core/ui/SearchBar';
 import {SelectButton} from '@/core/ui/SelectButton';
 import {SxProps, Theme} from '@/core/ui/system';
+import { BridgeStore } from '../stores/bridgeStore';
 
 interface CommonProps {
   theme?: Theme;
@@ -55,13 +56,13 @@ export const NetworkSelect: React.FC<NetworkSelectProps> = observer(
     const modal = useToggle();
     const [search, setSearch] = useState('');
     const filtered = options.map(toOption).filter((option) => matchSearch(option.chainId, search));
+    
+    // maintain preferred order while filtering available options to the top
+    filtered.sort((a, b) => BridgeStore.chainOrder.indexOf(a.chainId) - BridgeStore.chainOrder.indexOf(b.chainId))
+    filtered.sort((a, b) => (a.disabled === b.disabled) || (a.disabled && !b.disabled) ? 1 : -1);
 
     const icon = withIcon ? <NetworkIcon chainId={value} size={40} /> : null;
     const network = value ? getNetwork(value) : undefined;
-
-    const sorted = filtered.sort((a) => {
-      return a.disabled ? 1 : -1;
-    });
 
     function close() {
       modal.close();
@@ -92,7 +93,7 @@ export const NetworkSelect: React.FC<NetworkSelectProps> = observer(
           open={readonly ? false : modal.value}
           onClose={close}
         >
-          {sorted.map((option, index) => {
+          {filtered.map((option, index) => {
             const {chainId} = option;
             const network = getNetwork(chainId);
             const onClick = () => {
