@@ -60,10 +60,13 @@ export const AppHeader = observer(() => {
             <Logo src={'/static/telos-logo.png'} width={95} height={112} alt='Telos Blockchain Logo' priority={true} />
           </NavLink>
         </Link>
-        {/* <Link href='/bridge' passHref legacyBehavior>
-          <NavLink pathname={pathname}>Bridge</NavLink>
-        </Link>
-        <Link href='/oft' passHref legacyBehavior>
+        <a href='https://stakely.io/en/faucet/telos-evm-tlos' target='_blank'>
+          <NavLink pathname={pathname}>Faucet </NavLink>
+        </a>
+        <a href='https://dapp.ptokens.io/#/swap?asset=tlos&from=eth&to=telos' target='_blank'>
+          <NavLink pathname={pathname}>TLOS Bridge</NavLink>
+        </a>
+        {/* <Link href='/oft' passHref legacyBehavior>
           <NavLink pathname={pathname}>OFT</NavLink>
         </Link>
         <Link href='/onft' passHref legacyBehavior>
