@@ -54,6 +54,7 @@ import {DefaultAirdropProvider__aptos} from '@/bridge/sdk/airdrop/DefaultAirdrop
 import {DefaultAirdropProvider__evm} from '@/bridge/sdk/airdrop/DefaultAirdropProvider__evm';
 import {getStargateConfig} from '@/bridge/sdk/getStargateConfig';
 import {bridgeStore, initBridgeStore} from '@/bridge/stores/bridgeStore';
+import { initNativeBridgeStore, nativeBridgeStore } from '@/bridge/stores/nativeBridgeStore';
 import {unclaimedStore} from '@/bridge/stores/unclaimedStore';
 import {initUnclaimedStore} from '@/bridge/stores/unclaimedStore';
 import {createWallets} from '@/core/config/createWallets';
@@ -69,6 +70,8 @@ import {walletStore} from '@/core/stores/walletStore';
 import {onftStore} from '@/onft/stores/onftStore';
 import {initOnftStore} from '@/onft/stores/onftStore';
 
+import { nativeConfig } from './config';
+
 export async function bootstrap(lzAppConfig: AppConfig, providerFactory: ProviderFactory) {
   const aptos = {
     mainnet: createAptosModule(ChainStage.MAINNET),
@@ -80,6 +83,18 @@ export async function bootstrap(lzAppConfig: AppConfig, providerFactory: Provide
 
   // Compile a list of unique chains used in the app based on the bridge configuration
   const chains = getChainsFromLzAppConfig(lzAppConfig);
+
+  // Add native OFTs to native store
+  const nativeOftTokens = nativeConfig.tokens;
+  nativeBridgeStore.addCurrencies(nativeOftTokens);
+
+  // Append any missing networks from native OFT bridge
+  for (const token of nativeOftTokens){
+    if (!chains.includes(token.chainId)){
+      chains.push(token.chainId);
+    }
+  }
+  
   const wallets = createWallets(chains);
   walletStore.addWallets(wallets);
 
@@ -240,6 +255,7 @@ export async function bootstrap(lzAppConfig: AppConfig, providerFactory: Provide
     // Todo:
     // refactor to method on store
     initBridgeStore();
+    initNativeBridgeStore();
     initOnftStore();
     initTransactionStore(transactionStore);
     initUnclaimedStore(unclaimedStore);

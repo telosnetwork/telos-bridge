@@ -1,9 +1,10 @@
 import {ChainId} from '@layerzerolabs/lz-sdk';
 import {AppConfig, createAppConfig} from '@layerzerolabs/ui-app-config';
 import {WrappedTokenBridgeConfig} from '@layerzerolabs/ui-bridge-wrapped-token';
-import {Coin, Token} from '@layerzerolabs/ui-core';
+import {Coin, Currency, Token} from '@layerzerolabs/ui-core';
 
 import {OnftBridgeConfig, OnftStandard} from '@layerzerolabs/ui-bridge-onft';
+import { NativeOftConfig } from '@layerzerolabs/ui-bridge-oft';
 
 export const wrapped_mainnet: WrappedTokenBridgeConfig = {
   version: 2,
@@ -233,26 +234,6 @@ const RF  = {
   sharedDecimals: 4,
 }
 
-const TLOS = {
-  version: 2,
-  tokens: [
-    new Token(ChainId.FUJI, '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E', 18, 'TLOS'),
-    new Token(ChainId.TELOS_TESTNET, '0xAEa017740a2e7608F873CB130e7B3c335A4a1940', 18, 'TLOS')
-  ],
-  proxy: [
-    {
-      chainId: ChainId.FUJI,
-      address: '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E'
-    },
-    {
-      chainId: ChainId.TELOS_TESTNET,
-      address: '0xAEa017740a2e7608F873CB130e7B3c335A4a1940'
-    }
-  ],
-  fee: false,
-  sharedDecimals: 6,
-}
-
 const oftTokenList = [ 'BANANA', 'LVC', 'VC', 'RF'];
 
 export const isOFT = (tokenSymbol: string) => oftTokenList.includes(tokenSymbol);
@@ -265,7 +246,7 @@ export const appConfig: AppConfig = createAppConfig({
       // LVC,
       // VC,
       // RF,
-      TLOS
+      // TLOS
     ],
     wrappedToken: [
       // wrapped_mainnet,
@@ -277,3 +258,44 @@ export const appConfig: AppConfig = createAppConfig({
     ],
   },
 });
+
+// custom support for native OFT
+
+const TLOS = {
+  version: 2,
+  tokens: [
+    new Coin(ChainId.TELOS_TESTNET, 18, 'TLOS'),
+    new Token(ChainId.FUJI, '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E', 18, 'TLOS'),
+  ],
+  native: [
+    {
+      chainId: ChainId.TELOS_TESTNET,
+      address: '0xAEa017740a2e7608F873CB130e7B3c335A4a1940'
+    }
+  ],
+  proxy: [
+    {
+      chainId: ChainId.FUJI,
+      address: '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E'
+    },
+
+  ],
+  fee: false,
+  sharedDecimals: 6,
+}
+
+interface NativeConfig{
+  version: number;
+  tokens: Currency[];
+  native: NativeOftConfig[];
+  proxy: OftProxyConfig[];
+  fee: boolean;
+  sharedDecimals: number;
+}
+
+type OftProxyConfig = {
+  chainId: ChainId;
+  address: string;
+};
+
+export const nativeConfig: NativeConfig = TLOS;

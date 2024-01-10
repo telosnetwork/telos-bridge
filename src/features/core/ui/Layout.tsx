@@ -60,15 +60,15 @@ export const AppHeader = observer(() => {
             <Logo src={'/static/telos-logo.png'} width={95} height={112} alt='Telos Blockchain Logo' priority={true} />
           </NavLink>
         </Link>
-        {/* <Link href='/bridge' passHref legacyBehavior>
-          <NavLink pathname={pathname}>Bridge</NavLink>
+        <Link href='/bridge' passHref legacyBehavior>
+          <NavLink pathname={pathname}>Tokens</NavLink>
+        </Link> 
+        <Link href='/telos' passHref legacyBehavior>
+          <NavLink pathname={pathname}>TLOS</NavLink>
         </Link>
-        <Link href='/oft' passHref legacyBehavior>
-          <NavLink pathname={pathname}>OFT</NavLink>
-        </Link>
-        <Link href='/onft' passHref legacyBehavior>
+        {/* <Link href='/onft' passHref legacyBehavior>
           <NavLink pathname={pathname}>ONFT</NavLink>
-        </Link> */}
+        </Link>  */}
       </Bar.Section>
       <Bar.Section>
         <DesktopOnly>
