@@ -267,18 +267,15 @@ const TLOS = {
     new Coin(ChainId.TELOS_TESTNET, 18, 'TLOS'),
     new Token(ChainId.FUJI, '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E', 18, 'TLOS'),
   ],
-  native: [
-    {
-      chainId: ChainId.TELOS_TESTNET,
-      address: '0xAEa017740a2e7608F873CB130e7B3c335A4a1940'
-    }
-  ],
   proxy: [
     {
       chainId: ChainId.FUJI,
       address: '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E'
     },
-
+    {
+      chainId: ChainId.TELOS_TESTNET,
+      address: '0xAEa017740a2e7608F873CB130e7B3c335A4a1940'
+    }
   ],
   fee: false,
   sharedDecimals: 6,
@@ -287,7 +284,6 @@ const TLOS = {
 interface NativeConfig{
   version: number;
   tokens: Currency[];
-  native: NativeOftConfig[];
   proxy: OftProxyConfig[];
   fee: boolean;
   sharedDecimals: number;

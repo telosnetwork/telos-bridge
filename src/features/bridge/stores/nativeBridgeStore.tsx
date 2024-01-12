@@ -41,6 +41,9 @@ import {parseWalletError} from '@/core/utils/parseWalletError';
 
 import { nativeConfig } from '../../../config';
 import {unclaimedStore} from './unclaimedStore';
+import { ethers } from 'ethers';
+import { NativeOftConfig } from '@layerzerolabs/ui-bridge-oft';
+import { nativeOftAbi } from '../../../abi/nativeOftAbi';
 
 export enum DstNativeAmount {
   DEFAULT = 'DEFAULT',
@@ -916,6 +919,7 @@ export function initNativeBridgeStore() {
     autorun(() => updateAllowance()),
     // refresh
     interval(() => updateEvmBalance(), 30_000),
+
   ];
 
   // unregister
@@ -927,6 +931,49 @@ export function initNativeBridgeStore() {
 function interval(cb: () => void, timeMs: number) {
   const id = setInterval(cb, timeMs);
   return () => clearInterval(id);
+}
+
+async function nativeSend() {
+  const wallet = walletStore.evm;
+  const toAddress = wallet?.address;
+  const toAddressBytes = ethers.utils.defaultAbiCoder.encode(["address"], [wallet?.address])
+
+  const {srcChainId, dstChainId, amount} = nativeBridgeStore.form;
+
+  const qty = ethers.utils.parseEther(amount)
+
+  const srcContractAddress = nativeConfig.proxy.find(token => token.chainId === srcChainId)?.address;
+
+  // get src contract
+  const srcContractInstance = new ethers.Contract(srcContractAddress as string, srcChainId === ChainId.TELOS_TESTNET ? nativeOftAbi : nativeOftAbi, wallet?.signer )
+
+  // quote fee with default adapterParams
+  const adapterParams = ethers.utils.solidityPack(["uint16", "uint256"], [1, 200000]) // default adapterParams example
+
+  const fees = await srcContractInstance.estimateSendFee(dstChainId, toAddressBytes, qty, false, adapterParams)
+  console.log(`fees[0] (wei): ${fees[0]} / (eth): ${ethers.utils.formatEther(fees[0])}`)
+  console.log(toAddress, dstChainId, toAddressBytes, qty, fees[0] )
+
+  // includes native amount if sending native TLOS
+  const totalEth = srcChainId === ChainId.TELOS_TESTNET ? fees[0].add(qty) : fees[0];
+
+  const tx = await (
+      await srcContractInstance.sendFrom(
+          toAddress, // 'from' address to send tokens
+          dstChainId, // remote LayerZero chainId
+          toAddressBytes, // 'to' address to send tokens
+          qty, // amount of tokens to send (in wei)
+          {
+              refundAddress: toAddress,
+              zroPaymentAddress: ethers.constants.AddressZero,
+              adapterParams,
+          },
+          { value: totalEth } 
+      )
+  ).wait()
+
+  console.log(` tx: ${tx.transactionHash}`)
+  console.log(`* check your address [${toAddress}] on the destination chain, in the ERC20 transaction tab !"`)
 }
 
 type AnyFee = CurrencyAmount | Record<string, CurrencyAmount>;
