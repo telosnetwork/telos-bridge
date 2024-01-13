@@ -22,6 +22,7 @@ import {
 import {ONE_ADDRESS} from '@layerzerolabs/ui-evm';
 import {assertWallet, Wallet} from '@layerzerolabs/ui-wallet';
 import assert from 'assert';
+import { Contract, ethers } from 'ethers';
 import {autorun, computed, flow, makeAutoObservable} from 'mobx';
 import {fromPromise} from 'mobx-utils';
 import {toast} from 'react-toastify';
@@ -39,16 +40,15 @@ import {FromPromise, fromPromiseValue} from '@/core/utils/fromPromise';
 import {handleError} from '@/core/utils/handleError';
 import {parseWalletError} from '@/core/utils/parseWalletError';
 
+import { oftAbi } from '../../../abi/oftAbi';
 import { nativeConfig } from '../../../config';
 import {unclaimedStore} from './unclaimedStore';
-import { ethers } from 'ethers';
-import { NativeOftConfig } from '@layerzerolabs/ui-bridge-oft';
-import { nativeOftAbi } from '../../../abi/nativeOftAbi';
 
 export enum DstNativeAmount {
   DEFAULT = 'DEFAULT',
   MAX = 'MAX',
 }
+
 export type ValidationError = string;
 
 export class NativeBridgeStore {
@@ -57,7 +57,6 @@ export class NativeBridgeStore {
   isMining = false;
   isExecuting = false;
   isApproving = false;
-  isRegistering = false;
 
   form: BridgeFrom = {
     srcCurrency: undefined,
@@ -75,7 +74,6 @@ export class NativeBridgeStore {
   promise: BridgePromise = {
     output: undefined,
     allowance: undefined,
-    limitAmount: undefined,
     extraGas: undefined,
     messageFee: undefined,
   };
@@ -87,7 +85,6 @@ export class NativeBridgeStore {
         adapterParams: computed.struct,
         dstNativeAmount: computed.struct,
         amount: computed.struct,
-        limitAmount: computed.struct,
         allowance: computed.struct,
         extraGas: computed.struct,
         messageFee: computed.struct,
@@ -108,7 +105,7 @@ export class NativeBridgeStore {
 
   // views
   get output(): BridgeOutput | undefined {
-    return fromPromiseValue(this.promise.output);
+    return this.promise.output;
   }
 
   get messageFee(): FeeQuote | undefined {
@@ -117,10 +114,6 @@ export class NativeBridgeStore {
 
   get extraGas(): number | undefined {
     return fromPromiseValue(this.promise.extraGas);
-  }
-
-  get limitAmount(): CurrencyAmount | undefined {
-    return fromPromiseValue(this.promise.limitAmount);
   }
 
   get allowance(): CurrencyAmount | undefined {
@@ -134,12 +127,6 @@ export class NativeBridgeStore {
     if (!srcCurrency) return undefined;
     if (!dstCurrency) return undefined;
     return this.apis.find((s) => s.supportsTransfer(srcCurrency, dstCurrency));
-  }
-
-  get registerApi(): BridgeApi<unknown, unknown> | undefined {
-    const {dstCurrency} = this.form;
-    if (!dstCurrency) return undefined;
-    return this.apis.find((s) => s.supportsRegister(dstCurrency));
   }
 
   get claimApi(): BridgeApi<unknown, unknown> | undefined {
@@ -284,9 +271,11 @@ export class NativeBridgeStore {
     const native = getNativeCurrency(this.form.dstChainId);
     return getWalletBalance(native);
   }
+
   get srcNativeCost(): CurrencyAmount | undefined {
     return this.messageFee?.nativeFee;
   }
+
   get maxDstNativeAmount(): CurrencyAmount | undefined {
     const {dstChainId, srcChainId} = this.form;
     if (!srcChainId) return undefined;
@@ -294,6 +283,7 @@ export class NativeBridgeStore {
     const config = lzConfigStore.getDstConfig(srcChainId, dstChainId);
     return config?.dstNativeAmtCap;
   }
+
   get maxAmount(): CurrencyAmount | undefined {
     const {srcChainId} = this.form;
     const {srcBalance, srcNativeCost} = this;
@@ -307,18 +297,23 @@ export class NativeBridgeStore {
     }
     return undefined;
   }
+
   get srcBalance(): CurrencyAmount | undefined {
     return getWalletBalance(this.form.srcCurrency);
   }
+
   get dstBalance(): CurrencyAmount | undefined {
     return getWalletBalance(this.form.dstCurrency);
   }
+
   get amount(): CurrencyAmount | undefined {
     return tryParseCurrencyAmount(this.form.srcCurrency, this.form.amount);
   }
+
   get outputAmount(): CurrencyAmount | undefined {
     return this.output?.amount;
   }
+
   get minAmount(): CurrencyAmount | undefined {
     const {amount} = this;
     const {dstCurrency} = this.form;
@@ -328,6 +323,7 @@ export class NativeBridgeStore {
     // minAmount and outputAmount must be always in dstCurrency
     return castCurrencyAmountUnsafe(percentage, dstCurrency);
   }
+
   get dstNativeAmount(): CurrencyAmount | undefined {
     const {dstNativeAmount, dstChainId} = this.form;
     if (!dstChainId) return undefined;
@@ -354,13 +350,14 @@ export class NativeBridgeStore {
 
     return tryParseCurrencyAmount(native, dstNativeAmount);
   }
+  
   get errors() {
     const errors: ValidationError[] = [];
     function addError(error: string) {
       errors.push(error);
     }
-    const {srcNativeBalance, srcNativeCost, amount, limitAmount, minAmount, outputAmount} = this;
-    const {srcChainId, dstChainId, srcCurrency, dstCurrency} = this.form;
+    const {srcNativeBalance, srcNativeCost, amount } = this;
+    const {srcChainId, dstChainId} = this.form;
     if (srcChainId && srcChainId === dstChainId) {
       addError('Select different chain');
     }
@@ -375,8 +372,6 @@ export class NativeBridgeStore {
     }
     if (!amount || !amount.greaterThan(0)) {
       addError('Enter amount');
-    } else if (limitAmount?.lessThan(amount)) {
-      addError('Limit exceeded');
     } else if (this.maxAmount?.lessThan(amount)) {
       addError('Insufficient balance');
     } else if (this.outputAmount?.equalTo(0)) {
@@ -393,24 +388,26 @@ export class NativeBridgeStore {
     ) {
       addError('Gas too large');
     }
-
     if (!this.messageFee) addError('Checking fee ...');
     if (!this.output) addError('Checking fee ...');
-    if (!limitAmount) addError('Checking limit...');
     return errors;
   }
+
   get unclaimed(): CurrencyAmount[] {
     const {unclaimed} = unclaimedStore;
     return unclaimed.map((balance) => balance.amount);
   }
+
   get hasUnclaimed(): boolean {
     return this.unclaimed.length > 0;
   }
+
   get isApproved(): boolean | undefined {
     const {allowance, amount} = this;
     if (!allowance || !amount) return undefined;
     return !amount.greaterThan(allowance);
   }
+
   get adapterParams(): AdapterParams | undefined {
     const {dstNativeAmount, dstAddress, extraGas} = this;
     if (!extraGas === undefined) return undefined;
@@ -425,23 +422,37 @@ export class NativeBridgeStore {
     });
   }
 
-  // actions
-
-  async updateAllowance(): Promise<unknown> {
-    this.promise.allowance = undefined;
-    const {transferApi, srcAddress} = this;
-    const {srcCurrency} = this.form;
-    if (!transferApi) return;
-    if (!srcAddress) return;
-    if (!srcCurrency) return;
-    return (this.promise.allowance = fromPromise(
-      transferApi.getAllowance(srcCurrency, srcAddress),
-    ));
+  get srcContractAddress(): string | undefined {
+    const {srcChainId} = nativeBridgeStore.form;
+    if (nativeBridgeStore.form.srcChainId){
+      return nativeConfig.proxy.find(token => token.chainId === srcChainId)?.address;
+    }
   }
 
-  setAmount(amount: string) {
+  get srcContractInstance(): Contract | undefined {
+    if (nativeBridgeStore.srcContractAddress){
+      const wallet = walletStore.evm;
+      return new ethers.Contract(nativeBridgeStore.srcContractAddress as string, oftAbi, wallet?.signer )
+    }  
+  }
+
+  // actions
+  async updateAllowance(): Promise<unknown> {
+    this.promise.allowance = undefined;
+    const {srcAddress} = this;
+    const {srcCurrency} = this.form;
+    if (!srcAddress) return;
+    if (!srcCurrency) return;
+    // return (this.promise.allowance = fromPromise(
+      // transferApi.getAllowance(srcCurrency, srcAddress),
+    // ));
+  }
+
+  async setAmount(amount: string) {
     if (tryParseNumber(amount) !== undefined) {
       this.form.amount = amount;
+      this.updateOutput();
+      await this.updateMessageFee();
     }
   }
 
@@ -457,6 +468,7 @@ export class NativeBridgeStore {
       this.form.dstNativeAmount = amount;
     }
   }
+
   setMaxAmount() {
     if (!this.maxAmount) return;
     this.form.amount = this.maxAmount.toExact();
@@ -479,10 +491,12 @@ export class NativeBridgeStore {
       this.form.dstChainId = dstCurrency?.chainId;
     }
   }
+
   setDstCurrency(currency: Currency) {
     this.form.dstCurrency = currency;
     this.form.dstChainId = currency.chainId;
   }
+
   switch() {
     const {form} = this;
     [form.srcChainId, form.dstChainId, form.srcCurrency, form.dstCurrency] = [
@@ -492,6 +506,7 @@ export class NativeBridgeStore {
       form.srcCurrency,
     ];
   }
+
   transfer = flow(function* (this: NativeBridgeStore) {
     try {
       this.isExecuting = true;
@@ -508,8 +523,6 @@ export class NativeBridgeStore {
         adapterParams,
         outputAmount,
         dstNativeBalance,
-        transferApi,
-        registerApi,
       } = this;
       const {srcChainId, dstChainId, dstCurrency, srcCurrency} = form;
 
@@ -527,24 +540,6 @@ export class NativeBridgeStore {
       assert(srcWallet?.address, 'srcWallet');
       assert(dstWallet?.address, 'dstWallet');
       assert(dstNativeBalance, 'dstNativeBalance');
-      assert(transferApi, 'transferApi');
-      assert(registerApi, 'registerApi');
-
-      // try to register if possible
-      let isRegistered: boolean = yield registerApi.isRegistered(dstCurrency, dstWallet.address);
-      if (!isRegistered) {
-        const unsignedTransaction: Awaited<ReturnType<typeof registerApi['register']>> =
-          yield registerApi.register(dstCurrency);
-
-        const estimatedGasAmount: Awaited<
-          ReturnType<typeof unsignedTransaction['estimateNative']>
-        > = yield unsignedTransaction.estimateNative(dstWallet);
-
-        if (dstNativeBalance.greaterThan(estimatedGasAmount)) {
-          yield this.register();
-          isRegistered = true;
-        }
-      }
 
       if (!this.isApproved) {
         yield this.approve();
@@ -566,8 +561,11 @@ export class NativeBridgeStore {
       yield srcWallet.switchChain(srcChainId);
       this.isSigning = true;
 
-      const unsignedTransaction: Awaited<ReturnType<typeof transferApi['transfer']>> =
-        yield transferApi.transfer(input);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const unsignedTransaction: Awaited<ReturnType<any>> =
+        // yield transferApi.transfer(input);
+        yield nativeSend();
+
 
       // ensure correct wallet
       yield assertWallet(srcWallet, {chainId: srcChainId, address: srcAddress});
@@ -581,10 +579,6 @@ export class NativeBridgeStore {
       const receipt: Awaited<ReturnType<TransactionResult['wait']>> =
         yield transactionResult.wait();
       this.isMining = false;
-
-      if (!isRegistered) {
-        uiStore.claimReminderAlert.open();
-      }
 
       const tx = transactionStore.create({
         chainId: srcChainId,
@@ -637,45 +631,6 @@ export class NativeBridgeStore {
     }
   });
 
-  register: () => Promise<unknown> = flow(function* (this: NativeBridgeStore) {
-    this.isRegistering = true;
-    try {
-      const {dstWallet, registerApi} = this;
-      const {dstCurrency} = this.form;
-
-      assert(dstCurrency, 'dstCurrency');
-      assert(dstWallet, 'dstWallet');
-      assert(registerApi, 'registerApi');
-
-      const unsignedTransaction: Awaited<ReturnType<typeof registerApi['register']>> =
-        yield registerApi.register(dstCurrency);
-
-      const transactionResult: Awaited<
-        ReturnType<typeof unsignedTransaction['signAndSubmitTransaction']>
-      > = yield unsignedTransaction.signAndSubmitTransaction(dstWallet);
-
-      const receipt: Awaited<ReturnType<typeof transactionResult['wait']>> =
-        yield transactionResult.wait();
-
-      toast.success(
-        <Toast>
-          <h1>Transaction Submitted</h1>
-          <p>
-            <a
-              href={getTransactionLink(dstCurrency.chainId, receipt.txHash)}
-              target='_blank'
-              rel='noreferrer'
-            >
-              View on block explorer
-            </a>
-          </p>
-        </Toast>,
-      );
-    } finally {
-      this.isRegistering = false;
-    }
-  });
-
   approve: () => Promise<void> = flow(function* (this: NativeBridgeStore) {
     this.isApproving = true;
     try {
@@ -719,29 +674,32 @@ export class NativeBridgeStore {
   updateOutput = flow(function* (this: NativeBridgeStore) {
     this.promise.output = undefined;
     const {dstCurrency} = this.form;
-    const {amount, transferApi} = this;
+    const {amount} = this;
     if (!amount) return;
     if (!dstCurrency) return;
-    if (!transferApi) return;
 
-    yield (this.promise.output = fromPromise(
-      transferApi.getOutput(amount, dstCurrency).then((output) => ({
-        amount: output.amount,
-        fees: toBridgeFee(output.fee),
-      })),
-    ));
+    yield (this.promise.output = 
+      {
+        amount: amount,
+        fees: { totalFee:  CurrencyAmount.fromRawAmount(dstCurrency, 0)}
+      }
+    );
   });
 
   updateMessageFee = flow(function* (this: NativeBridgeStore) {
     this.promise.messageFee = undefined;
+    const toAddress = walletStore.evm?.address;  
+    const { srcCurrency, dstChainId, amount} = this.form;
+    const { srcContractInstance} = this;
 
-    const {srcCurrency, dstCurrency} = this.form;
-    const {transferApi, adapterParams} = this;
+    if (!dstChainId) return;
+    if (!amount) return;
+    if (!srcContractInstance) return;
+    if (!toAddress) return;
 
-    if (!srcCurrency) return;
-    if (!dstCurrency) return;
-    if (!transferApi) return;
-    if (!adapterParams) return;
+    const toAddressBytes = ethers.utils.defaultAbiCoder.encode(["address"], [toAddress])
+
+    const qty = ethers.utils.parseEther(amount)
 
     // We want to introduce a buffer to avoid any gas price fluctuations
     // to affect the user experience
@@ -749,11 +707,13 @@ export class NativeBridgeStore {
     // The user will be refunded so this increase does not affect the actual price
     const multiplier = new Fraction(110, 100);
 
+    const adapterParams = ethers.utils.solidityPack(["uint16", "uint256"], [1, 200000])
+
     yield (this.promise.messageFee = fromPromise(
-      transferApi.getMessageFee(srcCurrency, dstCurrency, adapterParams).then((fee) => ({
-        nativeFee: fee.nativeFee.multiply(multiplier),
-        zroFee: fee.zroFee.multiply(multiplier),
-      })),
+      (nativeBridgeStore.srcContractInstance as Contract).estimateSendFee(dstChainId, toAddressBytes, qty, false, adapterParams).then((fee: {nativeFee: number, zroFee: number}) => ({
+          nativeFee: CurrencyAmount.fromRawAmount(srcCurrency as Currency, fee.nativeFee).multiply(multiplier),
+          zroFee: CurrencyAmount.fromRawAmount(srcCurrency as Currency, fee.zroFee).multiply(multiplier),
+        }))
     ));
   });
 
@@ -766,17 +726,6 @@ export class NativeBridgeStore {
     if (!transferApi) return;
 
     yield (this.promise.extraGas = fromPromise(transferApi.getExtraGas(srcCurrency, dstCurrency)));
-  });
-
-  updateLimit = flow(function* (this: NativeBridgeStore) {
-    this.promise.limitAmount = undefined;
-    const {srcCurrency, dstCurrency} = this.form;
-    const {transferApi} = this;
-    if (!srcCurrency) return;
-    if (!dstCurrency) return;
-    if (!transferApi) return;
-
-    yield (this.promise.limitAmount = fromPromise(transferApi.getLimit(srcCurrency, dstCurrency)));
   });
 
   addBridge(bridge: BridgeApi<unknown, AnyFee>) {
@@ -793,11 +742,6 @@ export class NativeBridgeStore {
       }
     }
   }
-}
-
-function toBridgeFee(fees: AnyFee): BridgeFee {
-  if (fees instanceof CurrencyAmount) return {totalFee: fees};
-  return fees;
 }
 
 function findMatchingCurrency(currency: Currency) {
@@ -836,9 +780,8 @@ type BridgeFrom = {
 };
 
 type BridgePromise = {
-  output: FromPromise<BridgeOutput> | undefined;
+  output: BridgeOutput | undefined;
   allowance: FromPromise<CurrencyAmount> | undefined;
-  limitAmount: FromPromise<CurrencyAmount> | undefined;
   extraGas: FromPromise<number> | undefined;
   messageFee: FromPromise<FeeQuote> | undefined;
 };
@@ -863,35 +806,12 @@ export function initNativeBridgeStore() {
       });
   };
 
-  const updateMessageFee = () => {
-    // const {srcCurrency, dstCurrency} = nativeBridgeStore.form;
-    // const {adapterParams} = nativeBridgeStore;
-    nativeBridgeStore.updateMessageFee();
-  };
-
-  const updateExtraGas = () => {
-    // const {srcCurrency, dstCurrency} = nativeBridgeStore.form;
-    // const {transferApi} = nativeBridgeStore;
-    nativeBridgeStore.updateExtraGas();
-  };
-
-  const updateOutput = () => {
-    // const {dstCurrency} = nativeBridgeStore.form;
-    // const {amount} = nativeBridgeStore;
-    nativeBridgeStore.updateOutput();
-  };
-
   const updateDstPrice = () => {
     const {srcChainId, dstChainId} = nativeBridgeStore.form;
     if (!srcChainId) return;
     if (!dstChainId) return;
     lzConfigStore.updateDstConfig(srcChainId, dstChainId);
     lzConfigStore.updateDstPrice(srcChainId, dstChainId);
-  };
-
-  const updateTransferLimit = () => {
-    // const {srcCurrency, dstChainId} = nativeBridgeStore.form;
-    nativeBridgeStore.updateLimit();
   };
 
   const updateDefaultAirdropAmount = () => {
@@ -901,20 +821,13 @@ export function initNativeBridgeStore() {
   };
 
   const updateAllowance = () => {
-    // const {evm} = walletStore;
-    // const {srcCurrency} = nativeBridgeStore.form;
-    // const {transferApi} = nativeBridgeStore;
     nativeBridgeStore.updateAllowance();
   };
 
   const handlers = [
     // each in separate `thread`
     autorun(() => updateEvmBalance()),
-    autorun(() => updateMessageFee()),
-    autorun(() => updateExtraGas()),
-    autorun(() => updateOutput()),
     autorun(() => updateDstPrice()),
-    autorun(() => updateTransferLimit()),
     autorun(() => updateDefaultAirdropAmount()),
     autorun(() => updateAllowance()),
     // refresh
@@ -934,25 +847,20 @@ function interval(cb: () => void, timeMs: number) {
 }
 
 async function nativeSend() {
-  const wallet = walletStore.evm;
-  const toAddress = wallet?.address;
-  const toAddressBytes = ethers.utils.defaultAbiCoder.encode(["address"], [wallet?.address])
+  const toAddress = walletStore.evm?.address;
+  const toAddressBytes = ethers.utils.defaultAbiCoder.encode(["address"], [toAddress])
 
   const {srcChainId, dstChainId, amount} = nativeBridgeStore.form;
 
   const qty = ethers.utils.parseEther(amount)
 
-  const srcContractAddress = nativeConfig.proxy.find(token => token.chainId === srcChainId)?.address;
-
   // get src contract
-  const srcContractInstance = new ethers.Contract(srcContractAddress as string, srcChainId === ChainId.TELOS_TESTNET ? nativeOftAbi : nativeOftAbi, wallet?.signer )
+  const srcContractInstance = nativeBridgeStore.srcContractInstance as Contract;
 
   // quote fee with default adapterParams
   const adapterParams = ethers.utils.solidityPack(["uint16", "uint256"], [1, 200000]) // default adapterParams example
 
   const fees = await srcContractInstance.estimateSendFee(dstChainId, toAddressBytes, qty, false, adapterParams)
-  console.log(`fees[0] (wei): ${fees[0]} / (eth): ${ethers.utils.formatEther(fees[0])}`)
-  console.log(toAddress, dstChainId, toAddressBytes, qty, fees[0] )
 
   // includes native amount if sending native TLOS
   const totalEth = srcChainId === ChainId.TELOS_TESTNET ? fees[0].add(qty) : fees[0];
@@ -971,7 +879,8 @@ async function nativeSend() {
           { value: totalEth } 
       )
   ).wait()
-
+  // eslint-disable-next-line no-debugger
+  debugger;
   console.log(` tx: ${tx.transactionHash}`)
   console.log(`* check your address [${toAddress}] on the destination chain, in the ERC20 transaction tab !"`)
 }

@@ -22,7 +22,5 @@ export function getWalletBalance(currency?: Currency): CurrencyAmount | undefine
   if (!currency) return undefined;
   const wallet = getWalletForCurrency(currency);
   if (!wallet?.address) return undefined;
-  // eslint-disable-next-line no-debugger
-  debugger;
   return balanceStore.getBalance(currency, wallet.address);
 }
