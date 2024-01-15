@@ -47,26 +47,26 @@ export const AppHeader = observer(() => {
     alignItems: 'center',
     gap: '16px',
   };
-
+  
   useEffect(() => {
     changeUserThemePreference('Telos Dark');
   }, [changeUserThemePreference]);
 
   return (
     <Bar>
-      <Bar.Section sx={{gap: {md: 6}, width:{xs: "100%", sm: 'unset'}}}>
+      <Bar.Section sx={{gap: {md: 6}, width:{xs: "100%", md: 'unset'}}}>
         <Link href='/bridge' passHref legacyBehavior>
-          <NavLink sx={{ margin: {xs: 'auto'}}} pathname={pathname} style={logoStyle}>
+          <NavLink sx={{ margin: {xs: 'auto'}, width:{xs: "100%", md: 'unset'}}} pathname={pathname} style={logoStyle} >
             <Logo src={'/static/telos-logo.png'} width={95} height={112} alt='Telos Blockchain Logo' priority={true} />
           </NavLink>
         </Link>
-        <a href='https://stakely.io/en/faucet/telos-evm-tlos' target='_blank' rel="noreferrer" >
-          <NavLink pathname={pathname}>Faucet </NavLink>
-        </a>
-        <a href='https://dapp.ptokens.io/#/swap?asset=tlos&from=eth&to=telos' target='_blank' rel="noreferrer" >
-          <NavLink pathname={pathname}>TLOS Bridge</NavLink>
-        </a>
-        {/* <Link href='/oft' passHref legacyBehavior>
+        <NavLink sx={{ margin:{xs: "auto", md: 'unset'}}} href='https://stakely.io/en/faucet/telos-evm-tlos' target='_blank' rel="noreferrer">
+          Faucet 
+        </NavLink>
+        {/* <NavLink href='https://dapp.ptokens.io/#/swap?asset=tlos&from=eth&to=telos' target='_blank' rel="noreferrer" >
+          TLOS Bridge
+        </NavLink>
+        <Link href='/oft' passHref legacyBehavior>
           <NavLink pathname={pathname}>OFT</NavLink>
         </Link>
         <Link href='/onft' passHref legacyBehavior>
