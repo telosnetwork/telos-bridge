@@ -356,16 +356,16 @@ export class NativeBridgeStore {
     function addError(error: string) {
       errors.push(error);
     }
-    const {srcNativeBalance, srcNativeCost, amount } = this;
+    const { amount } = this;
     const {srcChainId, dstChainId} = this.form;
     if (srcChainId && srcChainId === dstChainId) {
       addError('Select different chain');
     }
-    if (srcNativeCost && srcNativeBalance) {
-      if (srcNativeCost.greaterThan(srcNativeBalance)) {
-        addError('Not enough native for gas');
-      }
-    }
+    // if (srcNativeCost && srcNativeBalance) {
+    //   if (srcNativeCost.greaterThan(srcNativeBalance)) {
+    //     addError('Not enough native for gas');
+    //   }
+    // }
     if (!dstChainId) addError('Select network');
     if (!srcChainId) {
       addError('Select network');
@@ -380,14 +380,15 @@ export class NativeBridgeStore {
     if (srcChainId && srcChainId === dstChainId) {
       addError('Change network');
     }
-    if (!this.dstNativeAmount) {
-      addError('Set gas on destination');
-    } else if (
-      this.maxDstNativeAmount &&
-      this.dstNativeAmount.greaterThan(this.maxDstNativeAmount)
-    ) {
-      addError('Gas too large');
-    }
+    // if (!this.dstNativeAmount) {
+    //   addError('Set gas on destination');
+    // } else if (
+    //   this.maxDstNativeAmount &&
+    //   this.dstNativeAmount.greaterThan(this.maxDstNativeAmount)
+    // ) {
+    //   addError('Gas too large');
+    // }
+
     if (!this.messageFee) addError('Checking fee ...');
     if (!this.output) addError('Checking fee ...');
     return errors;
@@ -432,7 +433,7 @@ export class NativeBridgeStore {
   get srcContractInstance(): Contract | undefined {
     if (nativeBridgeStore.srcContractAddress){
       const wallet = walletStore.evm;
-      return new ethers.Contract(nativeBridgeStore.srcContractAddress as string, oftAbi, wallet?.signer )
+      return new ethers.Contract(nativeBridgeStore.srcContractAddress as string, oftAbi, wallet?.signer)
     }  
   }
 
@@ -541,8 +542,8 @@ export class NativeBridgeStore {
       assert(dstWallet?.address, 'dstWallet');
       assert(dstNativeBalance, 'dstNativeBalance');
 
-      if (!this.isApproved) {
-        yield this.approve();
+      if (!this.isApproved && srcCurrency.chainId !== ChainId.TELOS_TESTNET) {
+        // yield this.approve();
       }
 
       const input: TransferInput = {
@@ -562,10 +563,7 @@ export class NativeBridgeStore {
       this.isSigning = true;
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const unsignedTransaction: Awaited<ReturnType<any>> =
-        // yield transferApi.transfer(input);
-        yield nativeSend();
-
+      const unsignedTransaction: Awaited<ReturnType<any>> = yield this.sendNative();
 
       // ensure correct wallet
       yield assertWallet(srcWallet, {chainId: srcChainId, address: srcAddress});
@@ -631,11 +629,50 @@ export class NativeBridgeStore {
     }
   });
 
+  sendNative: () => Promise<void> = flow(function* (this: NativeBridgeStore) {
+
+    const {srcCurrency, srcChainId, dstChainId, amount} = this.form;
+
+    assert(srcChainId, 'srcChainId');
+    assert(dstChainId, 'dstChainId');
+    assert(srcCurrency, 'srcCurrency');
+    assert(this.messageFee, 'messageFee');
+    assert(this.srcContractInstance, 'srcContractInstance');
+
+    const qty = ethers.utils.parseEther(amount)
+    const toAddress = walletStore.evm?.address;
+    const toAddressBytes = ethers.utils.defaultAbiCoder.encode(["address"], [toAddress])
+
+    // if sending from Telos network, include amount in total native token sent
+    const fee = srcChainId === ChainId.TELOS_TESTNET ?
+      this.messageFee.nativeFee.add(CurrencyAmount.fromRawAmount(srcCurrency, qty.toBigInt())):
+      this.messageFee.nativeFee;
+
+    // includes native amount if sending native TLOS
+    const totalEth =  ethers.BigNumber.from(fee.quotient);
+    const adapterParams = ethers.utils.solidityPack(["uint16", "uint256"], [1, 200000]);
+
+    yield (
+        this.srcContractInstance.sendFrom(
+            toAddress, // 'from' address to send tokens
+            dstChainId, // remote LayerZero chainId
+            toAddressBytes, // 'to' address to send tokens
+            qty, // amount of tokens to send (in wei)
+            {
+                refundAddress: toAddress,
+                zroPaymentAddress: ethers.constants.AddressZero,
+                adapterParams,
+            },
+            { value: totalEth } 
+        )
+    );
+  })
+
   approve: () => Promise<void> = flow(function* (this: NativeBridgeStore) {
     this.isApproving = true;
     try {
       const {transferApi, amount, srcWallet, srcAddress} = this;
-      assert(transferApi, 'transferApi');
+      // assert(transferApi, 'transferApi');
       assert(amount, 'amount');
       assert(srcWallet, 'srcWallet');
       assert(srcAddress, 'srcAddress');
@@ -707,7 +744,7 @@ export class NativeBridgeStore {
     // The user will be refunded so this increase does not affect the actual price
     const multiplier = new Fraction(110, 100);
 
-    const adapterParams = ethers.utils.solidityPack(["uint16", "uint256"], [1, 200000])
+    const adapterParams = ethers.utils.solidityPack(["uint16", "uint256"], [1, 200000]);
 
     yield (this.promise.messageFee = fromPromise(
       (nativeBridgeStore.srcContractInstance as Contract).estimateSendFee(dstChainId, toAddressBytes, qty, false, adapterParams).then((fee: {nativeFee: number, zroFee: number}) => ({
@@ -844,45 +881,6 @@ export function initNativeBridgeStore() {
 function interval(cb: () => void, timeMs: number) {
   const id = setInterval(cb, timeMs);
   return () => clearInterval(id);
-}
-
-async function nativeSend() {
-  const toAddress = walletStore.evm?.address;
-  const toAddressBytes = ethers.utils.defaultAbiCoder.encode(["address"], [toAddress])
-
-  const {srcChainId, dstChainId, amount} = nativeBridgeStore.form;
-
-  const qty = ethers.utils.parseEther(amount)
-
-  // get src contract
-  const srcContractInstance = nativeBridgeStore.srcContractInstance as Contract;
-
-  // quote fee with default adapterParams
-  const adapterParams = ethers.utils.solidityPack(["uint16", "uint256"], [1, 200000]) // default adapterParams example
-
-  const fees = await srcContractInstance.estimateSendFee(dstChainId, toAddressBytes, qty, false, adapterParams)
-
-  // includes native amount if sending native TLOS
-  const totalEth = srcChainId === ChainId.TELOS_TESTNET ? fees[0].add(qty) : fees[0];
-
-  const tx = await (
-      await srcContractInstance.sendFrom(
-          toAddress, // 'from' address to send tokens
-          dstChainId, // remote LayerZero chainId
-          toAddressBytes, // 'to' address to send tokens
-          qty, // amount of tokens to send (in wei)
-          {
-              refundAddress: toAddress,
-              zroPaymentAddress: ethers.constants.AddressZero,
-              adapterParams,
-          },
-          { value: totalEth } 
-      )
-  ).wait()
-  // eslint-disable-next-line no-debugger
-  debugger;
-  console.log(` tx: ${tx.transactionHash}`)
-  console.log(`* check your address [${toAddress}] on the destination chain, in the ERC20 transaction tab !"`)
 }
 
 type AnyFee = CurrencyAmount | Record<string, CurrencyAmount>;
