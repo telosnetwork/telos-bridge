@@ -869,12 +869,18 @@ export function initNativeBridgeStore() {
     nativeBridgeStore.updateAllowance();
   };
 
+  const setInitialSource = () => {
+    nativeBridgeStore.setSrcChainId(ChainId.TELOS_TESTNET);
+    nativeBridgeStore.setSrcCurrency(nativeConfig.tokens.find((token) => token.chainId === ChainId.TELOS_TESTNET) as Currency);
+  }
+
   const handlers = [
     // each in separate `thread`
     autorun(() => updateEvmBalance()),
     autorun(() => updateDstPrice()),
     autorun(() => updateDefaultAirdropAmount()),
     autorun(() => updateAllowance()),
+    autorun(() => setInitialSource()),
     // refresh
     interval(() => updateEvmBalance(), 30_000),
 
