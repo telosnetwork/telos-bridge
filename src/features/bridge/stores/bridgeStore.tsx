@@ -101,6 +101,13 @@ export class BridgeStore {
     );
   }
 
+  // preferred order of network selection list
+  static chainOrder = [ChainId.TELOS, ChainId.ETHEREUM, ChainId.BSC, ChainId.POLYGON, ChainId.ZKSYNC, ChainId.ZKCONSENSYS, ChainId.AVALANCHE,  ChainId.ARBITRUM];
+
+  static sortChains(chains: ChainId[]): ChainId[] {
+    return chains.sort((a,b) => this.chainOrder.indexOf(b) - this.chainOrder.indexOf(a));
+  }
+
   // views
   get output(): BridgeOutput | undefined {
     return fromPromiseValue(this.promise.output);
@@ -144,7 +151,8 @@ export class BridgeStore {
   }
 
   get chains(): ChainId[] {
-    return Array.from(new Set(this.currencies.map((c) => c.chainId)));
+    const chainList = Array.from(new Set(this.currencies.map((c) => c.chainId)));
+    return BridgeStore.sortChains(chainList);
   }
 
   get srcCurrencyOptions(): CurrencyOption[] {
@@ -219,7 +227,9 @@ export class BridgeStore {
   }
 
   get srcNetworkOptions(): ChainOption[] {
-    const chains = Array.from(new Set(this.srcCurrencyOptions.map((c) => c.currency.chainId)));
+    const chainList = Array.from(new Set(this.srcCurrencyOptions.map((c) => c.currency.chainId)));
+    const chains = BridgeStore.sortChains(chainList);
+
     return chains.map((chainId) => ({
       chainId,
       disabled: false,

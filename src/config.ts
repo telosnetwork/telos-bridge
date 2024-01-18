@@ -250,7 +250,7 @@ export const appConfig: AppConfig = createAppConfig({
     ],
     wrappedToken: [
       // wrapped_mainnet,
-      // wrapped_testnet,
+      wrapped_testnet,
     ],
     onft: [
       // erc721_testnet,
