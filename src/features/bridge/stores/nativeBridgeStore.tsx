@@ -59,11 +59,14 @@ export class NativeBridgeStore {
   isExecuting = false;
   isApproving = false;
 
+  defaultSrcCurrency = nativeConfig.tokens.find((token) => token.chainId === ChainId.TELOS_TESTNET);
+  defaultDstCurrency = nativeConfig.tokens.find((token) => token.chainId !== ChainId.TELOS_TESTNET);
+
   form: BridgeFrom = {
-    srcCurrency: undefined,
-    dstCurrency: undefined,
-    srcChainId: undefined,
-    dstChainId: undefined,
+    srcCurrency: this.defaultSrcCurrency,
+    dstCurrency: this.defaultDstCurrency,
+    srcChainId: this.defaultSrcCurrency?.chainId,
+    dstChainId: this.defaultDstCurrency?.chainId,
     amount: '',
     dstNativeAmount: DstNativeAmount.DEFAULT,
   };
@@ -655,6 +658,9 @@ export class NativeBridgeStore {
     const totalEth =  ethers.BigNumber.from(fee.quotient);
 
     const adapterParams = ethers.utils.solidityPack(["uint16", "uint256"], [1, 200000]);
+    // eslint-disable-next-line no-debugger
+    debugger;
+    const testing = this.adapterParams;
     // const adapterParams = ethers.utils.solidityPack(["uint16", "uint256", "uint256", "address"], [1, 200000, this.dstNativeAmount.quotient, toAddress ]);
     // const adapterParams = ethers.utils.solidityPack(["uint16", "uint256", "uint256", "address"], [2, 200000, 55555555555, toAddress ]);
 
@@ -880,7 +886,7 @@ export function initNativeBridgeStore() {
     autorun(() => updateDstPrice()),
     autorun(() => updateDefaultAirdropAmount()),
     autorun(() => updateAllowance()),
-    autorun(() => setInitialSource()),
+    // autorun(() => setInitialSource()),
     // refresh
     interval(() => updateEvmBalance(), 30_000),
 
