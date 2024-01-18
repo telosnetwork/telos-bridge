@@ -281,6 +281,66 @@ const TLOS = {
   sharedDecimals: 6,
 }
 
+// rpc list used for native oft implementation
+
+const testnetRpcList: RPC[] = [
+  {
+    chainId: 10199,
+    nativeChainId: 41,
+    rpc: 'https://testnet.telos.net/evm'
+  },
+  {
+    chainId: 10106,
+    nativeChainId: 43113,
+    rpc: 'https://api.avax-test.network/ext/bc/C/rpc'
+  }
+]
+
+const mainnetRpcList: RPC[] = [
+  { chainId: 199,
+    nativeChainId: 40,
+    rpc: 'https://mainnet.telos.net/evm',
+  },
+  {
+    chainId: 101,
+    nativeChainId: 1,
+    rpc: 'https://mainnet.infura.io/v3/',
+  },
+  {
+    chainId: 102,
+    nativeChainId: 56,
+    rpc: 'https://bsc-dataseed1.ninicoin.io',
+  },
+  {
+    chainId: 106,
+    nativeChainId: 43114,
+    rpc: 'https://avalanche-mainnet.infura.io'
+  },
+  {
+    chainId: 109,
+    nativeChainId: 137,
+    rpc: 'https://polygon-rpc.com/'
+  },
+  {
+    chainId: 165,
+    nativeChainId: 324,
+    rpc: 'https://mainnet.era.zksync.io'
+  },
+  {
+    chainId: 183,
+    nativeChainId: 59144,
+    rpc: 'https://rpc.linea.build	'
+  },
+]
+
+export const rpcList = appConfig.bridge.wrappedToken[0].wrapped.chainId === ChainId.TELOS ? mainnetRpcList : testnetRpcList;
+
+interface RPC{
+  chainId: number;
+  nativeChainId: number;
+  rpc: string;
+}
+
 interface NativeConfig{
   version: number;
   tokens: Currency[];

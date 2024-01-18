@@ -42,7 +42,7 @@ import {handleError} from '@/core/utils/handleError';
 import {parseWalletError} from '@/core/utils/parseWalletError';
 
 import { oftAbi } from '../../../abi/oftAbi';
-import { nativeConfig } from '../../../config';
+import { nativeConfig, rpcList } from '../../../config';
 import {unclaimedStore} from './unclaimedStore';
 
 export enum DstNativeAmount {
@@ -431,8 +431,14 @@ export class NativeBridgeStore {
 
   get srcContractInstance(): Contract | undefined {
     if (nativeBridgeStore.srcContractAddress){
+      const {srcChainId} = this.form;
       const wallet = walletStore.evm;
-      return new ethers.Contract(nativeBridgeStore.srcContractAddress as string, oftAbi, wallet?.signer)
+      const rpc = rpcList.find((rpc) => rpc.chainId === srcChainId);
+      const provider = rpc?.nativeChainId === wallet?.nativeChainId ? 
+        wallet?.signer : 
+        ethers.getDefaultProvider(rpc?.rpc);
+
+      return new ethers.Contract(this.srcContractAddress as string, oftAbi, provider)
     }  
   }
 
@@ -731,7 +737,6 @@ export class NativeBridgeStore {
     if (!dstChainId) return;
     if (!amount) return;
     if (!srcContractInstance) return;
-    if (!toAddress) return;
 
     const toAddressBytes = ethers.utils.defaultAbiCoder.encode(["address"], [toAddress])
 
