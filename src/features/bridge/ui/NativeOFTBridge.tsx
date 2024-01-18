@@ -15,7 +15,7 @@ import {Box} from '@/core/ui/system';
 import {WalletDetails} from '@/core/ui/WalletDetails';
 
 import {Alerts} from './Alerts';
-import {GasOnDestinationButton} from './GasOnDestinationButton';
+import {GasOnDestinationButton, NativeGasOnDestinationButton} from './GasOnDestinationButton';
 import {NetworkSelect} from './NetworkSelect';
 
 export const NativeOFTBridge = observer(() => {
@@ -139,7 +139,7 @@ export const NativeOFTBridge = observer(() => {
         items={[
           {
             label: 'Gas on destination',
-            value: <GasOnDestinationButton />,
+            value: <NativeGasOnDestinationButton/>,
           },
           {
             label: 'You will receive',
