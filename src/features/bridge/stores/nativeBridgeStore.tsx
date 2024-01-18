@@ -168,7 +168,6 @@ export class NativeBridgeStore {
       title: tryGetNetwork(srcChainId)?.name + ' Network',
       key: 'src',
       items: srcCurrencyOptions
-        //
         .filter((o) => o.currency.chainId === srcChainId),
     };
 
@@ -176,7 +175,6 @@ export class NativeBridgeStore {
       title: 'All networks',
       key: 'all',
       items: srcCurrencyOptions
-        //
         .filter((o) => o.currency.chainId !== srcChainId),
     };
 
@@ -563,24 +561,19 @@ export class NativeBridgeStore {
       this.isSigning = true;
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const unsignedTransaction: Awaited<ReturnType<any>> = yield this.sendNative();
+      const transactionResult: any = yield this.sendNative();
 
       // ensure correct wallet
       yield assertWallet(srcWallet, {chainId: srcChainId, address: srcAddress});
 
-      const transactionResult: Awaited<
-        ReturnType<typeof unsignedTransaction['signAndSubmitTransaction']>
-      > = yield unsignedTransaction.signAndSubmitTransaction(srcWallet.signer);
-
       this.isSigning = false;
       this.isMining = true;
-      const receipt: Awaited<ReturnType<TransactionResult['wait']>> =
-        yield transactionResult.wait();
+      const receipt = yield transactionResult.wait();
       this.isMining = false;
 
       const tx = transactionStore.create({
         chainId: srcChainId,
-        txHash: receipt.txHash,
+        txHash: receipt.transactionHash,
         type: 'TRANSFER',
         input,
         expectedDate: getExpectedDate(srcChainId, dstChainId),
@@ -590,13 +583,13 @@ export class NativeBridgeStore {
         <Toast>
           <h1>Transaction Submitted</h1>
           <p>
-            <a href={getScanLink(srcChainId, receipt.txHash)} target='_blank' rel='noreferrer'>
+            <a href={getScanLink(srcChainId, receipt.transactionHash)} target='_blank' rel='noreferrer'>
               View on block explorer
             </a>
           </p>
         </Toast>,
       );
-      waitForMessageReceived(srcChainId, receipt.txHash)
+      waitForMessageReceived(srcChainId, receipt.transactionHash)
         .then((message) => {
           // never mark tx as failed
           // we will eventually deliver the tx
@@ -629,7 +622,7 @@ export class NativeBridgeStore {
     }
   });
 
-  sendNative: () => Promise<void> = flow(function* (this: NativeBridgeStore) {
+  sendNative: () => unknown = flow(function* (this: NativeBridgeStore) {
 
     const {srcCurrency, srcChainId, dstChainId, amount} = this.form;
 
@@ -652,20 +645,20 @@ export class NativeBridgeStore {
     const totalEth =  ethers.BigNumber.from(fee.quotient);
     const adapterParams = ethers.utils.solidityPack(["uint16", "uint256"], [1, 200000]);
 
-    yield (
-        this.srcContractInstance.sendFrom(
-            toAddress, // 'from' address to send tokens
-            dstChainId, // remote LayerZero chainId
-            toAddressBytes, // 'to' address to send tokens
-            qty, // amount of tokens to send (in wei)
-            {
-                refundAddress: toAddress,
-                zroPaymentAddress: ethers.constants.AddressZero,
-                adapterParams,
-            },
-            { value: totalEth } 
-        )
-    );
+    const tx = yield this.srcContractInstance.sendFrom(
+      toAddress, // 'from' address to send tokens
+      dstChainId, // remote LayerZero chainId
+      toAddressBytes, // 'to' address to send tokens
+      qty, // amount of tokens to send (in wei)
+      {
+        refundAddress: toAddress,
+        zroPaymentAddress: ethers.constants.AddressZero,
+        adapterParams,
+      },
+      { value: totalEth } 
+    )
+
+    return tx;
   })
 
   approve: () => Promise<void> = flow(function* (this: NativeBridgeStore) {
