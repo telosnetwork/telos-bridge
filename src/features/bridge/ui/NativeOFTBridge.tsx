@@ -15,7 +15,7 @@ import {Box} from '@/core/ui/system';
 import {WalletDetails} from '@/core/ui/WalletDetails';
 
 import {Alerts} from './Alerts';
-import {GasOnDestinationButton, NativeGasOnDestinationButton} from './GasOnDestinationButton';
+import {NativeGasOnDestinationButton} from './GasOnDestinationButton';
 import {NetworkSelect} from './NetworkSelect';
 
 export const NativeOFTBridge = observer(() => {

@@ -3,6 +3,7 @@ import {waitForMessageReceived} from '@layerzerolabs/scan-client';
 import type {BridgeApi, TransferInput} from '@layerzerolabs/ui-bridge-sdk';
 import {
   AdapterParams,
+  BigintIsh,
   castCurrencyAmountUnsafe,
   Currency,
   CurrencyAmount,
@@ -559,26 +560,16 @@ export class NativeBridgeStore {
 
       yield srcWallet.switchChain(srcChainId);
       this.isSigning = true;
-
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const transactionResult: any = yield this.sendNative();
-
       // ensure correct wallet
       yield assertWallet(srcWallet, {chainId: srcChainId, address: srcAddress});
 
       this.isSigning = false;
       this.isMining = true;
-      const receipt = yield transactionResult.wait();
+      const receipt = transactionResult.wait();
       this.isMining = false;
 
-      const tx = transactionStore.create({
-        chainId: srcChainId,
-        txHash: receipt.transactionHash,
-        type: 'TRANSFER',
-        input,
-        expectedDate: getExpectedDate(srcChainId, dstChainId),
-      });
-      this.updateBalances();
       toast.success(
         <Toast>
           <h1>Transaction Submitted</h1>
@@ -589,6 +580,17 @@ export class NativeBridgeStore {
           </p>
         </Toast>,
       );
+
+      const tx = transactionStore.create({
+        chainId: srcChainId,
+        txHash: receipt.transactionHash,
+        type: 'TRANSFER',
+        input,
+        expectedDate: getExpectedDate(srcChainId, dstChainId),
+      });
+
+      this.updateBalances();
+      
       waitForMessageReceived(srcChainId, receipt.transactionHash)
         .then((message) => {
           // never mark tx as failed
@@ -631,11 +633,12 @@ export class NativeBridgeStore {
     assert(srcCurrency, 'srcCurrency');
     assert(this.messageFee, 'messageFee');
     assert(this.srcContractInstance, 'srcContractInstance');
+    assert(this.dstNativeAmount, 'dstNativeAmount');
 
     const qty = ethers.utils.parseEther(amount)
     const toAddress = walletStore.evm?.address;
     const toAddressBytes = ethers.utils.defaultAbiCoder.encode(["address"], [toAddress])
-
+    // const dstNativeGas = CurrencyAmount.fromRawAmount(srcCurrency, this.dstNativeAmount.quotient);
     // if sending from Telos network, include amount in total native token sent
     const fee = srcChainId === ChainId.TELOS_TESTNET ?
       this.messageFee.nativeFee.add(CurrencyAmount.fromRawAmount(srcCurrency, qty.toBigInt())):
@@ -643,9 +646,12 @@ export class NativeBridgeStore {
 
     // includes native amount if sending native TLOS
     const totalEth =  ethers.BigNumber.from(fee.quotient);
-    const adapterParams = ethers.utils.solidityPack(["uint16", "uint256"], [1, 200000]);
 
-    const tx = yield this.srcContractInstance.sendFrom(
+    const adapterParams = ethers.utils.solidityPack(["uint16", "uint256"], [1, 200000]);
+    // const adapterParams = ethers.utils.solidityPack(["uint16", "uint256", "uint256", "address"], [1, 200000, this.dstNativeAmount.quotient, toAddress ]);
+    // const adapterParams = ethers.utils.solidityPack(["uint16", "uint256", "uint256", "address"], [2, 200000, 55555555555, toAddress ]);
+
+    const tx:unknown = yield this.srcContractInstance.sendFrom(
       toAddress, // 'from' address to send tokens
       dstChainId, // remote LayerZero chainId
       toAddressBytes, // 'to' address to send tokens
@@ -738,6 +744,7 @@ export class NativeBridgeStore {
     const multiplier = new Fraction(110, 100);
 
     const adapterParams = ethers.utils.solidityPack(["uint16", "uint256"], [1, 200000]);
+    // const adapterParams = ethers.utils.solidityPack(["uint16", "uint256", "uint256", "address"], [2, 200000, this.dstNativeAmount?.quotient, toAddress ]);
 
     yield (this.promise.messageFee = fromPromise(
       (nativeBridgeStore.srcContractInstance as Contract).estimateSendFee(dstChainId, toAddressBytes, qty, false, adapterParams).then((fee: {nativeFee: number, zroFee: number}) => ({
@@ -745,6 +752,7 @@ export class NativeBridgeStore {
           zroFee: CurrencyAmount.fromRawAmount(srcCurrency as Currency, fee.zroFee).multiply(multiplier),
         }))
     ));
+    
   });
 
   updateExtraGas = flow(function* (this: NativeBridgeStore) {
