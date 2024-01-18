@@ -566,26 +566,27 @@ export class NativeBridgeStore {
 
       yield srcWallet.switchChain(srcChainId);
       this.isSigning = true;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const transactionResult: any = yield this.sendNative();
+
       // ensure correct wallet
       yield assertWallet(srcWallet, {chainId: srcChainId, address: srcAddress});
 
       this.isSigning = false;
       this.isMining = true;
-      const receipt = transactionResult.wait();
-      this.isMining = false;
 
       toast.success(
         <Toast>
           <h1>Transaction Submitted</h1>
           <p>
-            <a href={getScanLink(srcChainId, receipt.transactionHash)} target='_blank' rel='noreferrer'>
+            <a href={getScanLink(srcChainId, transactionResult.hash)} target='_blank' rel='noreferrer'>
               View on block explorer
             </a>
           </p>
         </Toast>,
       );
+
+      const receipt = yield transactionResult.wait();
+      this.isMining = false;
 
       const tx = transactionStore.create({
         chainId: srcChainId,
@@ -657,7 +658,8 @@ export class NativeBridgeStore {
     // const adapterParams = ethers.utils.solidityPack(["uint16", "uint256", "uint256", "address"], [1, 200000, this.dstNativeAmount.quotient, toAddress ]);
     // const adapterParams = ethers.utils.solidityPack(["uint16", "uint256", "uint256", "address"], [2, 200000, 55555555555, toAddress ]);
 
-    const tx:unknown = yield this.srcContractInstance.sendFrom(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const tx: unknown = yield this.srcContractInstance.sendFrom(
       toAddress, // 'from' address to send tokens
       dstChainId, // remote LayerZero chainId
       toAddressBytes, // 'to' address to send tokens
