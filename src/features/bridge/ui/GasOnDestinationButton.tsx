@@ -35,7 +35,7 @@ export const NativeGasOnDestinationButton = observer(() => {
   return (
     <>
       {form.dstChainId ? (
-        <GasButton onClick={uiStore.dstNativeAmountModal.open}>
+        <GasButton onClick={uiStore.oftDstNativeAmountModal.open}>
           {dstNativeAmount?.equalTo(0) || !dstNativeAmount
             ? 'Add'
             : `${dstNativeAmount.toExact()} ${dstNativeAmount.currency.symbol}`}

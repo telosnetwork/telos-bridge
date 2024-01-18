@@ -123,6 +123,7 @@ class UiStore {
   walletModal = new WalletModal();
   txProgress = new TransactionProgress();
   dstNativeAmountModal = new Toggle();
+  oftDstNativeAmountModal = new Toggle();
   slippageModal = new Toggle();
   claimReminderAlert = new Toggle();
   rpcErrorAlert = new Toggle();

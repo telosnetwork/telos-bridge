@@ -10,6 +10,7 @@ import React, {useEffect} from 'react';
 
 import {AccountModal} from '@/bridge/ui/AccountModal';
 import {GasOnDestinationModal} from '@/bridge/ui/GasOnDestinationModal';
+import { NativeGasOnDestinationModal } from '@/bridge/ui/GasOnDestinationModal';
 import {SlippageModal} from '@/bridge/ui/SlippageModal';
 import {JsonRpcProviderContext} from '@/core/context/JsonRpcProviderContext';
 import {THEMES, useUserThemePreference} from '@/core/hooks/useUserThemePreference';
@@ -65,6 +66,10 @@ const App = observer(({Component, pageProps}: AppPropsWithLayout) => {
             <GasOnDestinationModal
               open={uiStore.dstNativeAmountModal.value}
               onClose={uiStore.dstNativeAmountModal.close}
+            />
+            <NativeGasOnDestinationModal
+              open={uiStore.oftDstNativeAmountModal.value}
+              onClose={uiStore.oftDstNativeAmountModal.close}
             />
             <AccountModal open={walletModal.value} onClose={walletModal.close} />
           </ToastProvider>
