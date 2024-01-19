@@ -20,7 +20,7 @@ import {
   tryParseCurrencyAmount,
   tryParseNumber,
 } from '@layerzerolabs/ui-core';
-import {ONE_ADDRESS} from '@layerzerolabs/ui-evm';
+import {ONE_ADDRESS, serializeAdapterParams} from '@layerzerolabs/ui-evm';
 import {assertWallet, Wallet} from '@layerzerolabs/ui-wallet';
 import assert from 'assert';
 import { Contract, ethers } from 'ethers';
@@ -42,8 +42,9 @@ import {handleError} from '@/core/utils/handleError';
 import {parseWalletError} from '@/core/utils/parseWalletError';
 
 import { oftAbi } from '../../../abi/oftAbi';
-import { nativeConfig, rpcList } from '../../../config';
+import { nativeConfig, rpcList, wrapped_testnet } from '../../../config';
 import {unclaimedStore} from './unclaimedStore';
+import { bridgeAbi } from '../../../abi/bridgeAbi';
 
 export enum DstNativeAmount {
   DEFAULT = 'DEFAULT',
@@ -58,6 +59,9 @@ export class NativeBridgeStore {
   isMining = false;
   isExecuting = false;
   isApproving = false;
+
+  nativeBridgeAddress = wrapped_testnet.wrapped.address;
+  dstBridgeAddresses = wrapped_testnet.original;
 
   defaultSrcCurrency = nativeConfig.tokens.find((token) => token.chainId === ChainId.TELOS_TESTNET);
   defaultDstCurrency = nativeConfig.tokens.find((token) => token.chainId !== ChainId.TELOS_TESTNET);
@@ -445,6 +449,23 @@ export class NativeBridgeStore {
     }  
   }
 
+  get srcBridgeContractAddress(): string | undefined {
+    const {srcChainId} = nativeBridgeStore.form;
+    if (srcChainId){
+      return srcChainId === ChainId.TELOS_TESTNET ? this.nativeBridgeAddress : this.dstBridgeAddresses.find(bridge => bridge.chainId === srcChainId)?.address;
+    }
+  }
+
+  get srcBridgeContractInstance(): Contract | undefined {
+    if (this.srcBridgeContractAddress){
+      const {srcChainId} = this.form;
+      const rpc = rpcList.find((rpc) => rpc.chainId === srcChainId);
+      const provider = ethers.getDefaultProvider(rpc?.rpc);
+
+      return new ethers.Contract(this.srcBridgeContractAddress as string, bridgeAbi, provider)
+    }  
+  }
+
   // actions
   async updateAllowance(): Promise<unknown> {
     this.promise.allowance = undefined;
@@ -576,6 +597,7 @@ export class NativeBridgeStore {
 
       this.isSigning = false;
       this.isMining = true;
+      transactionResult.wait();
 
       toast.success(
         <Toast>
@@ -588,20 +610,15 @@ export class NativeBridgeStore {
         </Toast>,
       );
 
-      const receipt = yield transactionResult.wait();
-      this.isMining = false;
-
       const tx = transactionStore.create({
         chainId: srcChainId,
-        txHash: receipt.transactionHash,
+        txHash: transactionResult.hash,
         type: 'TRANSFER',
         input,
         expectedDate: getExpectedDate(srcChainId, dstChainId),
       });
-
-      this.updateBalances();
       
-      waitForMessageReceived(srcChainId, receipt.transactionHash)
+      waitForMessageReceived(srcChainId, transactionResult.hash)
         .then((message) => {
           // never mark tx as failed
           // we will eventually deliver the tx
@@ -641,6 +658,7 @@ export class NativeBridgeStore {
     assert(srcChainId, 'srcChainId');
     assert(dstChainId, 'dstChainId');
     assert(srcCurrency, 'srcCurrency');
+    assert(this.adapterParams, 'adapterParams');
     assert(this.messageFee, 'messageFee');
     assert(this.srcContractInstance, 'srcContractInstance');
     assert(this.dstNativeAmount, 'dstNativeAmount');
@@ -648,7 +666,7 @@ export class NativeBridgeStore {
     const qty = ethers.utils.parseEther(amount)
     const toAddress = walletStore.evm?.address;
     const toAddressBytes = ethers.utils.defaultAbiCoder.encode(["address"], [toAddress])
-    // const dstNativeGas = CurrencyAmount.fromRawAmount(srcCurrency, this.dstNativeAmount.quotient);
+
     // if sending from Telos network, include amount in total native token sent
     const fee = srcChainId === ChainId.TELOS_TESTNET ?
       this.messageFee.nativeFee.add(CurrencyAmount.fromRawAmount(srcCurrency, qty.toBigInt())):
@@ -657,14 +675,8 @@ export class NativeBridgeStore {
     // includes native amount if sending native TLOS
     const totalEth =  ethers.BigNumber.from(fee.quotient);
 
-    const adapterParams = ethers.utils.solidityPack(["uint16", "uint256"], [1, 200000]);
-    // eslint-disable-next-line no-debugger
-    debugger;
-    const testing = this.adapterParams;
-    // const adapterParams = ethers.utils.solidityPack(["uint16", "uint256", "uint256", "address"], [1, 200000, this.dstNativeAmount.quotient, toAddress ]);
-    // const adapterParams = ethers.utils.solidityPack(["uint16", "uint256", "uint256", "address"], [2, 200000, 55555555555, toAddress ]);
+    const serializedAdapterParams = serializeAdapterParams(this.adapterParams);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const tx: unknown = yield this.srcContractInstance.sendFrom(
       toAddress, // 'from' address to send tokens
       dstChainId, // remote LayerZero chainId
@@ -673,7 +685,7 @@ export class NativeBridgeStore {
       {
         refundAddress: toAddress,
         zroPaymentAddress: ethers.constants.AddressZero,
-        adapterParams,
+        adapterParams: serializedAdapterParams,
       },
       { value: totalEth } 
     )
@@ -685,7 +697,6 @@ export class NativeBridgeStore {
     this.isApproving = true;
     try {
       const {transferApi, amount, srcWallet, srcAddress} = this;
-      // assert(transferApi, 'transferApi');
       assert(amount, 'amount');
       assert(srcWallet, 'srcWallet');
       assert(srcAddress, 'srcAddress');
@@ -740,27 +751,24 @@ export class NativeBridgeStore {
     this.promise.messageFee = undefined;
     const toAddress = walletStore.evm?.address;  
     const { srcCurrency, dstChainId, amount} = this.form;
-    const { srcContractInstance} = this;
+    const { srcContractInstance, srcBridgeContractInstance, adapterParams } = this;
 
+    if (!toAddress) return;
     if (!dstChainId) return;
     if (!amount) return;
+    if (!adapterParams) return;
     if (!srcContractInstance) return;
+    if (!srcBridgeContractInstance) return;
 
-    const toAddressBytes = ethers.utils.defaultAbiCoder.encode(["address"], [toAddress])
-
-    const qty = ethers.utils.parseEther(amount)
-
-    // We want to introduce a buffer to avoid any gas price fluctuations
-    // to affect the user experience
-    //
-    // The user will be refunded so this increase does not affect the actual price
+    // introduce buffer to avoid any gas price fluctuations
+    // that might affect the user experience
+    // user is refunded so this increase does not affect the actual price
     const multiplier = new Fraction(110, 100);
 
-    const adapterParams = ethers.utils.solidityPack(["uint16", "uint256"], [1, 200000]);
-    // const adapterParams = ethers.utils.solidityPack(["uint16", "uint256", "uint256", "address"], [2, 200000, this.dstNativeAmount?.quotient, toAddress ]);
+    const serializedAdapterParams = serializeAdapterParams(adapterParams);
 
     yield (this.promise.messageFee = fromPromise(
-      (nativeBridgeStore.srcContractInstance as Contract).estimateSendFee(dstChainId, toAddressBytes, qty, false, adapterParams).then((fee: {nativeFee: number, zroFee: number}) => ({
+      (srcBridgeContractInstance.estimateBridgeFee(dstChainId, false, serializedAdapterParams)).then((fee: {nativeFee: BigintIsh, zroFee: BigintIsh}) => ({
           nativeFee: CurrencyAmount.fromRawAmount(srcCurrency as Currency, fee.nativeFee).multiply(multiplier),
           zroFee: CurrencyAmount.fromRawAmount(srcCurrency as Currency, fee.zroFee).multiply(multiplier),
         }))
@@ -875,18 +883,12 @@ export function initNativeBridgeStore() {
     nativeBridgeStore.updateAllowance();
   };
 
-  const setInitialSource = () => {
-    nativeBridgeStore.setSrcChainId(ChainId.TELOS_TESTNET);
-    nativeBridgeStore.setSrcCurrency(nativeConfig.tokens.find((token) => token.chainId === ChainId.TELOS_TESTNET) as Currency);
-  }
-
   const handlers = [
     // each in separate `thread`
     autorun(() => updateEvmBalance()),
     autorun(() => updateDstPrice()),
     autorun(() => updateDefaultAirdropAmount()),
     autorun(() => updateAllowance()),
-    // autorun(() => setInitialSource()),
     // refresh
     interval(() => updateEvmBalance(), 30_000),
 
