@@ -12,10 +12,8 @@ import {
   getExpectedDate,
   getNativeCurrency,
   getScanLink,
-  getTransactionLink,
   isEvmChainId,
   Percent,
-  TransactionResult,
   tryGetNetwork,
   tryParseCurrencyAmount,
   tryParseNumber,
@@ -33,7 +31,6 @@ import {balanceStore} from '@/core/stores/balanceStore';
 import {fiatStore} from '@/core/stores/fiatStore';
 import {lzConfigStore} from '@/core/stores/lzStore';
 import {transactionStore} from '@/core/stores/transactionStore';
-import {uiStore} from '@/core/stores/uiStore';
 import {getWalletBalance} from '@/core/stores/utils';
 import {walletStore} from '@/core/stores/walletStore';
 import {Toast} from '@/core/ui/Toast';
@@ -41,10 +38,10 @@ import {FromPromise, fromPromiseValue} from '@/core/utils/fromPromise';
 import {handleError} from '@/core/utils/handleError';
 import {parseWalletError} from '@/core/utils/parseWalletError';
 
+import { bridgeAbi } from '../../../abi/bridgeAbi';
 import { oftAbi } from '../../../abi/oftAbi';
 import { nativeConfig, rpcList, wrapped_testnet } from '../../../config';
 import {unclaimedStore} from './unclaimedStore';
-import { bridgeAbi } from '../../../abi/bridgeAbi';
 
 export enum DstNativeAmount {
   DEFAULT = 'DEFAULT',
@@ -105,7 +102,7 @@ export class NativeBridgeStore {
   }
 
   // preferred order of network selection list
-  static chainOrder = [ChainId.TELOS, ChainId.ETHEREUM, ChainId.BSC, ChainId.POLYGON, ChainId.ZKSYNC, ChainId.ZKCONSENSYS, ChainId.AVALANCHE,  ChainId.ARBITRUM];
+  static chainOrder = [ChainId.TELOS_TESTNET, ChainId.FUJI];
 
   static sortChains(chains: ChainId[]): ChainId[] {
     return chains.sort((a,b) => this.chainOrder.indexOf(b) - this.chainOrder.indexOf(a));
