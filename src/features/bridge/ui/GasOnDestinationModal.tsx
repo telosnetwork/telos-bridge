@@ -50,10 +50,9 @@ export const GasOnDestinationModal = observer((props: GasOnDestinationModalProps
           <Box component='span' color='primary.main'>
             {dstNative?.symbol}
           </Box>{' '}
-          you want to swap.
+          you want to receive at the destination.
           <br />
-          The total amount you’ll pay in your wallet includes the gas you’ll be airdropping to your
-          destination.
+          Choose the amount of TLOS you want to recieve at the destination. The total amount you`&apos;`ll pay in your wallet includes the gas you`&apos;`ll be airdropping.
         </Box>
         <Box sx={{mt: 4, mb: 2}}>
           <Selector selection={form.dstNativeAmount}>
