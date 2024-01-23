@@ -483,7 +483,7 @@ export class NativeBridgeStore {
     }
   }
 
-  setDstNativeAmount(amount: string | DstNativeAmount): void {
+  async setDstNativeAmount(amount: string | DstNativeAmount): Promise<void> {
     if (amount in DstNativeAmount) {
       this.form.dstNativeAmount = amount;
     }
@@ -494,6 +494,7 @@ export class NativeBridgeStore {
     if (amount === '' || tryParseCurrencyAmount(dstNative, amount) !== undefined) {
       this.form.dstNativeAmount = amount;
     }
+    await this.updateMessageFee();
   }
 
   setMaxAmount() {
