@@ -40,7 +40,7 @@ import {parseWalletError} from '@/core/utils/parseWalletError';
 
 import { bridgeAbi } from '../../../abi/bridgeAbi';
 import { oftAbi } from '../../../abi/oftAbi';
-import { nativeConfig, rpcList, wrapped_testnet } from '../../../config';
+import { nativeConfig, rpcList, wrapped_testnet, config_test } from '../../../config';
 import {unclaimedStore} from './unclaimedStore';
 
 export enum DstNativeAmount {
@@ -57,11 +57,10 @@ export class NativeBridgeStore {
   isExecuting = false;
   isApproving = false;
 
-  nativeBridgeAddress = wrapped_testnet.wrapped.address;
-  dstBridgeAddresses = wrapped_testnet.original;
+  nativeBridgeAddress = config_test.wrapped.address;
 
-  defaultSrcCurrency = nativeConfig.tokens.find((token) => token.chainId === ChainId.TELOS_TESTNET);
-  defaultDstCurrency = nativeConfig.tokens.find((token) => token.chainId !== ChainId.TELOS_TESTNET);
+  defaultSrcCurrency = config_test.tokens.find((token:any) => token.chainId === ChainId.TELOS_TESTNET);
+  defaultDstCurrency = config_test.tokens.find((token:any) => token.chainId !== ChainId.TELOS_TESTNET);
 
   form: BridgeFrom = {
     srcCurrency: this.defaultSrcCurrency,
@@ -73,7 +72,7 @@ export class NativeBridgeStore {
   };
 
   apis: BridgeApi<unknown, AnyFee>[] = [];
-  currencies: Currency[] = nativeConfig.tokens;
+  currencies: Currency[] = config_test.tokens;
   chains: number[] = [ChainId.TELOS_TESTNET, ChainId.FUJI];
 
   promise: BridgePromise = {
@@ -429,7 +428,7 @@ export class NativeBridgeStore {
   get srcContractAddress(): string | undefined {
     const {srcChainId} = nativeBridgeStore.form;
     if (nativeBridgeStore.form.srcChainId){
-      return nativeConfig.proxy.find(token => token.chainId === srcChainId)?.address;
+      return config_test.proxy.find((token: any) => token.chainId === srcChainId)?.address;
     }
   }
 
@@ -437,10 +436,10 @@ export class NativeBridgeStore {
     if (nativeBridgeStore.srcContractAddress){
       const {srcChainId} = this.form;
       const wallet = walletStore.evm;
-      const rpc = rpcList.find((rpc) => rpc.chainId === srcChainId);
-      const provider = rpc?.nativeChainId === wallet?.nativeChainId ? 
+      const bridge = srcChainId === ChainId.TELOS_TESTNET ? config_test.wrapped.rpc : config_test.original.find((bridge: any) => bridge.chainId === srcChainId);
+      const provider = bridge.chainListId === wallet?.nativeChainId ? 
         wallet?.signer : 
-        ethers.getDefaultProvider(rpc?.rpc);
+        ethers.getDefaultProvider(bridge?.rpc);
 
       return new ethers.Contract(this.srcContractAddress as string, oftAbi, provider)
     }  
@@ -449,7 +448,7 @@ export class NativeBridgeStore {
   get srcBridgeContractAddress(): string | undefined {
     const {srcChainId} = nativeBridgeStore.form;
     if (srcChainId){
-      return srcChainId === ChainId.TELOS_TESTNET ? this.nativeBridgeAddress : this.dstBridgeAddresses.find(bridge => bridge.chainId === srcChainId)?.address;
+      return srcChainId === ChainId.TELOS_TESTNET ? config_test.wrapped.address : config_test.original.find((bridge: any) => bridge.chainId === srcChainId)?.address;
     }
   }
 
