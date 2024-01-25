@@ -17,7 +17,6 @@ import {WalletDetails} from '@/core/ui/WalletDetails';
 import {Alerts} from './Alerts';
 import {GasOnDestinationButton} from './GasOnDestinationButton';
 import {NetworkSelect} from './NetworkSelect';
-import {SlippageButton} from './SlippageButton';
 
 import { isOFT } from '../../../config';
 
@@ -139,7 +138,7 @@ export const Bridge = observer(() => {
       </InputsGroup>
       <Details
         sx={{my: '24px'}}
-        items={ isOFT(bridgeStore.form.srcCurrency?.symbol as string) ? [
+        items={[
           {
             label: 'Gas on destination',
             value: <GasOnDestinationButton />,
@@ -158,29 +157,6 @@ export const Bridge = observer(() => {
               ? nativeFee.toSignificant(8) + ' ' + fiatStore.getSymbol(nativeFee.currency)
               : '--',
           }
-        ] : [
-          {
-            label: 'Gas on destination',
-            value: <GasOnDestinationButton />,
-          },
-          {
-            label: 'You will receive',
-            value: outputAmount
-              ? outputAmount.toExact() + ' ' + fiatStore.getSymbol(outputAmount.currency)
-              : '--',
-          },
-          {
-            label: 'Fee',
-            value: feeFiat
-              ? feeFiat.value.toFixed(2) + ' USD'
-              : nativeFee
-              ? nativeFee.toSignificant(8) + ' ' + fiatStore.getSymbol(nativeFee.currency)
-              : '--',
-          },
-          {
-            label: 'Slippage tolerance',
-            value: <SlippageButton />,
-          },
         ]}
       />
       {srcWallet?.address && dstAddress ? (
