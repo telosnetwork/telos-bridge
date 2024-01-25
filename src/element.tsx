@@ -13,7 +13,6 @@ import {AccountModal} from '@/bridge/ui/AccountModal';
 import {Bridge} from '@/bridge/ui/Bridge';
 import {BridgeTracker} from '@/bridge/ui/BridgeTracker';
 import {GasOnDestinationModal} from '@/bridge/ui/GasOnDestinationModal';
-import {SlippageModal} from '@/bridge/ui/SlippageModal';
 import {JsonRpcProviderContext} from '@/core/context/JsonRpcProviderContext';
 import {tokenStore} from '@/core/stores/tokenStore';
 import {transactionStore} from '@/core/stores/transactionStore';
@@ -128,10 +127,6 @@ const BridgeLayout: React.FC<React.PropsWithChildren> = observer(({children}) =>
               })}
             />
             {children}
-            <SlippageModal
-              open={uiStore.slippageModal.value}
-              onClose={uiStore.slippageModal.close}
-            />
             <GasOnDestinationModal
               open={uiStore.dstNativeAmountModal.value}
               onClose={uiStore.dstNativeAmountModal.close}

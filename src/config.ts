@@ -1,9 +1,8 @@
 import {ChainId} from '@layerzerolabs/lz-sdk';
 import {AppConfig, createAppConfig} from '@layerzerolabs/ui-app-config';
+import {OnftBridgeConfig, OnftStandard} from '@layerzerolabs/ui-bridge-onft';
 import {WrappedTokenBridgeConfig} from '@layerzerolabs/ui-bridge-wrapped-token';
 import {Coin, Token} from '@layerzerolabs/ui-core';
-
-import {OnftBridgeConfig, OnftStandard} from '@layerzerolabs/ui-bridge-onft';
 
 export const wrapped_mainnet: WrappedTokenBridgeConfig = {
   version: 2,
@@ -252,10 +251,6 @@ const TLOS = {
   fee: false,
   sharedDecimals: 6,
 }
-
-const oftTokenList = [ 'BANANA', 'LVC', 'VC', 'RF'];
-
-export const isOFT = (tokenSymbol: string) => oftTokenList.includes(tokenSymbol);
 
 export const appConfig: AppConfig = createAppConfig({
   bridge: {
