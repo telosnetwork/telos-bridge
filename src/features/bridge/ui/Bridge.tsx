@@ -18,8 +18,6 @@ import {Alerts} from './Alerts';
 import {GasOnDestinationButton} from './GasOnDestinationButton';
 import {NetworkSelect} from './NetworkSelect';
 
-import { isOFT } from '../../../config';
-
 export const Bridge = observer(() => {
   const {
     errors,
