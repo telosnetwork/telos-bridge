@@ -2,7 +2,10 @@ import {ChainId} from '@layerzerolabs/lz-sdk';
 import {AppConfig, createAppConfig} from '@layerzerolabs/ui-app-config';
 import {OnftBridgeConfig, OnftStandard} from '@layerzerolabs/ui-bridge-onft';
 import {WrappedTokenBridgeConfig} from '@layerzerolabs/ui-bridge-wrapped-token';
-import {Coin, Token} from '@layerzerolabs/ui-core';
+import {Coin, Currency, Token} from '@layerzerolabs/ui-core';
+
+import { bridgeAbi } from './abi/bridgeAbi';
+import { originalTokenBridgeAbi } from './abi/originalTokenBridgeAbi';
 
 export const wrapped_mainnet: WrappedTokenBridgeConfig = {
   version: 2,
@@ -232,26 +235,6 @@ const RF  = {
   sharedDecimals: 4,
 }
 
-const TLOS = {
-  version: 2,
-  tokens: [
-    new Token(ChainId.FUJI, '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E', 18, 'TLOS'),
-    new Token(ChainId.TELOS_TESTNET, '0xAEa017740a2e7608F873CB130e7B3c335A4a1940', 18, 'TLOS')
-  ],
-  proxy: [
-    {
-      chainId: ChainId.FUJI,
-      address: '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E'
-    },
-    {
-      chainId: ChainId.TELOS_TESTNET,
-      address: '0xAEa017740a2e7608F873CB130e7B3c335A4a1940'
-    }
-  ],
-  fee: false,
-  sharedDecimals: 6,
-}
-
 export const appConfig: AppConfig = createAppConfig({
   bridge: {
     aptos: [],
@@ -260,7 +243,7 @@ export const appConfig: AppConfig = createAppConfig({
       // LVC,
       // VC,
       // RF,
-      TLOS
+      // TLOS
     ],
     wrappedToken: [
       // wrapped_mainnet,
@@ -272,3 +255,104 @@ export const appConfig: AppConfig = createAppConfig({
     ],
   },
 });
+
+
+/***Native OFT Bridge***/
+
+enum ChainListId {
+  AVALANCHE = 43114,
+  ARBITRUM = 42161,
+  ARBITRUM_GOERLI = 421613,
+  BSC = 56,
+  BSC_TESTNET = 97,
+  ETHEREUM = 1,
+  FUJI = 43113,
+  GOERLI = 5,
+  MUMBAI = 80001,
+  POLYGON = 137,
+  TELOS = 40,
+  TELOS_TESTNET = 41,
+  ZKCONSENSYS = 59144,  //LINEA
+  ZKCONSENSYS_TESTNET = 59140,
+}
+
+type BridgeSettings = {
+  address: string;
+  chainId: ChainId;
+  chainListId: ChainListId;
+  rpc: string;
+  abi: typeof bridgeAbi | typeof originalTokenBridgeAbi
+}
+
+type ProxyConfig = {
+  chainId: number;
+  address: string;
+}
+
+type BridgeConfig = {
+  version: number;
+  original: BridgeSettings[];
+  wrapped: BridgeSettings;
+  tokens: Currency[][];
+  proxy: ProxyConfig[];
+}
+
+
+// custom config 
+export const bridgeConfig: BridgeConfig = {
+  version: 2,
+  original: [
+    {address: '0xBCD4a2c19DC010d1Da2D7985CF18A5251774dF46', chainId: ChainId.GOERLI, chainListId: ChainListId.GOERLI, rpc: 'https://goerli.gateway.tenderly.co', abi: originalTokenBridgeAbi},
+    {address: '0xbF625D717de1a6e5a8446424CF08D4269D51ab96', chainId: ChainId.ARBITRUM_GOERLI, chainListId: ChainListId.ARBITRUM_GOERLI, rpc: 'https://endpoints.omniatech.io/v1/arbitrum/goerli/public', abi: originalTokenBridgeAbi},
+    {address: '0x8168C0704Ff49F8e89AF45f04f898144C459b156', chainId: ChainId.BSC_TESTNET, chainListId: ChainListId.BSC_TESTNET, rpc: 'wss://bsc-testnet.publicnode.com', abi: originalTokenBridgeAbi},
+    {address: '0x0c372d3f89d1ce9f11a50b98374f7846a37f7d99', chainId: ChainId.MUMBAI, chainListId: ChainListId.MUMBAI, rpc: 'https://polygon-mumbai.api.onfinality.io/public', abi: originalTokenBridgeAbi},
+    {address: '0x2a3a50f458AaAae618C54C1670fD49e338b795c2', chainId: ChainId.FUJI, chainListId: ChainListId.FUJI, rpc: 'https://api.avax-test.network/ext/bc/C/rpc', abi: originalTokenBridgeAbi}
+  ],
+  wrapped: {
+    address: '0x137d4e9C2431A3DCBa6e615E9438F2c558353a17', chainId: ChainId.TELOS_TESTNET, chainListId: ChainListId.TELOS_TESTNET, rpc: 'https://testnet.telos.net/evm', abi: bridgeAbi
+  },
+  tokens: [
+    [
+      new Coin(ChainId.TELOS_TESTNET, 18, 'TLOS'),
+      new Token(ChainId.FUJI, '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E', 18, 'TLOS'),
+    ],
+    // [
+    //   // USDC
+    //   new Token(ChainId.GOERLI, '0x31190a205713Bd825a0c237E26f67CE89B5C4dD8', 6, 'USDC'),
+    //   new Token(ChainId.ARBITRUM_GOERLI, '0x6463C73809EE3F85BeCD0a82c55cb808474101D0', 6, 'USDC'),
+    //   new Token(ChainId.BSC_TESTNET, '0x9D5859A95A0b9d7739fCBec82c800B56ef143fe9', 6, 'USDC'),
+    //   new Token(ChainId.TELOS_TESTNET, '0x22FdA4Efc62d72f0E0804e205c2c858D5c2cF959', 6, 'USDC'),
+    // ],
+    // [
+    //   // WETH
+    //   new Token(ChainId.TELOS_TESTNET, '0xe83F5959A58cb21E3B3B1682a898143C3f4AFEe0', 18, 'WETH'),
+    //   // new Token(ChainId.GOERLI, '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6', 18, 'WETH'), // via Uniswap
+    // ],
+    // [
+    //   // USDT
+    //   new Token(ChainId.GOERLI, '0xdddacBBFa219b9579596886032b826552c8E9810', 6, 'USDT'),
+    //   // new Token(ChainId.GOERLI, '0xC2C527C0CACF457746Bd31B2a698Fe89de2b6d49', 6, 'USDT'), // via Uniswap
+    //   new Token(ChainId.MUMBAI, '0x6cc732BB947569e5560F380c8d3E24844bA2DDb3', 6, 'USDT'),
+    //   new Token(ChainId.TELOS_TESTNET, '0xe1aFB545B5701D884a674d90b31927BBd0fcA380', 6, 'USDT'),
+    // ],
+    // [
+    //   // BTC.b
+    //   new Token(ChainId.FUJI, '0x576d96722c79aB0469BE3a632521d100de0AE3E3', 8, 'BTC.b'),
+    //   new Token(ChainId.TELOS_TESTNET, '0xDbCE5f022203c36578F5D751E9c5e669AF35C62B', 8, 'BTC.b'),
+    // ],
+    // [
+    //   // WBNB
+    //   new Token(ChainId.TELOS_TESTNET, '0x15a7cad43E5F24d1B08fDE151CE00D1cf360f6C7', 6, 'WBNB'),
+    // ],
+  ],
+  proxy: [
+    {
+      chainId: ChainId.FUJI,
+      address: '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E'
+    },
+    {
+      chainId: ChainId.TELOS_TESTNET,
+      address: '0xAEa017740a2e7608F873CB130e7B3c335A4a1940'
+    }
+  ],
+};

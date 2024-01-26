@@ -23,6 +23,8 @@ const getTokenIcon = (symbol: string): string => {
       return 'https://raw.githubusercontent.com/telosnetwork/token-list/master/logos/RF.webp';
     case 'VC':
       return 'https://raw.githubusercontent.com/telosnetwork/token-list/master/logos/VC.png';
+    case 'TLOS':
+      return 'https://raw.githubusercontent.com/telosnetwork/token-list/main/logos/telos.png';
     default:
       return getCurrencyIcon(symbol);
   }
@@ -31,6 +33,7 @@ const getTokenIcon = (symbol: string): string => {
 export const CurrencyIcon: React.FC<CurrencyIconProps> = (props) => {
   const {size, currency, ...otherProps} = props;
   const defaultUrl = getCurrencyIcon('default');
+
   if (!currency) {
     return <Icon type='emptyToken' size={props.size} />;
   }
