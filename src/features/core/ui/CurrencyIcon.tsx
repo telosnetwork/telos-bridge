@@ -33,6 +33,7 @@ const getTokenIcon = (symbol: string): string => {
 export const CurrencyIcon: React.FC<CurrencyIconProps> = (props) => {
   const {size, currency, ...otherProps} = props;
   const defaultUrl = getCurrencyIcon('default');
+
   if (!currency) {
     return <Icon type='emptyToken' size={props.size} />;
   }

@@ -122,8 +122,6 @@ export const CurrencySelect: React.FC<CurrencySelectProps> = observer(
             if (renderOption) {
               return React.cloneElement(renderOption(option, index), {onClick, key: index});
             }
-            // eslint-disable-next-line no-debugger
-            debugger;
             const {currency} = option;
             const network = getNetwork(currency.chainId);
             const key = index;

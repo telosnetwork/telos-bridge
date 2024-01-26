@@ -1,7 +1,7 @@
 import {observer} from 'mobx-react';
 import {useCallback, useState} from 'react';
 
-import {useDefaultSrcCurrency} from '@/bridge/hooks/useDefaultSrcCurrency';
+import {useCustomDefaultSrcCurrency} from '@/bridge/hooks/useDefaultSrcCurrency';
 import {nativeBridgeStore} from '@/bridge/stores/nativeBridgeStore';
 import {CurrencySelect} from '@/bridge/ui/CurrencySelect';
 import {fiatStore, FiatSymbol} from '@/core/stores/fiatStore';
@@ -32,7 +32,7 @@ export const NativeOFTBridge = observer(() => {
   const [error] = errors;
   const nativeFee = messageFee?.nativeFee;
   const feeFiat = fiatStore.getFiatAmount(nativeFee);
-  useDefaultSrcCurrency();
+  useCustomDefaultSrcCurrency();
 
   const [fiatSymbol, setFiatSymbol] = useState(FiatSymbol.USD);
   const outputFiat = fiatStore.getFiatAmount(outputAmount, fiatSymbol);

@@ -4,6 +4,9 @@ import {OnftBridgeConfig, OnftStandard} from '@layerzerolabs/ui-bridge-onft';
 import {WrappedTokenBridgeConfig} from '@layerzerolabs/ui-bridge-wrapped-token';
 import {Coin, Currency, Token} from '@layerzerolabs/ui-core';
 
+import { bridgeAbi } from './abi/bridgeAbi';
+import { originalTokenBridgeAbi } from './abi/originalTokenBridgeAbi';
+
 export const wrapped_mainnet: WrappedTokenBridgeConfig = {
   version: 2,
   original: [
@@ -232,26 +235,6 @@ const RF  = {
   sharedDecimals: 4,
 }
 
-// const TLOS = {
-//   version: 2,
-//   tokens: [
-//     new Token(ChainId.FUJI, '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E', 18, 'TLOS'),
-//     new Token(ChainId.TELOS_TESTNET, '0xAEa017740a2e7608F873CB130e7B3c335A4a1940', 18, 'TLOS')
-//   ],
-//   proxy: [
-//     {
-//       chainId: ChainId.FUJI,
-//       address: '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E'
-//     },
-//     {
-//       chainId: ChainId.TELOS_TESTNET,
-//       address: '0xAEa017740a2e7608F873CB130e7B3c335A4a1940'
-//     }
-//   ],
-//   fee: false,
-//   sharedDecimals: 6,
-// }
-
 export const appConfig: AppConfig = createAppConfig({
   bridge: {
     aptos: [],
@@ -264,7 +247,7 @@ export const appConfig: AppConfig = createAppConfig({
     ],
     wrappedToken: [
       // wrapped_mainnet,
-      // wrapped_testnet,
+      wrapped_testnet,
     ],
     onft: [
       // erc721_testnet,
@@ -273,102 +256,8 @@ export const appConfig: AppConfig = createAppConfig({
   },
 });
 
-// custom support for native OFT
 
-const TLOS = {
-  version: 2,
-  tokens: [
-    new Coin(ChainId.TELOS_TESTNET, 18, 'TLOS'),
-    new Token(ChainId.FUJI, '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E', 18, 'TLOS'),
-  ],
-  proxy: [
-    {
-      chainId: ChainId.FUJI,
-      address: '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E'
-    },
-    {
-      chainId: ChainId.TELOS_TESTNET,
-      address: '0xAEa017740a2e7608F873CB130e7B3c335A4a1940'
-    }
-  ],
-  fee: false,
-  sharedDecimals: 6,
-}
-
-// rpc list used for native oft implementation
-
-const testnetRpcList: RPC[] = [
-  {
-    chainId: ChainId.TELOS_TESTNET,
-    nativeChainId: 41,
-    rpc: 'https://testnet.telos.net/evm'
-  },
-  {
-    chainId: 10106,
-    nativeChainId: 43113,
-    rpc: 'https://api.avax-test.network/ext/bc/C/rpc'
-  }
-]
-
-const mainnetRpcList: RPC[] = [
-  { chainId: 199,
-    nativeChainId: 40,
-    rpc: 'https://mainnet.telos.net/evm',
-  },
-  {
-    chainId: 101,
-    nativeChainId: 1,
-    rpc: 'https://mainnet.infura.io/v3/',
-  },
-  {
-    chainId: 102,
-    nativeChainId: 56,
-    rpc: 'https://bsc-dataseed1.ninicoin.io',
-  },
-  {
-    chainId: 106,
-    nativeChainId: 43114,
-    rpc: 'https://avalanche-mainnet.infura.io'
-  },
-  {
-    chainId: 109,
-    nativeChainId: 137,
-    rpc: 'https://polygon-rpc.com/'
-  },
-  {
-    chainId: 165,
-    nativeChainId: 324,
-    rpc: 'https://mainnet.era.zksync.io'
-  },
-  {
-    chainId: ChainId.ZKCONSENSYS,
-    nativeChainId: 59144,
-    rpc: 'https://rpc.linea.build	'
-  },
-]
-
-// export const rpcList = appConfig.bridge.wrappedToken[0].wrapped.chainId === ChainId.TELOS ? mainnetRpcList : testnetRpcList;
-
-interface RPC{
-  chainId: number;
-  nativeChainId: number;
-  rpc: string;
-}
-
-interface NativeConfig{
-  version: number;
-  tokens: Currency[];
-  proxy: OftProxyConfig[];
-  fee: boolean;
-  sharedDecimals: number;
-}
-
-type OftProxyConfig = {
-  chainId: ChainId;
-  address: string;
-};
-
-export const nativeConfig: NativeConfig = TLOS;
+/***Native OFT Bridge***/
 
 enum ChainListId {
   AVALANCHE = 43114,
@@ -377,7 +266,7 @@ enum ChainListId {
   BSC = 56,
   BSC_TESTNET = 97,
   ETHEREUM = 1,
-  FUJI = 43114,
+  FUJI = 43113,
   GOERLI = 5,
   MUMBAI = 80001,
   POLYGON = 137,
@@ -387,19 +276,40 @@ enum ChainListId {
   ZKCONSENSYS_TESTNET = 59140,
 }
 
+type BridgeSettings = {
+  address: string;
+  chainId: ChainId;
+  chainListId: ChainListId;
+  rpc: string;
+  abi: typeof bridgeAbi | typeof originalTokenBridgeAbi
+}
+
+type ProxyConfig = {
+  chainId: number;
+  address: string;
+}
+
+type BridgeConfig = {
+  version: number;
+  original: BridgeSettings[];
+  wrapped: BridgeSettings;
+  tokens: Currency[][];
+  proxy: ProxyConfig[];
+}
+
 
 // custom config 
-export const config_test: any = {
+export const config_test: BridgeConfig = {
   version: 2,
   original: [
-    {address: '0xBCD4a2c19DC010d1Da2D7985CF18A5251774dF46', chainId: ChainId.GOERLI, chainListId: ChainListId.GOERLI, rpc: 'https://goerli.gateway.tenderly.co'},
-    {address: '0xbF625D717de1a6e5a8446424CF08D4269D51ab96', chainId: ChainId.ARBITRUM_GOERLI, chainListId: ChainListId.ARBITRUM_GOERLI, rpc: 'https://endpoints.omniatech.io/v1/arbitrum/goerli/public'},
-    {address: '0x8168C0704Ff49F8e89AF45f04f898144C459b156', chainId: ChainId.BSC_TESTNET, chainListId: ChainListId.BSC_TESTNET, rpc: 'wss://bsc-testnet.publicnode.com'},
-    {address: '0x0c372d3f89d1ce9f11a50b98374f7846a37f7d99', chainId: ChainId.MUMBAI, chainListId: ChainListId.MUMBAI, rpc: 'https://polygon-mumbai.api.onfinality.io/public'},
-    {address: '0x2a3a50f458AaAae618C54C1670fD49e338b795c2', chainId: ChainId.FUJI, chainListId: ChainListId.FUJI, rpc: 'https://api.avax-test.network/ext/bc/C/rpc'},
+    {address: '0xBCD4a2c19DC010d1Da2D7985CF18A5251774dF46', chainId: ChainId.GOERLI, chainListId: ChainListId.GOERLI, rpc: 'https://goerli.gateway.tenderly.co', abi: originalTokenBridgeAbi},
+    {address: '0xbF625D717de1a6e5a8446424CF08D4269D51ab96', chainId: ChainId.ARBITRUM_GOERLI, chainListId: ChainListId.ARBITRUM_GOERLI, rpc: 'https://endpoints.omniatech.io/v1/arbitrum/goerli/public', abi: originalTokenBridgeAbi},
+    {address: '0x8168C0704Ff49F8e89AF45f04f898144C459b156', chainId: ChainId.BSC_TESTNET, chainListId: ChainListId.BSC_TESTNET, rpc: 'wss://bsc-testnet.publicnode.com', abi: originalTokenBridgeAbi},
+    {address: '0x0c372d3f89d1ce9f11a50b98374f7846a37f7d99', chainId: ChainId.MUMBAI, chainListId: ChainListId.MUMBAI, rpc: 'https://polygon-mumbai.api.onfinality.io/public', abi: originalTokenBridgeAbi},
+    {address: '0x2a3a50f458AaAae618C54C1670fD49e338b795c2', chainId: ChainId.FUJI, chainListId: ChainListId.FUJI, rpc: 'https://api.avax-test.network/ext/bc/C/rpc', abi: originalTokenBridgeAbi}
   ],
   wrapped: {
-    address: '0x137d4e9C2431A3DCBa6e615E9438F2c558353a17', chainId: ChainId.TELOS_TESTNET, chainListId: ChainListId.TELOS_TESTNET, rpc: 'https://testnet.telos.net/evm',
+    address: '0x137d4e9C2431A3DCBa6e615E9438F2c558353a17', chainId: ChainId.TELOS_TESTNET, chainListId: ChainListId.TELOS_TESTNET, rpc: 'https://testnet.telos.net/evm', abi: bridgeAbi
   },
   tokens: [
     [

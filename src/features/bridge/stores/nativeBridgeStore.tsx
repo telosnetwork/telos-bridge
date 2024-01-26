@@ -13,7 +13,6 @@ import {
   getNativeCurrency,
   getScanLink,
   isEvmChainId,
-  Percent,
   tryGetNetwork,
   tryParseCurrencyAmount,
   tryParseNumber,
@@ -38,9 +37,8 @@ import {FromPromise, fromPromiseValue} from '@/core/utils/fromPromise';
 import {handleError} from '@/core/utils/handleError';
 import {parseWalletError} from '@/core/utils/parseWalletError';
 
-import { bridgeAbi } from '../../../abi/bridgeAbi';
 import { oftAbi } from '../../../abi/oftAbi';
-import { nativeConfig, rpcList, wrapped_testnet, config_test } from '../../../config';
+import { config_test } from '../../../config';
 import {unclaimedStore} from './unclaimedStore';
 
 export enum DstNativeAmount {
@@ -57,23 +55,19 @@ export class NativeBridgeStore {
   isExecuting = false;
   isApproving = false;
 
-  nativeBridgeAddress = config_test.wrapped.address;
-
-  defaultSrcCurrency = config_test.tokens.find((token:any) => token.chainId === ChainId.TELOS_TESTNET);
-  defaultDstCurrency = config_test.tokens.find((token:any) => token.chainId !== ChainId.TELOS_TESTNET);
+  apis: BridgeApi<unknown, AnyFee>[] = [];
+  currencies: Currency[] = [];
+  chains: number[] = [ChainId.TELOS_TESTNET, ChainId.FUJI];
 
   form: BridgeFrom = {
-    srcCurrency: this.defaultSrcCurrency,
-    dstCurrency: this.defaultDstCurrency,
-    srcChainId: this.defaultSrcCurrency?.chainId,
-    dstChainId: this.defaultDstCurrency?.chainId,
+    srcCurrency: undefined, 
+    dstCurrency: undefined,
+    srcChainId: undefined,
+    dstChainId: undefined,
     amount: '',
     dstNativeAmount: DstNativeAmount.DEFAULT,
+    srcBridge: undefined,
   };
-
-  apis: BridgeApi<unknown, AnyFee>[] = [];
-  currencies: Currency[] = config_test.tokens;
-  chains: number[] = [ChainId.TELOS_TESTNET, ChainId.FUJI];
 
   promise: BridgePromise = {
     output: undefined,
@@ -321,9 +315,8 @@ export class NativeBridgeStore {
     const {dstCurrency} = this.form;
     if (!amount) return undefined;
     if (!dstCurrency) return undefined;
-    const percentage = amount.multiply(new Percent(100, 100));
     // minAmount and outputAmount must be always in dstCurrency
-    return castCurrencyAmountUnsafe(percentage, dstCurrency);
+    return castCurrencyAmountUnsafe(amount, dstCurrency);
   }
 
   get dstNativeAmount(): CurrencyAmount | undefined {
@@ -363,11 +356,11 @@ export class NativeBridgeStore {
     if (srcChainId && srcChainId === dstChainId) {
       addError('Select different chain');
     }
-    // if (srcNativeCost && srcNativeBalance) {
-    //   if (srcNativeCost.greaterThan(srcNativeBalance)) {
-    //     addError('Not enough native for gas');
-    //   }
-    // }
+    if (this.srcNativeCost && this.srcNativeBalance) {
+      if (this.srcNativeCost.greaterThan(this.srcNativeBalance)) {
+        addError('Not enough native for gas');
+      }
+    }
     if (!dstChainId) addError('Select network');
     if (!srcChainId) {
       addError('Select network');
@@ -382,15 +375,14 @@ export class NativeBridgeStore {
     if (srcChainId && srcChainId === dstChainId) {
       addError('Change network');
     }
-    // if (!this.dstNativeAmount) {
-    //   addError('Set gas on destination');
-    // } else if (
-    //   this.maxDstNativeAmount &&
-    //   this.dstNativeAmount.greaterThan(this.maxDstNativeAmount)
-    // ) {
-    //   addError('Gas too large');
-    // }
-
+    if (!this.dstNativeAmount) {
+      addError('Set gas on destination');
+    } else if (
+      this.maxDstNativeAmount &&
+      this.dstNativeAmount.greaterThan(this.maxDstNativeAmount)
+    ) {
+      addError('Gas too large');
+    }
     if (!this.messageFee) addError('Checking fee ...');
     if (!this.output) addError('Checking fee ...');
     return errors;
@@ -425,40 +417,24 @@ export class NativeBridgeStore {
     });
   }
 
-  get srcContractAddress(): string | undefined {
-    const {srcChainId} = nativeBridgeStore.form;
-    if (nativeBridgeStore.form.srcChainId){
-      return config_test.proxy.find((token: any) => token.chainId === srcChainId)?.address;
-    }
-  }
-
   get srcContractInstance(): Contract | undefined {
-    if (nativeBridgeStore.srcContractAddress){
-      const {srcChainId} = this.form;
+    const {srcBridge} = this.form;
+    if (srcBridge){
       const wallet = walletStore.evm;
-      const bridge = srcChainId === ChainId.TELOS_TESTNET ? config_test.wrapped.rpc : config_test.original.find((bridge: any) => bridge.chainId === srcChainId);
-      const provider = bridge.chainListId === wallet?.nativeChainId ? 
+      const proxyAddress = config_test.proxy.find((token: any) => token.chainId === srcBridge.chainId)?.address as string;
+      const provider = srcBridge.chainListId === wallet?.nativeChainId ? 
         wallet?.signer : 
-        ethers.getDefaultProvider(bridge?.rpc);
+        ethers.getDefaultProvider(srcBridge?.rpc);
 
-      return new ethers.Contract(this.srcContractAddress as string, oftAbi, provider)
+      return new ethers.Contract(proxyAddress, oftAbi, provider)
     }  
   }
 
-  get srcBridgeContractAddress(): string | undefined {
-    const {srcChainId} = nativeBridgeStore.form;
-    if (srcChainId){
-      return srcChainId === ChainId.TELOS_TESTNET ? config_test.wrapped.address : config_test.original.find((bridge: any) => bridge.chainId === srcChainId)?.address;
-    }
-  }
-
   get srcBridgeContractInstance(): Contract | undefined {
-    if (this.srcBridgeContractAddress){
-      const {srcChainId} = this.form;
-      const rpc = rpcList.find((rpc) => rpc.chainId === srcChainId);
-      const provider = ethers.getDefaultProvider(rpc?.rpc);
-
-      return new ethers.Contract(this.srcBridgeContractAddress as string, bridgeAbi, provider)
+    const {srcBridge} = this.form;
+    if (srcBridge){
+      const provider = ethers.getDefaultProvider(srcBridge.rpc);
+      return new ethers.Contract(srcBridge.address, srcBridge.abi, provider)
     }  
   }
 
@@ -503,6 +479,11 @@ export class NativeBridgeStore {
   
   setSrcChainId(chainId: ChainId): void {
     this.form.srcChainId = chainId;
+    this.setSrcBridge(chainId);
+  }
+
+  setSrcBridge(chainId: ChainId): void {
+    this.form.srcBridge = chainId === ChainId.TELOS_TESTNET ? config_test.wrapped : config_test.original.find((bridge: any) => bridge.chainId === chainId);
   }
 
   setDstChainId(chainId: ChainId): void {
@@ -511,7 +492,7 @@ export class NativeBridgeStore {
 
   setSrcCurrency(currency: Currency) {
     this.form.srcCurrency = currency;
-    this.form.srcChainId = currency.chainId;
+    this.setSrcChainId(currency.chainId);
     if (!this.form.dstCurrency) {
       const dstCurrency = findMatchingCurrency(currency);
       this.form.dstCurrency = dstCurrency;
@@ -532,6 +513,8 @@ export class NativeBridgeStore {
       form.dstCurrency,
       form.srcCurrency,
     ];
+    this.setSrcBridge(form.srcChainId as ChainId);
+    this.setDstNativeAmount('0');
   }
 
   transfer = flow(function* (this: NativeBridgeStore) {
@@ -747,10 +730,11 @@ export class NativeBridgeStore {
   updateMessageFee = flow(function* (this: NativeBridgeStore) {
     this.promise.messageFee = undefined;
     const toAddress = walletStore.evm?.address;  
-    const { srcCurrency, dstChainId, amount} = this.form;
+    const { srcBridge,srcChainId, dstChainId, amount} = this.form;
     const { srcContractInstance, srcBridgeContractInstance, adapterParams } = this;
 
     if (!toAddress) return;
+    if (!srcChainId) return;
     if (!dstChainId) return;
     if (!amount) return;
     if (!adapterParams) return;
@@ -761,16 +745,20 @@ export class NativeBridgeStore {
     // that might affect the user experience
     // user is refunded so this increase does not affect the actual price
     const multiplier = new Fraction(110, 100);
+    const nativeCurrency = getNativeCurrency(srcChainId);
+    const args: any = [false, serializeAdapterParams(adapterParams)];
 
-    const serializedAdapterParams = serializeAdapterParams(adapterParams);
+    // wrapped bridge contract method requires destination chain id arg
+    if (srcBridge.chainId === ChainId.TELOS_TESTNET){
+      args.unshift(dstChainId);
+    }
 
-    yield (this.promise.messageFee = fromPromise(
-      (srcBridgeContractInstance.estimateBridgeFee(dstChainId, false, serializedAdapterParams)).then((fee: {nativeFee: BigintIsh, zroFee: BigintIsh}) => ({
-          nativeFee: CurrencyAmount.fromRawAmount(srcCurrency as Currency, fee.nativeFee).multiply(multiplier),
-          zroFee: CurrencyAmount.fromRawAmount(srcCurrency as Currency, fee.zroFee).multiply(multiplier),
+    yield this.promise.messageFee = fromPromise(
+      (srcBridgeContractInstance.estimateBridgeFee(...args)).then((fee: {nativeFee: BigintIsh, zroFee: BigintIsh}) => ({
+          nativeFee: CurrencyAmount.fromRawAmount(nativeCurrency, fee.nativeFee).multiply(multiplier),
+          zroFee: CurrencyAmount.fromRawAmount(nativeCurrency, fee.zroFee).multiply(multiplier),
         }))
-    ));
-    
+    );    
   });
 
   updateExtraGas = flow(function* (this: NativeBridgeStore) {
@@ -833,6 +821,7 @@ type BridgeFrom = {
   dstChainId: ChainId | undefined;
   amount: string;
   dstNativeAmount: DstNativeAmount | string;
+  srcBridge: any;
 };
 
 type BridgePromise = {
