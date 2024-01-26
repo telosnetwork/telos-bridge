@@ -38,7 +38,7 @@ import {handleError} from '@/core/utils/handleError';
 import {parseWalletError} from '@/core/utils/parseWalletError';
 
 import { oftAbi } from '../../../abi/oftAbi';
-import { config_test } from '../../../config';
+import { bridgeConfig } from '../../../config';
 import {unclaimedStore} from './unclaimedStore';
 
 export enum DstNativeAmount {
@@ -421,7 +421,7 @@ export class NativeBridgeStore {
     const {srcBridge} = this.form;
     if (srcBridge){
       const wallet = walletStore.evm;
-      const proxyAddress = config_test.proxy.find((token: any) => token.chainId === srcBridge.chainId)?.address as string;
+      const proxyAddress = bridgeConfig.proxy.find((token: any) => token.chainId === srcBridge.chainId)?.address as string;
       const provider = srcBridge.chainListId === wallet?.nativeChainId ? 
         wallet?.signer : 
         ethers.getDefaultProvider(srcBridge?.rpc);
@@ -483,7 +483,7 @@ export class NativeBridgeStore {
   }
 
   setSrcBridge(chainId: ChainId): void {
-    this.form.srcBridge = chainId === ChainId.TELOS_TESTNET ? config_test.wrapped : config_test.original.find((bridge: any) => bridge.chainId === chainId);
+    this.form.srcBridge = chainId === ChainId.TELOS_TESTNET ? bridgeConfig.wrapped : bridgeConfig.original.find((bridge: any) => bridge.chainId === chainId);
   }
 
   setDstChainId(chainId: ChainId): void {

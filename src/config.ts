@@ -299,7 +299,7 @@ type BridgeConfig = {
 
 
 // custom config 
-export const config_test: BridgeConfig = {
+export const bridgeConfig: BridgeConfig = {
   version: 2,
   original: [
     {address: '0xBCD4a2c19DC010d1Da2D7985CF18A5251774dF46', chainId: ChainId.GOERLI, chainListId: ChainListId.GOERLI, rpc: 'https://goerli.gateway.tenderly.co', abi: originalTokenBridgeAbi},

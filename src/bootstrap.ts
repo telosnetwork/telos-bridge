@@ -70,7 +70,7 @@ import {walletStore} from '@/core/stores/walletStore';
 import {onftStore} from '@/onft/stores/onftStore';
 import {initOnftStore} from '@/onft/stores/onftStore';
 
-import { config_test } from './config';
+import { bridgeConfig } from './config';
 
 export async function bootstrap(lzAppConfig: AppConfig, providerFactory: ProviderFactory) {
   const aptos = {
@@ -85,7 +85,7 @@ export async function bootstrap(lzAppConfig: AppConfig, providerFactory: Provide
   const chains = getChainsFromLzAppConfig(lzAppConfig);
 
   // tokens from custom config
-  const bridgeTokens = config_test.tokens;
+  const bridgeTokens = bridgeConfig.tokens;
 
   // Append any missing networks from native OFT bridge
   for (const tokenGroup of bridgeTokens){
