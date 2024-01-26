@@ -54,7 +54,6 @@ import {DefaultAirdropProvider__aptos} from '@/bridge/sdk/airdrop/DefaultAirdrop
 import {DefaultAirdropProvider__evm} from '@/bridge/sdk/airdrop/DefaultAirdropProvider__evm';
 import {getStargateConfig} from '@/bridge/sdk/getStargateConfig';
 import {bridgeStore, initBridgeStore} from '@/bridge/stores/bridgeStore';
-import { initNativeBridgeStore, nativeBridgeStore } from '@/bridge/stores/nativeBridgeStore';
 import {unclaimedStore} from '@/bridge/stores/unclaimedStore';
 import {initUnclaimedStore} from '@/bridge/stores/unclaimedStore';
 import {createWallets} from '@/core/config/createWallets';
@@ -70,7 +69,7 @@ import {walletStore} from '@/core/stores/walletStore';
 import {onftStore} from '@/onft/stores/onftStore';
 import {initOnftStore} from '@/onft/stores/onftStore';
 
-import { bridgeConfig } from './config';
+import { telosConfig } from './config';
 
 export async function bootstrap(lzAppConfig: AppConfig, providerFactory: ProviderFactory) {
   const aptos = {
@@ -85,15 +84,12 @@ export async function bootstrap(lzAppConfig: AppConfig, providerFactory: Provide
   const chains = getChainsFromLzAppConfig(lzAppConfig);
 
   // tokens from custom config
-  const bridgeTokens = bridgeConfig.tokens;
+  const bridgeTokens = telosConfig.tokens;
 
   // Append any missing networks from native OFT bridge
-  for (const tokenGroup of bridgeTokens){
-    nativeBridgeStore.addCurrencies(tokenGroup);
-    for (const token of tokenGroup){
-      if (!chains.includes(token.chainId)){
-        chains.push(token.chainId);
-      }
+  for (const token of bridgeTokens){
+    if (!chains.includes(token.chainId)){
+      chains.push(token.chainId);
     }
   }
   
@@ -228,7 +224,11 @@ export async function bootstrap(lzAppConfig: AppConfig, providerFactory: Provide
     }
   }
 
+  // add native TLOS oft tokens
+  bridgeStore.addCurrencies(telosConfig.tokens);
+  // add all other tokens
   bridgeStore.addCurrencies(currencies);
+
 
   tokenStore.addProviders([
     //
@@ -257,7 +257,6 @@ export async function bootstrap(lzAppConfig: AppConfig, providerFactory: Provide
     // Todo:
     // refactor to method on store
     initBridgeStore();
-    initNativeBridgeStore();
     initOnftStore();
     initTransactionStore(transactionStore);
     initUnclaimedStore(unclaimedStore);

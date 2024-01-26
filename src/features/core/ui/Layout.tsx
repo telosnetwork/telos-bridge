@@ -66,9 +66,6 @@ export const AppHeader = observer(() => {
         {/* <NavLink sx={{ 'marginRight':{xs: "auto", md: 'unset'}}} href='https://dapp.ptokens.io/#/swap?asset=tlos&from=eth&to=telos' target='_blank' rel="noreferrer" >
           Bridge TLOS (pToken)
         </NavLink> */}
-        <Link href='/telos' passHref legacyBehavior>
-          <NavLink pathname={pathname}>TLOS</NavLink>
-        </Link>
         {/* <Link href='/onft' passHref legacyBehavior>
           <NavLink pathname={pathname}>ONFT</NavLink>
         </Link>  */}
