@@ -224,11 +224,11 @@ export async function bootstrap(lzAppConfig: AppConfig, providerFactory: Provide
     }
   }
 
-  // add native TLOS oft tokens
-  bridgeStore.addCurrencies(telosConfig.tokens);
+
   // add all other tokens
   bridgeStore.addCurrencies(currencies);
-
+  // add native TLOS oft tokens
+  bridgeStore.addCurrencies(telosConfig.tokens);
 
   tokenStore.addProviders([
     //
