@@ -72,10 +72,10 @@ export const wrapped_testnet: WrappedTokenBridgeConfig = {
   tokens: [
     [
       // USDC
+      new Token(ChainId.TELOS_TESTNET, '0x22FdA4Efc62d72f0E0804e205c2c858D5c2cF959', 6, 'USDC'),
       new Token(ChainId.GOERLI, '0x31190a205713Bd825a0c237E26f67CE89B5C4dD8', 6, 'USDC'),
       new Token(ChainId.ARBITRUM_GOERLI, '0x6463C73809EE3F85BeCD0a82c55cb808474101D0', 6, 'USDC'),
       new Token(ChainId.BSC_TESTNET, '0x9D5859A95A0b9d7739fCBec82c800B56ef143fe9', 6, 'USDC'),
-      new Token(ChainId.TELOS_TESTNET, '0x22FdA4Efc62d72f0E0804e205c2c858D5c2cF959', 6, 'USDC'),
     ],
     [
       // WETH
@@ -257,7 +257,7 @@ export const appConfig: AppConfig = createAppConfig({
 });
 
 
-/***Native OFT Bridge***/
+/***NATIVE OFT CONFIG***/
 
 enum ChainListId {
   AVALANCHE = 43114,
@@ -307,8 +307,8 @@ export const telosConfig: BridgeConfig = {
     address: '0x137d4e9C2431A3DCBa6e615E9438F2c558353a17', chainId: ChainId.TELOS_TESTNET, chainListId: ChainListId.TELOS_TESTNET, rpc: 'https://testnet.telos.net/evm', abi: bridgeAbi
   },
   tokens: [
-      new Coin(ChainId.TELOS_TESTNET, 18, 'TLOS'),
       new Token(ChainId.FUJI, '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E', 18, 'TLOS'),
+      new Coin(ChainId.TELOS_TESTNET, 18, 'TLOS')
   ],
   proxy: [
     {
