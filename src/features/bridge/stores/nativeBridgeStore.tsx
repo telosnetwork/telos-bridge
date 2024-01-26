@@ -673,33 +673,33 @@ export class NativeBridgeStore {
     return tx;
   })
 
-  approve: () => Promise<void> = flow(function* (this: NativeBridgeStore) {
-    this.isApproving = true;
-    try {
-      const {transferApi, amount, srcWallet, srcAddress} = this;
-      assert(amount, 'amount');
-      assert(srcWallet, 'srcWallet');
-      assert(srcAddress, 'srcAddress');
+  // approve: () => Promise<void> = flow(function* (this: NativeBridgeStore) {
+  //   this.isApproving = true;
+  //   try {
+  //     const {transferApi, amount, srcWallet, srcAddress} = this;
+  //     assert(amount, 'amount');
+  //     assert(srcWallet, 'srcWallet');
+  //     assert(srcAddress, 'srcAddress');
 
-      yield srcWallet.switchChain(amount.currency.chainId);
+  //     yield srcWallet.switchChain(amount.currency.chainId);
 
-      yield assertWallet(srcWallet, {
-        chainId: amount.currency.chainId,
-        address: srcAddress,
-      });
+  //     yield assertWallet(srcWallet, {
+  //       chainId: amount.currency.chainId,
+  //       address: srcAddress,
+  //     });
 
-      const unsignedTransaction: Awaited<ReturnType<typeof transferApi['approve']>> =
-        yield transferApi.approve(amount);
+  //     const unsignedTransaction: Awaited<ReturnType<typeof transferApi['approve']>> =
+  //       yield transferApi.approve(amount);
 
-      const transactionResult: Awaited<
-        ReturnType<typeof unsignedTransaction['signAndSubmitTransaction']>
-      > = yield unsignedTransaction.signAndSubmitTransaction(srcWallet.signer);
-      yield transactionResult.wait();
-      yield this.updateAllowance();
-    } finally {
-      this.isApproving = false;
-    }
-  });
+  //     const transactionResult: Awaited<
+  //       ReturnType<typeof unsignedTransaction['signAndSubmitTransaction']>
+  //     > = yield unsignedTransaction.signAndSubmitTransaction(srcWallet.signer);
+  //     yield transactionResult.wait();
+  //     yield this.updateAllowance();
+  //   } finally {
+  //     this.isApproving = false;
+  //   }
+  // });
 
   async updateBalances() {
     const {evm} = walletStore;
