@@ -776,9 +776,7 @@ export class BridgeStore {
       this.messageFee.nativeFee.add(CurrencyAmount.fromRawAmount(srcCurrency, qty.toBigInt())):
       this.messageFee.nativeFee;
 
-    // includes native amount if sending native TLOS
     const totalEth =  ethers.BigNumber.from(fee.quotient);
-
     const serializedAdapterParams = serializeAdapterParams(this.adapterParams);
 
     const tx: unknown = yield this.srcContractInstance.sendFrom(
@@ -981,6 +979,7 @@ export class BridgeStore {
 
 function isValidPair(srcCurrency: Currency, dstCurrency: Currency): boolean {
   if (srcCurrency.chainId === dstCurrency.chainId) return false;
+  // confirm valid pair via asset api or if pair is TLOS oft
   return bridgeStore.apis.some((api) => api.supportsTransfer(srcCurrency, dstCurrency)) || bridgeStore.isTelos && dstCurrency.symbol === 'TLOS';
 }
 

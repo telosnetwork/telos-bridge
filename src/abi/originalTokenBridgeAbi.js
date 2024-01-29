@@ -1,3 +1,4 @@
+// token bridge abi used for TLOS OFT transfers
 export const originalTokenBridgeAbi = [
     {
       "inputs": [

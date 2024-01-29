@@ -1,3 +1,4 @@
+// OFT abi used for TLOS OFT transfers
 export const oftAbi = [
   {
     "inputs": [
