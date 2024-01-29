@@ -239,15 +239,15 @@ export const appConfig: AppConfig = createAppConfig({
   bridge: {
     aptos: [],
     oft: [
-      // BANANA,
-      // LVC,
-      // VC,
-      // RF,
+      BANANA,
+      LVC,
+      VC,
+      RF,
       // TLOS
     ],
     wrappedToken: [
-      // wrapped_mainnet,
-      wrapped_testnet,
+      wrapped_mainnet,
+      // wrapped_testnet,
     ],
     onft: [
       // erc721_testnet,
@@ -297,27 +297,58 @@ type BridgeConfig = {
   proxy: ProxyConfig[];
 }
 
-// custom config for TLOS OFT
+// custom config for TLOS (mainnet)
 export const telosConfig: BridgeConfig = {
   version: 2,
   original: [
-    {address: '0x2a3a50f458AaAae618C54C1670fD49e338b795c2', chainId: ChainId.FUJI, chainListId: ChainListId.FUJI, rpc: 'https://api.avax-test.network/ext/bc/C/rpc', abi: originalTokenBridgeAbi}
+    {address: '0x9c5ebCbE531aA81bD82013aBF97401f5C6111d76', chainId: ChainId.ETHEREUM, chainListId: ChainListId.ETHEREUM, rpc: 'https://mainnet.infura.io/v3/', abi: originalTokenBridgeAbi},
+    {address: '0x9c5ebCbE531aA81bD82013aBF97401f5C6111d76', chainId: ChainId.POLYGON, chainListId: ChainListId.POLYGON, rpc: 'https://polygon-rpc.com/', abi: originalTokenBridgeAbi},
+    {address: '0x9c5ebCbE531aA81bD82013aBF97401f5C6111d76', chainId: ChainId.BSC, chainListId: ChainListId.BSC, rpc: 'https://bsc-dataseed1.binance.org', abi: originalTokenBridgeAbi},
+    {address: '0x9c5ebCbE531aA81bD82013aBF97401f5C6111d76', chainId: ChainId.AVALANCHE, chainListId: ChainListId.AVALANCHE, rpc: 'https://api.avax.network/ext/bc/C/rpc', abi: originalTokenBridgeAbi},
+    {address: '0x9c5ebCbE531aA81bD82013aBF97401f5C6111d76', chainId: ChainId.ARBITRUM, chainListId: ChainListId.ARBITRUM, rpc: 'https://arb1.arbitrum.io/rpc', abi: originalTokenBridgeAbi},
   ],
   wrapped: {
-    address: '0x137d4e9C2431A3DCBa6e615E9438F2c558353a17', chainId: ChainId.TELOS_TESTNET, chainListId: ChainListId.TELOS_TESTNET, rpc: 'https://testnet.telos.net/evm', abi: bridgeAbi
+    address: '0x9c5ebCbE531aA81bD82013aBF97401f5C6111d76', chainId: ChainId.TELOS, chainListId: ChainListId.TELOS, rpc: 'https://mainnet.telos.net/evm', abi: bridgeAbi
   },
   tokens: [
-      new Token(ChainId.FUJI, '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E', 18, 'TLOS'),
-      new Coin(ChainId.TELOS_TESTNET, 18, 'TLOS')
+    new Token(ChainId.ARBITRUM, '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E', 18, 'TLOS'),
+    new Token(ChainId.AVALANCHE, '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E', 18, 'TLOS'),
+    new Token(ChainId.BSC, '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E', 18, 'TLOS'),
+    new Token(ChainId.POLYGON, '0x1cF0636abbc569fB413A20bd7964712e6b4d1161', 18, 'TLOS'),
+    new Token(ChainId.ETHEREUM, '0x5Aa352551d39F5ce592260e0D26818e7d780867f', 18, 'TLOS'),
+    new Coin(ChainId.TELOS, 18, 'TLOS')
   ],
   proxy: [
-    {
-      chainId: ChainId.FUJI,
-      address: '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E'
-    },
-    {
-      chainId: ChainId.TELOS_TESTNET,
-      address: '0xAEa017740a2e7608F873CB130e7B3c335A4a1940'
-    }
+    {chainId: ChainId.ARBITRUM, address: '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E'},
+    {chainId: ChainId.AVALANCHE, address: '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E'},
+    {chainId: ChainId.BSC, address: '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E'},
+    {chainId: ChainId.POLYGON, address: '0x1cF0636abbc569fB413A20bd7964712e6b4d1161'},
+    {chainId: ChainId.ETHEREUM, address: '0x5Aa352551d39F5ce592260e0D26818e7d780867f'},
+    {chainId: ChainId.TELOS, address: '0x7B5250Ad9aE6445e75E01Cd4bB070aECBf8DB92E'}
   ],
 };
+
+// custom config for TLOS (testnet)
+// export const telosConfig: BridgeConfig = {
+//   version: 2,
+//   original: [
+//     {address: '0x2a3a50f458AaAae618C54C1670fD49e338b795c2', chainId: ChainId.FUJI, chainListId: ChainListId.FUJI, rpc: 'https://api.avax-test.network/ext/bc/C/rpc', abi: originalTokenBridgeAbi}
+//   ],
+//   wrapped: {
+//     address: '0x137d4e9C2431A3DCBa6e615E9438F2c558353a17', chainId: ChainId.TELOS_TESTNET, chainListId: ChainListId.TELOS_TESTNET, rpc: 'https://testnet.telos.net/evm', abi: bridgeAbi
+//   },
+//   tokens: [
+//       new Token(ChainId.FUJI, '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E', 18, 'TLOS'),
+//       new Coin(ChainId.TELOS_TESTNET, 18, 'TLOS')
+//   ],
+//   proxy: [
+//     {
+//       chainId: ChainId.FUJI,
+//       address: '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E'
+//     },
+//     {
+//       chainId: ChainId.TELOS_TESTNET,
+//       address: '0xAEa017740a2e7608F873CB130e7B3c335A4a1940'
+//     }
+//   ],
+// };

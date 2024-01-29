@@ -572,7 +572,7 @@ export class BridgeStore {
     this.form.dstChainId = currency.chainId;
   }
   setSrcBridge(chainId: ChainId): void {
-    this.form.srcBridge = chainId === ChainId.TELOS_TESTNET ? telosConfig.wrapped : telosConfig.original.find((bridge: any) => bridge.chainId === chainId);
+    this.form.srcBridge = chainId === ChainId.TELOS ? telosConfig.wrapped : telosConfig.original.find((bridge: any) => bridge.chainId === chainId);
   }
   switch() {
     const {form} = this;
@@ -772,7 +772,7 @@ export class BridgeStore {
     const toAddressBytes = ethers.utils.defaultAbiCoder.encode(["address"], [toAddress])
 
     // if sending from Telos network, include amount in total native token sent
-    const fee = srcChainId === ChainId.TELOS_TESTNET ?
+    const fee = srcChainId === ChainId.TELOS ?
       this.messageFee.nativeFee.add(CurrencyAmount.fromRawAmount(srcCurrency, qty.toBigInt())):
       this.messageFee.nativeFee;
 
@@ -924,7 +924,7 @@ export class BridgeStore {
       const nativeCurrency = getNativeCurrency(srcCurrency.chainId);
 
       // wrapped bridge contract method requires destination chain id arg
-      if (srcBridge.chainId === ChainId.TELOS_TESTNET){
+      if (srcBridge.chainId === ChainId.TELOS){
         args.unshift(dstCurrency.chainId);
       }
       yield this.promise.messageFee = fromPromise(
