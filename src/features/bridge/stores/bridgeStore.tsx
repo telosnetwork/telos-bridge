@@ -138,19 +138,21 @@ export class BridgeStore {
     if (!srcCurrency) return undefined;
     if (!dstCurrency) return undefined;
 
-    function findTelosOftTransferApi(api: any ): boolean {
-      return api.config.proxy.some((p: ProxyConfig) => p.address === telosNativeOft.proxy.address);
+    if (this.dstIsNativeTelos){
+      return this.apis.find(this.findTelosOftTransferApi);
     }
 
-    if (dstCurrency.chainId === ChainId.TELOS && dstCurrency.symbol === "TLOS"){
-      return this.apis.find(findTelosOftTransferApi);
-    }
     return this.apis.find((s) => s.supportsTransfer(srcCurrency, dstCurrency));
   }
 
   get registerApi(): BridgeApi<unknown, unknown> | undefined {
     const {dstCurrency} = this.form;
     if (!dstCurrency) return undefined;
+
+    if (this.dstIsNativeTelos){
+      return this.apis.find(this.findTelosOftTransferApi);
+    }
+    
     return this.apis.find((s) => s.supportsRegister(dstCurrency));
   }
 
@@ -490,6 +492,10 @@ export class BridgeStore {
 
   // actions
 
+  findTelosOftTransferApi(api: any ): boolean {
+    return api.config.proxy.some((p: ProxyConfig) => p.address === telosNativeOft.proxy.address);
+  }
+
   async updateAllowance(): Promise<unknown> {
     this.promise.allowance = undefined;
     const {transferApi, srcAddress} = this;
@@ -627,7 +633,7 @@ export class BridgeStore {
 
       let isRegistered = false;
       
-      if (!(dstCurrency.symbol === "TLOS" && dstChainId === ChainId.TELOS)){
+      if (!this.srcIsNativeTelos){
         assert(registerApi, 'registerApi');
 
         // try to register if possible, exclude registration when src or dst is native OFT
@@ -684,7 +690,7 @@ export class BridgeStore {
       this.isMining = false;
 
       // exclude registration when src or dst is native OFT
-      if (!this.srcIsNativeTelos && !this.dstIsNativeTelos && !isRegistered) {
+      if (/*!this.srcIsNativeTelos */ !isRegistered) {
         uiStore.claimReminderAlert.open();
       }
 
