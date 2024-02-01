@@ -23,6 +23,8 @@ const getTokenIcon = (symbol: string): string => {
       return 'https://raw.githubusercontent.com/telosnetwork/token-list/master/logos/RF.webp';
     case 'VC':
       return 'https://raw.githubusercontent.com/telosnetwork/token-list/master/logos/VC.png';
+    case 'TLOS':
+      return 'https://raw.githubusercontent.com/telosnetwork/token-list/main/logos/telos.png';
     default:
       return getCurrencyIcon(symbol);
   }

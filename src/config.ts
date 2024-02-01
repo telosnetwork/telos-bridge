@@ -2,7 +2,9 @@ import {ChainId} from '@layerzerolabs/lz-sdk';
 import {AppConfig, createAppConfig} from '@layerzerolabs/ui-app-config';
 import {OnftBridgeConfig, OnftStandard} from '@layerzerolabs/ui-bridge-onft';
 import {WrappedTokenBridgeConfig} from '@layerzerolabs/ui-bridge-wrapped-token';
-import {Coin, Token} from '@layerzerolabs/ui-core';
+import {Coin, Currency, Token} from '@layerzerolabs/ui-core';
+
+import { bridgeAbi } from './abi/bridgeAbi';
 
 export const wrapped_mainnet: WrappedTokenBridgeConfig = {
   version: 2,
@@ -230,6 +232,27 @@ const RF  = {
   sharedDecimals: 4,
 }
 
+const TLOS  = {
+  version: 2,
+  tokens: [
+    new Token(ChainId.ARBITRUM, '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E', 18, 'TLOS'),
+    new Token(ChainId.AVALANCHE, '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E', 18, 'TLOS'),
+    new Token(ChainId.BSC, '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E', 18, 'TLOS'),
+    new Token(ChainId.POLYGON, '0x1cF0636abbc569fB413A20bd7964712e6b4d1161', 18, 'TLOS'),
+    new Token(ChainId.ETHEREUM, '0x5Aa352551d39F5ce592260e0D26818e7d780867f', 18, 'TLOS'),
+  ],
+  proxy: [
+    {chainId: ChainId.ARBITRUM, address: '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E'},
+    {chainId: ChainId.AVALANCHE, address: '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E'},
+    {chainId: ChainId.BSC, address: '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E'},
+    {chainId: ChainId.POLYGON, address: '0x1cF0636abbc569fB413A20bd7964712e6b4d1161'},
+    {chainId: ChainId.ETHEREUM, address: '0x5Aa352551d39F5ce592260e0D26818e7d780867f'},
+    {chainId: ChainId.TELOS, address: '0x7B5250Ad9aE6445e75E01Cd4bB070aECBf8DB92E'}
+  ],
+  fee: false,
+  sharedDecimals: 4,
+}
+
 export const appConfig: AppConfig = createAppConfig({
   bridge: {
     aptos: [],
@@ -238,6 +261,7 @@ export const appConfig: AppConfig = createAppConfig({
       LVC,
       VC,
       RF,
+      TLOS
     ],
     wrappedToken: [
       wrapped_mainnet,
@@ -249,3 +273,35 @@ export const appConfig: AppConfig = createAppConfig({
     ],
   },
 });
+
+/***NATIVE OFT CONFIG***/
+
+enum ChainListId {
+  TELOS = 40,
+  TELOS_TESTNET = 41,
+}
+
+type BridgeSettings = {
+  address: string;
+  chainId: ChainId;
+  chainListId: ChainListId;
+  rpc: string;
+  abi: typeof bridgeAbi
+}
+
+export type ProxyConfig = {
+  chainId: number;
+  address: string;
+}
+
+type NativeOftConfig = {
+  bridge: BridgeSettings;
+  token: Currency;
+  proxy: ProxyConfig;
+}
+
+export const telosNativeOft: NativeOftConfig = {
+  bridge: {address: '0x9c5ebCbE531aA81bD82013aBF97401f5C6111d76', chainId: ChainId.TELOS, chainListId: ChainListId.TELOS, rpc: 'https://mainnet.telos.net/evm', abi: bridgeAbi},
+  token: new Coin(ChainId.TELOS, 18, 'TLOS'),
+  proxy: {chainId: ChainId.TELOS, address: '0x7B5250Ad9aE6445e75E01Cd4bB070aECBf8DB92E'}
+}

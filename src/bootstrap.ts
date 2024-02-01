@@ -69,6 +69,8 @@ import {walletStore} from '@/core/stores/walletStore';
 import {onftStore} from '@/onft/stores/onftStore';
 import {initOnftStore} from '@/onft/stores/onftStore';
 
+import { telosNativeOft } from './config';
+
 export async function bootstrap(lzAppConfig: AppConfig, providerFactory: ProviderFactory) {
   const aptos = {
     mainnet: createAptosModule(ChainStage.MAINNET),
@@ -143,6 +145,9 @@ export async function bootstrap(lzAppConfig: AppConfig, providerFactory: Provide
     addAptosOft(oftConfig);
     bridgeStore.addCurrencies(oftConfig.tokens);
   }
+
+  // Add Native TLOS OFT
+  bridgeStore.addCurrencies([telosNativeOft.token])
 
   // WrappedAssetBridge
   // https://github.com/LayerZero-Labs/wrapped-asset-bridge
