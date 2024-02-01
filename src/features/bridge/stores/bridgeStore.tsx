@@ -25,7 +25,7 @@ import {
 import {ONE_ADDRESS, serializeAdapterParams} from '@layerzerolabs/ui-evm';
 import {assertWallet, Wallet} from '@layerzerolabs/ui-wallet';
 import assert from 'assert';
-import { Contract,Signer,ethers } from 'ethers';
+import { Contract,ethers } from 'ethers';
 import {autorun, computed, flow, makeAutoObservable} from 'mobx';
 import {fromPromise} from 'mobx-utils';
 import {toast} from 'react-toastify';
@@ -1019,19 +1019,6 @@ function isSrcCurrencyValid(srcCurrency: Currency) {
 function toBridgeFee(fees: AnyFee): BridgeFee {
   if (fees instanceof CurrencyAmount) return {totalFee: fees};
   return fees;
-}
-
-function isDstCurrencyValid(dstCurrency: Currency) {
-  const {srcChainId, srcCurrency} = bridgeStore.form;
-  if (!srcChainId) return true;
-  // both can't be aptos
-  if (isAptosChainId(srcChainId) && isAptosChainId(dstCurrency.chainId)) return false;
-  // one has to be aptos
-  if (!isAptosChainId(srcChainId) && !isAptosChainId(dstCurrency.chainId)) return false;
-  if (srcCurrency) {
-    return isValidPair(srcCurrency, dstCurrency);
-  }
-  return true;
 }
 
 export type CurrencyOption = {
