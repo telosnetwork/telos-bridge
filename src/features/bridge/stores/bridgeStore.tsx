@@ -53,6 +53,7 @@ export enum DstNativeAmount {
 }
 export type ValidationError = string;
 
+const TLOS_SYMBOL = 'TLOS';
 export class BridgeStore {
   //
   isLoading = false;
@@ -111,7 +112,7 @@ export class BridgeStore {
 
   // views
   get output(): BridgeOutput | undefined {
-    return this.isTelos ? this.promise.output as BridgeOutput : fromPromiseValue(this.promise.output as FromPromise<BridgeOutput>);
+    return this.srcIsNativeTelos ? this.promise.output as BridgeOutput : fromPromiseValue(this.promise.output as FromPromise<BridgeOutput>);
   }
 
   get messageFee(): FeeQuote | undefined {
@@ -142,9 +143,7 @@ export class BridgeStore {
     }
 
     if (dstCurrency.chainId === ChainId.TELOS && dstCurrency.symbol === "TLOS"){
-      debugger;
-      const test =  this.apis.find(findTelosOftTransferApi);
-      return test;
+      return this.apis.find(findTelosOftTransferApi);
     }
     return this.apis.find((s) => s.supportsTransfer(srcCurrency, dstCurrency));
   }
@@ -434,10 +433,9 @@ export class BridgeStore {
     if (srcCurrency && dstCurrency && !isValidPair(srcCurrency, dstCurrency)) {
       addError('Select other pair');
     }
-    debugger;
     if (!this.messageFee) addError('Checking fee ...');
     if (!this.output) addError('Checking fee ...');
-    if (!this.isTelos && !limitAmount) addError('Checking limit...');
+    if (!this.srcIsNativeTelos && !limitAmount) addError('Checking limit...');
     return errors;
   }
   get unclaimed(): CurrencyAmount[] {
@@ -466,8 +464,12 @@ export class BridgeStore {
     });
   }
 
-  get isTelos(): boolean {
-    return this.form.srcCurrency?.symbol === 'TLOS' && this.form.srcChainId === ChainId.TELOS;
+  get srcIsNativeTelos(): boolean {
+    return this.form.srcCurrency?.symbol === TLOS_SYMBOL && this.form.srcChainId === ChainId.TELOS;
+  }
+
+  get dstIsNativeTelos(): boolean {
+    return this.form.dstCurrency?.symbol === TLOS_SYMBOL && this.form.dstChainId === ChainId.TELOS
   }
 
   get srcContractInstance(): Contract | undefined {
@@ -570,7 +572,6 @@ export class BridgeStore {
     }
   }
   setDstCurrency(currency: Currency) {
-    debugger;
     this.form.dstCurrency = currency;
     this.form.dstChainId = currency.chainId;
   }
@@ -625,7 +626,8 @@ export class BridgeStore {
       assert(transferApi, 'transferApi');
 
       let isRegistered = false;
-      if (!(dstCurrency.symbol === "TLOS") && !(dstChainId === ChainId.TELOS)){
+      
+      if (!(dstCurrency.symbol === "TLOS" && dstChainId === ChainId.TELOS)){
         assert(registerApi, 'registerApi');
 
         // try to register if possible, exclude registration when src or dst is native OFT
@@ -682,7 +684,7 @@ export class BridgeStore {
       this.isMining = false;
 
       // exclude registration when src or dst is native OFT
-      if (!this.isTelos && !(dstChainId === ChainId.TELOS && dstCurrency.symbol === 'TLOS') && !isRegistered) {
+      if (!this.srcIsNativeTelos && !this.dstIsNativeTelos && !isRegistered) {
         uiStore.claimReminderAlert.open();
       }
 
@@ -1034,7 +1036,7 @@ export class BridgeStore {
     const {amount, transferApi} = this;
     if (!amount) return;
     if (!dstCurrency) return;
-    if(this.isTelos){
+    if(this.srcIsNativeTelos){
       yield (this.promise.output = 
         {
           amount,
@@ -1052,8 +1054,6 @@ export class BridgeStore {
   });
 
   updateMessageFee = flow(function* (this: BridgeStore) {
-    debugger;
-
     this.promise.messageFee = undefined;
 
     const {srcCurrency, dstCurrency} = this.form;
@@ -1068,7 +1068,7 @@ export class BridgeStore {
     //
     // The user will be refunded so this increase does not affect the actual price
     const multiplier = new Fraction(110, 100);
-    if (this.isTelos && srcBridgeContractInstance){
+    if (this.srcIsNativeTelos && srcBridgeContractInstance){
       const args: [ChainId, boolean, string] = [dstCurrency.chainId, false, serializeAdapterParams(adapterParams)];
       const nativeCurrency = getNativeCurrency(ChainId.TELOS);
 
@@ -1079,9 +1079,6 @@ export class BridgeStore {
           }))
       );
     }else if (transferApi){
-      debugger;
-      const test = yield transferApi.getMessageFee(srcCurrency, dstCurrency, adapterParams);
-      debugger;
       yield (this.promise.messageFee = fromPromise(
         transferApi.getMessageFee(srcCurrency, dstCurrency, adapterParams).then((fee) => ({
           nativeFee: fee.nativeFee.multiply(multiplier),
