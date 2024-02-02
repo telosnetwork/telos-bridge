@@ -69,7 +69,7 @@ import {walletStore} from '@/core/stores/walletStore';
 import {onftStore} from '@/onft/stores/onftStore';
 import {initOnftStore} from '@/onft/stores/onftStore';
 
-import { TLOS, telosNativeOft } from './config';
+import { telosNativeOft } from './config';
 
 export async function bootstrap(lzAppConfig: AppConfig, providerFactory: ProviderFactory) {
   const aptos = {
@@ -142,9 +142,9 @@ export async function bootstrap(lzAppConfig: AppConfig, providerFactory: Provide
 
   // add OFT tokens
   for (const oftConfig of lzAppConfig.bridge.oft) {
-      addEvmOft(oftConfig);
-      addAptosOft(oftConfig);
-      bridgeStore.addCurrencies(oftConfig.tokens);
+    addEvmOft(oftConfig);
+    addAptosOft(oftConfig);
+    bridgeStore.addCurrencies(oftConfig.tokens);
   }
 
   // add Telos Native for OFT bridge

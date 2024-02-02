@@ -200,22 +200,17 @@ export class BridgeStore {
   get srcCurrencyOptionsGroups(): OptionGroup<CurrencyOption>[] {
     const {srcChainId} = this.form;
     const {srcCurrencyOptions} = this;
-    const srcOptions = srcCurrencyOptions
-      .filter((o) => o.currency.chainId === srcChainId)
-    
-    const allOptions = srcCurrencyOptions
-      .filter((o) => o.currency.chainId !== srcChainId)
-    
+        
     const src: OptionGroup<CurrencyOption> = {
       title: tryGetNetwork(srcChainId)?.name + ' Network',
       key: 'src',
-      items: srcOptions,
+      items: srcCurrencyOptions.filter((o) => o.currency.chainId === srcChainId),
     };
 
     const all: OptionGroup<CurrencyOption> = {
       title: 'All networks',
       key: 'all',
-      items: allOptions,
+      items: srcCurrencyOptions.filter((o) => o.currency.chainId !== srcChainId),
     };
 
     return [src, all].filter((g) => g.items.length > 0);

@@ -28,6 +28,22 @@ export function useDefaultSrcCurrency() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [address, srcChainId]);
 
+  useEffect(() => {
+    if (!isReady) return;
+    if (!address) return;
+    if (!form.srcChainId) return;
+    if (form.srcCurrency) return;
+    if (form.dstCurrency) return;
+    const {srcCurrencyOptions} = bridgeStore;
+    // set default Native TLOS as default
+    const telosNative = srcCurrencyOptions.find((option: CurrencyOption) => option.currency.chainId === ChainId.TELOS && option.currency.symbol === TLOS_SYMBOL)
+    if (telosNative) {
+      bridgeStore.setSrcCurrency(telosNative.currency);
+    }
+    /* eslint-disable-next-line react-hooks/exhaustive-deps */
+  }, [address, form.srcChainId, srcChainId, isReady]);
+
+  /*** set max balance as default token ***/
   // useEffect(() => {
   //   if (!isReady) return;
   //   if (!address) return;
@@ -52,19 +68,4 @@ export function useDefaultSrcCurrency() {
   //   }
   //   /* eslint-disable-next-line react-hooks/exhaustive-deps */
   // }, [address, form.srcChainId, srcChainId, isReady]);
-
-  useEffect(() => {
-    if (!isReady) return;
-    if (!address) return;
-    if (!form.srcChainId) return;
-    if (form.srcCurrency) return;
-    if (form.dstCurrency) return;
-    const {srcCurrencyOptions} = bridgeStore;
-    // set default Native TLOS as default
-    const telosNative = srcCurrencyOptions.find((option: CurrencyOption) => option.currency.chainId === ChainId.TELOS && option.currency.symbol === TLOS_SYMBOL)
-    if (telosNative) {
-      bridgeStore.setSrcCurrency(telosNative.currency);
-    }
-    /* eslint-disable-next-line react-hooks/exhaustive-deps */
-  }, [address, form.srcChainId, srcChainId, isReady]);
 }
