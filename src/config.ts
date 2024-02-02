@@ -232,7 +232,7 @@ const RF  = {
   sharedDecimals: 4,
 }
 
-const TLOS  = {
+export const TLOS  = {
   version: 2,
   tokens: [
     new Token(ChainId.ARBITRUM, '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E', 18, 'TLOS'),

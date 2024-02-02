@@ -1,10 +1,11 @@
+import {ChainId} from '@layerzerolabs/lz-sdk';
 import {chainKeyToEndpointId} from '@layerzerolabs/ui-core';
-import {maxBy} from 'lodash-es';
 import {useEffect} from 'react';
 
-import {bridgeStore} from '@/bridge/stores/bridgeStore';
+import {bridgeStore,CurrencyOption, TLOS_SYMBOL} from '@/bridge/stores/bridgeStore';
 import {balanceStore} from '@/core/stores/balanceStore';
 import {walletStore} from '@/core/stores/walletStore';
+
 
 export function useDefaultSrcCurrency() {
   const {address, chainKey} = walletStore.evm ?? {};
@@ -27,6 +28,31 @@ export function useDefaultSrcCurrency() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [address, srcChainId]);
 
+  // useEffect(() => {
+  //   if (!isReady) return;
+  //   if (!address) return;
+  //   if (!form.srcChainId) return;
+  //   if (form.srcCurrency) return;
+  //   if (form.dstCurrency) return;
+  //   const {srcCurrencyOptions} = bridgeStore;
+  //   const balances = srcCurrencyOptions
+  //     .filter((o) => o.currency.chainId === srcChainId)
+  //     .map(({currency}) => balanceStore.getBalance(currency, address))
+  //     .flatMap((balance) => (balance ? [balance] : []));
+
+  //   const maxBalance = maxBy(balances, (b) => {
+  //     try {
+  //       return parseFloat(b.toExact());
+  //     } catch {
+  //       return 0;
+  //     }
+  //   });
+  //   if (maxBalance) {
+  //     bridgeStore.setSrcCurrency(maxBalance.currency);
+  //   }
+  //   /* eslint-disable-next-line react-hooks/exhaustive-deps */
+  // }, [address, form.srcChainId, srcChainId, isReady]);
+
   useEffect(() => {
     if (!isReady) return;
     if (!address) return;
@@ -34,20 +60,10 @@ export function useDefaultSrcCurrency() {
     if (form.srcCurrency) return;
     if (form.dstCurrency) return;
     const {srcCurrencyOptions} = bridgeStore;
-    const balances = srcCurrencyOptions
-      .filter((o) => o.currency.chainId === srcChainId)
-      .map(({currency}) => balanceStore.getBalance(currency, address))
-      .flatMap((balance) => (balance ? [balance] : []));
-
-    const maxBalance = maxBy(balances, (b) => {
-      try {
-        return parseFloat(b.toExact());
-      } catch {
-        return 0;
-      }
-    });
-    if (maxBalance) {
-      bridgeStore.setSrcCurrency(maxBalance.currency);
+    // set default Native TLOS as default
+    const telosNative = srcCurrencyOptions.find((option: CurrencyOption) => option.currency.chainId === ChainId.TELOS && option.currency.symbol === TLOS_SYMBOL)
+    if (telosNative) {
+      bridgeStore.setSrcCurrency(telosNative.currency);
     }
     /* eslint-disable-next-line react-hooks/exhaustive-deps */
   }, [address, form.srcChainId, srcChainId, isReady]);

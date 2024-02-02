@@ -53,7 +53,7 @@ export enum DstNativeAmount {
 }
 export type ValidationError = string;
 
-const TLOS_SYMBOL = 'TLOS';
+export const TLOS_SYMBOL = 'TLOS';
 export class BridgeStore {
   isLoading = false;
   isSigning = false;
@@ -168,7 +168,7 @@ export class BridgeStore {
   }
 
   get srcCurrencyOptions(): CurrencyOption[] {
-    return this.currencies.map((currency) => {
+    const currencyOptions = this.currencies.map((currency) => {
       const disabled = false;
       const balance = getWalletBalance(currency);
       const isZero = !balance || balance?.equalTo(0);
@@ -178,6 +178,8 @@ export class BridgeStore {
         overlay: disabled && !isZero ? 'Not available' : undefined,
       };
     });
+
+    return currencyOptions;
   }
 
   get dstCurrencyOptions(): CurrencyOption[] {
@@ -198,20 +200,22 @@ export class BridgeStore {
   get srcCurrencyOptionsGroups(): OptionGroup<CurrencyOption>[] {
     const {srcChainId} = this.form;
     const {srcCurrencyOptions} = this;
+    const srcOptions = srcCurrencyOptions
+      .filter((o) => o.currency.chainId === srcChainId)
+    
+    const allOptions = srcCurrencyOptions
+      .filter((o) => o.currency.chainId !== srcChainId)
+    
     const src: OptionGroup<CurrencyOption> = {
       title: tryGetNetwork(srcChainId)?.name + ' Network',
       key: 'src',
-      items: srcCurrencyOptions
-        //
-        .filter((o) => o.currency.chainId === srcChainId),
+      items: srcOptions,
     };
 
     const all: OptionGroup<CurrencyOption> = {
       title: 'All networks',
       key: 'all',
-      items: srcCurrencyOptions
-        //
-        .filter((o) => o.currency.chainId !== srcChainId),
+      items: allOptions,
     };
 
     return [src, all].filter((g) => g.items.length > 0);
@@ -488,8 +492,6 @@ export class BridgeStore {
       const provider = ethers.getDefaultProvider(telosNativeOft.bridge.rpc);
       return new ethers.Contract(telosNativeOft.bridge.address, telosNativeOft.bridge.abi, provider)
   }
-
-  // actions
 
   findTelosOftTransferApi(api: any ): boolean {
     return api.config.proxy.some((p: ProxyConfig) => p.address === telosNativeOft.proxy.address);
