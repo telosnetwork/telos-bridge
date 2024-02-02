@@ -69,7 +69,7 @@ import {walletStore} from '@/core/stores/walletStore';
 import {onftStore} from '@/onft/stores/onftStore';
 import {initOnftStore} from '@/onft/stores/onftStore';
 
-import { telosNativeOft } from './config';
+import { TLOS, telosNativeOft } from './config';
 
 export async function bootstrap(lzAppConfig: AppConfig, providerFactory: ProviderFactory) {
   const aptos = {
@@ -140,14 +140,18 @@ export async function bootstrap(lzAppConfig: AppConfig, providerFactory: Provide
     }
   }
 
+  // add OFT tokens
   for (const oftConfig of lzAppConfig.bridge.oft) {
-    addEvmOft(oftConfig);
-    addAptosOft(oftConfig);
-    bridgeStore.addCurrencies(oftConfig.tokens);
+      addEvmOft(oftConfig);
+      addAptosOft(oftConfig);
+      bridgeStore.addCurrencies(oftConfig.tokens);
   }
 
-  // Add Native TLOS OFT
+  // add Telos Native for OFT bridge
   bridgeStore.addCurrencies([telosNativeOft.token])
+  
+  // add wrapped assets
+  bridgeStore.addCurrencies(currencies);
 
   // WrappedAssetBridge
   // https://github.com/LayerZero-Labs/wrapped-asset-bridge
@@ -215,8 +219,6 @@ export async function bootstrap(lzAppConfig: AppConfig, providerFactory: Provide
       throw new Error(`Unknown ONFT standard ${standard}`);
     }
   }
-
-  bridgeStore.addCurrencies(currencies);
 
   tokenStore.addProviders([
     //

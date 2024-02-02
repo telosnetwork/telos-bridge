@@ -2,7 +2,7 @@ import {Currency, getNetwork, isCurrency} from '@layerzerolabs/ui-core';
 import {observer} from 'mobx-react';
 import React, {useState} from 'react';
 
-import {CurrencyOption, OptionGroup} from '@/bridge/stores/bridgeStore';
+import {CurrencyOption, OptionGroup, TLOS_SYMBOL} from '@/bridge/stores/bridgeStore';
 import {useToggle} from '@/core/hooks/useToggle';
 import {fiatStore} from '@/core/stores/fiatStore';
 import {getWalletBalance} from '@/core/stores/utils';
@@ -109,6 +109,7 @@ export const CurrencySelect: React.FC<CurrencySelectProps> = observer(
           if (bBalance === undefined) bBalance = -1;
           return aBalance - bBalance;
         })
+        .sort(sortTokens)
         .sort((a) => (a.option.disabled ? 1 : -1));
 
       return (
@@ -174,6 +175,16 @@ function matchSearch(currency: Currency, query?: string) {
   if (!query) return true;
   const text = query.toLowerCase();
   return currency.symbol.toLowerCase().includes(text);
+}
+
+type NestedCurrencyOption = {
+  option: CurrencyOption;
+}
+// sort TLOS tokens to top of list
+function sortTokens(a:NestedCurrencyOption, b:NestedCurrencyOption){
+  return (a.option.currency.symbol === TLOS_SYMBOL && b.option.currency.symbol !== TLOS_SYMBOL) ? 1 
+    : (a.option.currency.symbol !== TLOS_SYMBOL && b.option.currency.symbol === TLOS_SYMBOL ? -1 
+    : 0)
 }
 
 function toOption(option: CurrencyOption | Currency): CurrencyOption {

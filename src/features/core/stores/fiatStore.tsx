@@ -1,4 +1,5 @@
 import {Currency, CurrencyAmount, FiatAmount} from '@layerzerolabs/ui-core';
+import axios from 'axios';
 import {makeAutoObservable, ObservableMap} from 'mobx';
 
 import {tokenStore} from './tokenStore';
@@ -90,3 +91,20 @@ export class FiatStore {
 }
 
 export const fiatStore = new FiatStore();
+
+export interface PriceStats {
+  data: {
+    [tokenId: string]: {
+      usd: number;
+    };
+  };
+}
+
+export const getTlosUsdPrice = async (
+  ): Promise<number> => {
+    const stats: PriceStats = await axios.get(
+      `https://api.coingecko.com/api/v3/simple/price?ids=telos&vs_currencies=USD`
+    );
+  
+    return stats.data.telos.usd;
+  };
