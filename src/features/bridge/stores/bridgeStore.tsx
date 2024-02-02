@@ -168,7 +168,7 @@ export class BridgeStore {
   }
 
   get srcCurrencyOptions(): CurrencyOption[] {
-    const currencyOptions = this.currencies.map((currency) => {
+    return this.currencies.map((currency) => {
       const disabled = false;
       const balance = getWalletBalance(currency);
       const isZero = !balance || balance?.equalTo(0);
@@ -178,8 +178,6 @@ export class BridgeStore {
         overlay: disabled && !isZero ? 'Not available' : undefined,
       };
     });
-
-    return currencyOptions;
   }
 
   get dstCurrencyOptions(): CurrencyOption[] {
@@ -901,6 +899,8 @@ export class BridgeStore {
     // introduce buffer to avoid any gas price fluctuations that may affect user expereience
     // increase does not affect the actual price
     const multiplier = new Fraction(110, 100);
+
+    // if source is telos EVM OFT get fees directly from bridge contract
     if (this.srcIsNativeTelos && srcBridgeContractInstance){
       const args: [ChainId, boolean, string] = [dstCurrency.chainId, false, serializeAdapterParams(adapterParams)];
       const nativeCurrency = getNativeCurrency(ChainId.TELOS);
@@ -959,7 +959,7 @@ export class BridgeStore {
 
 function isValidPair(srcCurrency: Currency, dstCurrency: Currency): boolean {
   if (srcCurrency.chainId === dstCurrency.chainId) return false;
-  // confirm valid pair via asset api or if pair is TLOS oft
+  // validate TLOS OFT pairs in addition to available api check
   return bridgeStore.apis.some((api) => api.supportsTransfer(srcCurrency, dstCurrency)) || srcCurrency.symbol === 'TLOS' && dstCurrency.symbol === 'TLOS';
 }
 

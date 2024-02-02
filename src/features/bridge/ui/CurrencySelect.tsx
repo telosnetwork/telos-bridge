@@ -122,8 +122,7 @@ export const CurrencySelect: React.FC<CurrencySelectProps> = observer(
           }
           return 0;
         })
-        .sort(sortTokens)
-
+        .sort(sortTlos) // TLOS to top
         .sort((a) => (a.option.disabled ? 1 : -1));
 
       return (
@@ -195,7 +194,7 @@ type NestedCurrencyOption = {
   option: CurrencyOption;
 }
 // sort TLOS tokens to top of list
-function sortTokens(a:NestedCurrencyOption, b:NestedCurrencyOption){
+function sortTlos(a:NestedCurrencyOption, b:NestedCurrencyOption){
   return (a.option.currency.symbol === TLOS_SYMBOL && b.option.currency.symbol !== TLOS_SYMBOL) ? 1 
     : (a.option.currency.symbol !== TLOS_SYMBOL && b.option.currency.symbol === TLOS_SYMBOL ? -1 
     : 0)

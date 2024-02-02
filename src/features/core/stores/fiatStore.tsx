@@ -1,5 +1,4 @@
 import {Currency, CurrencyAmount, FiatAmount} from '@layerzerolabs/ui-core';
-import axios from 'axios';
 import {makeAutoObservable, ObservableMap} from 'mobx';
 
 import {tokenStore} from './tokenStore';
