@@ -658,6 +658,7 @@ export class BridgeStore {
 
       let transactionResult: any = {};
 
+      // if sending TLOS from Telos EVM, use contract method
       if (this.srcIsNativeTelos){
         transactionResult = yield this.sendNative();
         // ensure correct wallet
@@ -742,6 +743,7 @@ export class BridgeStore {
     }
   });
 
+  // bridge Telos EVM TLOS by calling `sendFrom` directly on the native oft contract instance 
   sendNative: () => unknown = flow(function* (this: BridgeStore) {
 
     const {srcCurrency, srcChainId, dstChainId, amount} = this.form;
