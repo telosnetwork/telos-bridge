@@ -1,6 +1,14 @@
 import {TokenListItem} from '@layerzerolabs/ui-core';
 
 export const tokenList = createTokenList([
+  // TLOS
+  ['TLOS', 'TLOS', null, 18, 'telos', 4660, 'telos'],
+  ['TLOS', 'TLOS', '0x5Aa352551d39F5ce592260e0D26818e7d780867f', 18, 'ethereum', 4660, 'telos'],
+  ['TLOS', 'TLOS', '0x1cF0636abbc569fB413A20bd7964712e6b4d1161', 18, 'polygon', 4660, 'telos'],
+  ['TLOS', 'TLOS', '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E', 18, 'bsc', 4660, 'telos'],
+  ['TLOS', 'TLOS', '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E', 18, 'avalanche', 4660, 'telos'],
+  ['TLOS', 'TLOS', '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E', 18, 'arbitrum', 4660, 'telos'],
+
   // USDC
   ['USDC', 'USDC', '0x8D97Cea50351Fb4329d591682b148D43a0C3611b', 6, 'telos', 3408, 'usd-coin'],
   ['USDC', 'USDC', '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', 6, 'ethereum', 3408, 'usd-coin'],

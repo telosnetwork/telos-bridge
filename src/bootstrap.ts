@@ -221,7 +221,6 @@ export async function bootstrap(lzAppConfig: AppConfig, providerFactory: Provide
   }
 
   tokenStore.addProviders([
-    //
     new TokenListProvider(),
   ]);
 

@@ -35,9 +35,13 @@ export function useDefaultSrcCurrency() {
     if (form.srcCurrency) return;
     if (form.dstCurrency) return;
     const {srcCurrencyOptions} = bridgeStore;
+
     // set default Native TLOS as default
     const telosNative = srcCurrencyOptions.find((option: CurrencyOption) => option.currency.chainId === ChainId.TELOS && option.currency.symbol === TLOS_SYMBOL)
     if (telosNative) {
+      if (srcChainId !== ChainId.TELOS){
+        bridgeStore.setSrcChainId(ChainId.TELOS);
+      }
       bridgeStore.setSrcCurrency(telosNative.currency);
     }
     /* eslint-disable-next-line react-hooks/exhaustive-deps */
