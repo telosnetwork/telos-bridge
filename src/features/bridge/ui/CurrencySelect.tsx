@@ -109,7 +109,21 @@ export const CurrencySelect: React.FC<CurrencySelectProps> = observer(
           if (bBalance === undefined) bBalance = -1;
           return aBalance - bBalance;
         })
+        .sort((a,b) => {
+          // if no fiat value, order by token quantity          
+          if (a.fiatBalance?.value === undefined && b.fiatBalance?.value === undefined){
+            let aBalance = a.balance?.quotient;
+            let bBalance = b.balance?.quotient;
+            if (aBalance === undefined) aBalance = 0n;
+            if (bBalance === undefined) bBalance = 0n;
+            return aBalance - bBalance > 0 ? -1 
+              : aBalance - bBalance < 0 ? 1 
+              : 0
+          }
+          return 0;
+        })
         .sort(sortTokens)
+
         .sort((a) => (a.option.disabled ? 1 : -1));
 
       return (
