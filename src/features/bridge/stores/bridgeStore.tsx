@@ -55,7 +55,6 @@ export type ValidationError = string;
 
 const TLOS_SYMBOL = 'TLOS';
 export class BridgeStore {
-  //
   isLoading = false;
   isSigning = false;
   isMining = false;
@@ -71,11 +70,10 @@ export class BridgeStore {
     amount: '',
     dstNativeAmount: DstNativeAmount.DEFAULT,
   };
-  //
+
   apis: BridgeApi<unknown, AnyFee>[] = [];
   currencies: Currency[] = [];
 
-  //
   promise: BridgePromise = {
     output: undefined,
     allowance: undefined,
@@ -512,10 +510,6 @@ export class BridgeStore {
   setAmount(amount: string) {
     if (tryParseNumber(amount) !== undefined) {
       this.form.amount = amount;
-      // if (this.isTelos){
-      //   this.updateOutput();
-      //   this.updateMessageFee();
-      // }
     }
   }
 
@@ -590,9 +584,6 @@ export class BridgeStore {
       form.dstCurrency,
       form.srcCurrency,
     ];
-    // if (this.isTelos){
-    //   this.setDstNativeAmount('0');
-    // }
   }
 
   transfer = flow(function* (this: BridgeStore) {
@@ -629,27 +620,21 @@ export class BridgeStore {
       assert(outputAmount, 'outputAmount');
       assert(srcWallet?.address, 'srcWallet');
       assert(dstWallet?.address, 'dstWallet');
-      assert(dstNativeBalance, 'dstNativeBalance');
+      assert(dstNativeBalance, 'dstNativeBalance');      
+      assert(registerApi, 'registerApi');
 
-      let isRegistered = false;
-      
-      if (!this.srcIsNativeTelos){
-        assert(registerApi, 'registerApi');
+      // try to register if possible
+      let isRegistered = yield registerApi.isRegistered(dstCurrency, dstWallet.address);
+      if (!isRegistered) {
+        const unsignedTransaction: Awaited<ReturnType<typeof registerApi['register']>> =
+          yield registerApi.register(dstCurrency);
 
-        // try to register if possible, exclude registration when src or dst is native OFT
-        isRegistered = yield registerApi.isRegistered(dstCurrency, dstWallet.address);
-        if (!isRegistered) {
-          const unsignedTransaction: Awaited<ReturnType<typeof registerApi['register']>> =
-            yield registerApi.register(dstCurrency);
+        const estimatedGasAmount: Awaited<ReturnType<typeof unsignedTransaction['estimateNative']>> = 
+          yield unsignedTransaction.estimateNative(dstWallet);
 
-          const estimatedGasAmount: Awaited<
-            ReturnType<typeof unsignedTransaction['estimateNative']>
-          > = yield unsignedTransaction.estimateNative(dstWallet);
-
-          if (dstNativeBalance.greaterThan(estimatedGasAmount)) {
-            yield this.register();
-            isRegistered = true;
-          }
+        if (dstNativeBalance.greaterThan(estimatedGasAmount)) {
+          yield this.register();
+          isRegistered = true;
         }
       }
 
@@ -723,7 +708,6 @@ export class BridgeStore {
         input,
         expectedDate: getExpectedDate(srcChainId, dstChainId),
       });
-      // this.updateBalances();
 
       waitForMessageReceived(srcChainId, transactionResult.hash)
         .then((message) => {
