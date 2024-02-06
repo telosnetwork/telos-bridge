@@ -1,5 +1,6 @@
 import {Currency, getCurrencyIcon} from '@layerzerolabs/ui-core';
 
+import { TLOS_SYMBOL } from '@/bridge/stores/bridgeStore';
 import {styled} from '@/core/ui/system';
 import {overrideImageSrcOnError} from '@/core/utils/overrideImageSrcOnError';
 
@@ -23,7 +24,7 @@ const getTokenIcon = (symbol: string): string => {
       return 'https://raw.githubusercontent.com/telosnetwork/token-list/master/logos/RF.webp';
     case 'VC':
       return 'https://raw.githubusercontent.com/telosnetwork/token-list/master/logos/VC.png';
-    case 'TLOS':
+    case TLOS_SYMBOL:
       return 'https://raw.githubusercontent.com/telosnetwork/token-list/main/logos/telos.png';
     default:
       return getCurrencyIcon(symbol);

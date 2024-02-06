@@ -4,6 +4,8 @@ import {OnftBridgeConfig, OnftStandard} from '@layerzerolabs/ui-bridge-onft';
 import {WrappedTokenBridgeConfig} from '@layerzerolabs/ui-bridge-wrapped-token';
 import {Coin, Currency, Token} from '@layerzerolabs/ui-core';
 
+import { TLOS_SYMBOL } from '@/bridge/stores/bridgeStore';
+
 import { bridgeAbi } from './abi/bridgeAbi';
 
 export const wrapped_mainnet: WrappedTokenBridgeConfig = {
@@ -235,11 +237,11 @@ const RF  = {
 export const TLOS  = {
   version: 2,
   tokens: [
-    new Token(ChainId.ARBITRUM, '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E', 18, 'TLOS'),
-    new Token(ChainId.AVALANCHE, '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E', 18, 'TLOS'),
-    new Token(ChainId.BSC, '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E', 18, 'TLOS'),
-    new Token(ChainId.POLYGON, '0x1cF0636abbc569fB413A20bd7964712e6b4d1161', 18, 'TLOS'),
-    new Token(ChainId.ETHEREUM, '0x5Aa352551d39F5ce592260e0D26818e7d780867f', 18, 'TLOS'),
+    new Token(ChainId.ARBITRUM, '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E', 18, TLOS_SYMBOL),
+    new Token(ChainId.AVALANCHE, '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E', 18, TLOS_SYMBOL),
+    new Token(ChainId.BSC, '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E', 18, TLOS_SYMBOL),
+    new Token(ChainId.POLYGON, '0x1cF0636abbc569fB413A20bd7964712e6b4d1161', 18, TLOS_SYMBOL),
+    new Token(ChainId.ETHEREUM, '0x5Aa352551d39F5ce592260e0D26818e7d780867f', 18, TLOS_SYMBOL),
   ],
   proxy: [
     {chainId: ChainId.ARBITRUM, address: '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E'},
@@ -302,6 +304,6 @@ type NativeOftConfig = {
 
 export const telosNativeOft: NativeOftConfig = {
   bridge: {address: '0x9c5ebCbE531aA81bD82013aBF97401f5C6111d76', chainId: ChainId.TELOS, chainListId: ChainListId.TELOS, rpc: 'https://mainnet.telos.net/evm', abi: bridgeAbi},
-  token: new Coin(ChainId.TELOS, 18, 'TLOS'),
+  token: new Coin(ChainId.TELOS, 18, TLOS_SYMBOL),
   proxy: {chainId: ChainId.TELOS, address: '0x7B5250Ad9aE6445e75E01Cd4bB070aECBf8DB92E'}
 }

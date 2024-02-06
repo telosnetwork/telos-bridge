@@ -960,7 +960,7 @@ export class BridgeStore {
 function isValidPair(srcCurrency: Currency, dstCurrency: Currency): boolean {
   if (srcCurrency.chainId === dstCurrency.chainId) return false;
   // validate TLOS OFT pairs in addition to available api check
-  return bridgeStore.apis.some((api) => api.supportsTransfer(srcCurrency, dstCurrency)) || srcCurrency.symbol === 'TLOS' && dstCurrency.symbol === 'TLOS';
+  return bridgeStore.apis.some((api) => api.supportsTransfer(srcCurrency, dstCurrency)) || srcCurrency.symbol === TLOS_SYMBOL && dstCurrency.symbol === TLOS_SYMBOL;
 }
 
 function findMatchingCurrency(currency: Currency) {

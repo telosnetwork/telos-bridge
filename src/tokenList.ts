@@ -1,13 +1,15 @@
 import {TokenListItem} from '@layerzerolabs/ui-core';
 
+import { TLOS_SYMBOL } from '@/bridge/stores/bridgeStore';
+
 export const tokenList = createTokenList([
   // TLOS
-  ['TLOS', 'TLOS', null, 18, 'telos', 4660, 'telos'],
-  ['TLOS', 'TLOS', '0x5Aa352551d39F5ce592260e0D26818e7d780867f', 18, 'ethereum', 4660, 'telos'],
-  ['TLOS', 'TLOS', '0x1cF0636abbc569fB413A20bd7964712e6b4d1161', 18, 'polygon', 4660, 'telos'],
-  ['TLOS', 'TLOS', '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E', 18, 'bsc', 4660, 'telos'],
-  ['TLOS', 'TLOS', '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E', 18, 'avalanche', 4660, 'telos'],
-  ['TLOS', 'TLOS', '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E', 18, 'arbitrum', 4660, 'telos'],
+  [TLOS_SYMBOL, TLOS_SYMBOL, null, 18, 'telos', 4660, 'telos'],
+  [TLOS_SYMBOL, TLOS_SYMBOL, '0x5Aa352551d39F5ce592260e0D26818e7d780867f', 18, 'ethereum', 4660, 'telos'],
+  [TLOS_SYMBOL, TLOS_SYMBOL, '0x1cF0636abbc569fB413A20bd7964712e6b4d1161', 18, 'polygon', 4660, 'telos'],
+  [TLOS_SYMBOL, TLOS_SYMBOL, '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E', 18, 'bsc', 4660, 'telos'],
+  [TLOS_SYMBOL, TLOS_SYMBOL, '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E', 18, 'avalanche', 4660, 'telos'],
+  [TLOS_SYMBOL, TLOS_SYMBOL, '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E', 18, 'arbitrum', 4660, 'telos'],
 
   // USDC
   ['USDC', 'USDC', '0x8D97Cea50351Fb4329d591682b148D43a0C3611b', 6, 'telos', 3408, 'usd-coin'],
