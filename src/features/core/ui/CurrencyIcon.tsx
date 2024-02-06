@@ -1,9 +1,9 @@
 import {Currency, getCurrencyIcon} from '@layerzerolabs/ui-core';
 
-import { TLOS_SYMBOL } from '@/bridge/stores/bridgeStore';
 import {styled} from '@/core/ui/system';
 import {overrideImageSrcOnError} from '@/core/utils/overrideImageSrcOnError';
 
+import { TLOS_SYMBOL } from '../../../config';
 import {fiatStore} from '../stores/fiatStore';
 import {Icon} from './Icon';
 

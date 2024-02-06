@@ -44,7 +44,7 @@ import {handleError} from '@/core/utils/handleError';
 import {parseWalletError} from '@/core/utils/parseWalletError';
 
 import { oftAbi } from '../../../abi/oftAbi';
-import { ProxyConfig, telosNativeOft } from '../../../config';
+import { ProxyConfig, telosNativeOft,TLOS_SYMBOL } from '../../../config';
 import {unclaimedStore} from './unclaimedStore';
 
 export enum DstNativeAmount {
@@ -53,7 +53,6 @@ export enum DstNativeAmount {
 }
 export type ValidationError = string;
 
-export const TLOS_SYMBOL = 'TLOS';
 export class BridgeStore {
   isLoading = false;
   isSigning = false;

@@ -1,6 +1,6 @@
 import {TokenListItem} from '@layerzerolabs/ui-core';
 
-import { TLOS_SYMBOL } from '@/bridge/stores/bridgeStore';
+import { TLOS_SYMBOL } from './config';
 
 export const tokenList = createTokenList([
   // TLOS

@@ -2,9 +2,11 @@ import {ChainId} from '@layerzerolabs/lz-sdk';
 import {chainKeyToEndpointId} from '@layerzerolabs/ui-core';
 import {useEffect} from 'react';
 
-import {bridgeStore,CurrencyOption, TLOS_SYMBOL} from '@/bridge/stores/bridgeStore';
+import {bridgeStore,CurrencyOption } from '@/bridge/stores/bridgeStore';
 import {balanceStore} from '@/core/stores/balanceStore';
 import {walletStore} from '@/core/stores/walletStore';
+
+import { TLOS_SYMBOL } from '../../../config';
 
 
 export function useDefaultSrcCurrency() {

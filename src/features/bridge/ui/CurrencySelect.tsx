@@ -2,7 +2,7 @@ import {Currency, CurrencyAmount, FiatAmount, getNetwork, isCurrency} from '@lay
 import {observer} from 'mobx-react';
 import React, {useState} from 'react';
 
-import {CurrencyOption, OptionGroup, TLOS_SYMBOL} from '@/bridge/stores/bridgeStore';
+import {CurrencyOption, OptionGroup} from '@/bridge/stores/bridgeStore';
 import {useToggle} from '@/core/hooks/useToggle';
 import {fiatStore} from '@/core/stores/fiatStore';
 import {getWalletBalance} from '@/core/stores/utils';
@@ -12,6 +12,8 @@ import {Modal} from '@/core/ui/Modal';
 import {SearchBar} from '@/core/ui/SearchBar';
 import {SelectButton} from '@/core/ui/SelectButton';
 import {styled, SxProps, Theme} from '@/core/ui/system';
+
+import { TLOS_SYMBOL } from '../../../config';
 
 interface CommonProps {
   theme?: Theme;

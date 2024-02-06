@@ -4,9 +4,9 @@ import {OnftBridgeConfig, OnftStandard} from '@layerzerolabs/ui-bridge-onft';
 import {WrappedTokenBridgeConfig} from '@layerzerolabs/ui-bridge-wrapped-token';
 import {Coin, Currency, Token} from '@layerzerolabs/ui-core';
 
-import { TLOS_SYMBOL } from '@/bridge/stores/bridgeStore';
-
 import { bridgeAbi } from './abi/bridgeAbi';
+
+export const TLOS_SYMBOL = 'TLOS';
 
 export const wrapped_mainnet: WrappedTokenBridgeConfig = {
   version: 2,
