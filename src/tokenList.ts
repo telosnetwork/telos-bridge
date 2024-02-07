@@ -6,7 +6,7 @@ export const tokenList = createTokenList([
   ['USDC', 'USDC', '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', 6, 'ethereum', 3408, 'usd-coin'],
   ['USDC', 'USDC', '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8', 6, 'arbitrum', 3408, 'usd-coin'],
   ['USDC', 'USDC', '0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d', 18, 'bsc', 3408, 'usd-coin'],
-  ['USDC', 'USDC', '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174', 6, 'polygon', 3408, 'usd-coin'],
+  ['USDC', 'USDC', '0x3c499c542cef5e3811e1192ce70d8cc03d5c3359', 6, 'polygon', 3408, 'usd-coin'],
   ['USDC', 'USDC', '0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E', 6, 'avalanche', 3408, 'usd-coin'],
 
   // USDT

@@ -23,7 +23,8 @@ export const wrapped_mainnet: WrappedTokenBridgeConfig = {
       new Token(ChainId.TELOS, '0x8D97Cea50351Fb4329d591682b148D43a0C3611b', 6, 'USDC'),
       new Token(ChainId.ETHEREUM, '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', 6, 'USDC'),
       new Token(ChainId.ARBITRUM, '0xaf88d065e77c8cC2239327C5EDb3A432268e5831', 6, 'USDC'),
-      new Token(ChainId.BSC, '0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d', 18, 'USDC'),
+      new Token(ChainId.BSC, '0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d', 6, 'USDC'),
+      new Token(ChainId.POLYGON, '0x3c499c542cef5e3811e1192ce70d8cc03d5c3359', 6, 'USDC'),
     ],
     [
       // ETH
