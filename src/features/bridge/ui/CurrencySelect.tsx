@@ -158,7 +158,7 @@ export const CurrencySelect: React.FC<CurrencySelectProps> = observer(
 
     return (
       <>
-        {value && isNativeCurrency(value as Currency) ? 
+        {!value || isNativeCurrency(value) ? 
       (
         <SelectButton
           sx={sx}
