@@ -156,11 +156,44 @@ export const CurrencySelect: React.FC<CurrencySelectProps> = observer(
       padding: '20px 0px' 
     }));
 
-    function SelectToken(){ 
-      if (!value){
-        return
-      }
-      return isNativeCurrency(value as Currency) ? 
+    // function SelectToken(){ 
+    //   if (!value){
+    //     return 
+    //   }
+    //   return isNativeCurrency(value as Currency) ? 
+    //   (
+    //     <SelectButton
+    //       sx={sx}
+    //       title={label}
+    //       chevron={!readonly}
+    //       onClick={readonly ? undefined : modal.value ? close : modal.open}
+    //       icon={icon}
+    //       value={fiatStore.getSymbol(value)}
+    //       readonly={readonly}
+    //     />
+    //   ) :
+    //   (
+    //     <SelectTokenContainer>
+    //       <SelectButton
+    //         style={{width: '60%', float: 'left', paddingRight: '0'}}
+    //         sx={sx}
+    //         title={label}
+    //         chevron={!readonly}
+    //         onClick={readonly ? undefined : modal.value ? close : modal.open}
+    //         icon={icon}
+    //         value={fiatStore.getSymbol(value)}
+    //         readonly={readonly}
+    //       />
+    //       <AddTokenButton onClick={() => bridgeStore.addToken(value as Token)}>
+    //         <Image src='/static/plus.svg' alt='placeholder' width={20} height={20} />
+    //       </AddTokenButton>
+    //     </SelectTokenContainer>
+    //   );
+    // }
+
+    return (
+      <>
+        {isNativeCurrency(value as Currency) ? 
       (
         <SelectButton
           sx={sx}
@@ -188,12 +221,7 @@ export const CurrencySelect: React.FC<CurrencySelectProps> = observer(
             <Image src='/static/plus.svg' alt='placeholder' width={20} height={20} />
           </AddTokenButton>
         </SelectTokenContainer>
-      );
-    }
-
-    return (
-      <>
-        <SelectToken/>
+      )}
         <Modal
           overlay
           title={title}
