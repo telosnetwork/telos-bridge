@@ -16,13 +16,11 @@ import {
   isEvmChainId,
   isNativeCurrency,
   isSolanaChainId,
-  Percent,
   Token,
   TransactionResult,
   tryGetNetwork,
   tryParseCurrencyAmount,
   tryParseNumber,
-  tryParsePercent,
 } from '@layerzerolabs/ui-core';
 import {ONE_ADDRESS} from '@layerzerolabs/ui-evm';
 import {assertWallet, Wallet} from '@layerzerolabs/ui-wallet';
@@ -39,13 +37,13 @@ import {transactionStore} from '@/core/stores/transactionStore';
 import {uiStore} from '@/core/stores/uiStore';
 import {getWalletBalance} from '@/core/stores/utils';
 import {walletStore} from '@/core/stores/walletStore';
+import { getTokenIcon } from '@/core/ui/CurrencyIcon';
 import {Toast} from '@/core/ui/Toast';
 import {FromPromise, fromPromiseValue} from '@/core/utils/fromPromise';
 import {handleError} from '@/core/utils/handleError';
 import {parseWalletError} from '@/core/utils/parseWalletError';
 
 import {unclaimedStore} from './unclaimedStore';
-import { getTokenIcon } from '@/core/ui/CurrencyIcon';
 
 export enum DstNativeAmount {
   DEFAULT = 'DEFAULT',
