@@ -458,9 +458,9 @@ export class BridgeStore {
   // actions
 
   async addToken(token: Token): Promise<void> {
-    await walletStore.evm?.switchChain(token.chainId);
-
     try {
+      await walletStore.evm?.switchChain(token.chainId);
+
       (walletStore.evm as any).provider.request({
         method: 'wallet_watchAsset',
         params: {
