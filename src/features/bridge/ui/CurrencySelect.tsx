@@ -1,8 +1,9 @@
-import {Currency, getNetwork, isCurrency} from '@layerzerolabs/ui-core';
+import {Currency, getNetwork, isCurrency, isNativeCurrency} from '@layerzerolabs/ui-core';
 import {observer} from 'mobx-react';
+import Image from 'next/legacy/image';
 import React, {useState} from 'react';
 
-import {CurrencyOption, OptionGroup} from '@/bridge/stores/bridgeStore';
+import {bridgeStore,CurrencyOption, OptionGroup} from '@/bridge/stores/bridgeStore';
 import {useToggle} from '@/core/hooks/useToggle';
 import {fiatStore} from '@/core/stores/fiatStore';
 import {getWalletBalance} from '@/core/stores/utils';
@@ -145,8 +146,18 @@ export const CurrencySelect: React.FC<CurrencySelectProps> = observer(
 
     const content = groups ? getGroupsContent(groups) : getOptionsContent(options.map(toOption));
 
-    return (
-      <>
+    const SelectTokenContainer = styled('div', {name: 'SelectTokenContainer'})(({theme}) => ({
+      width: '95%',
+      height: '100%',
+      backgroundColor: theme.palette.secondary.main,
+    }));
+
+    const AddTokenButton = styled('div', {name: 'AddTokenButton'})(() => ({
+      padding: '20px 0px' 
+    }));
+
+    function SelectToken(){ return isNativeCurrency(value as Currency) ? 
+      (
         <SelectButton
           sx={sx}
           title={label}
@@ -156,6 +167,29 @@ export const CurrencySelect: React.FC<CurrencySelectProps> = observer(
           value={fiatStore.getSymbol(value)}
           readonly={readonly}
         />
+      ) :
+      (
+        <SelectTokenContainer>
+          <SelectButton
+            style={{width: '60%', float: 'left', paddingRight: '0'}}
+            sx={sx}
+            title={label}
+            chevron={!readonly}
+            onClick={readonly ? undefined : modal.value ? close : modal.open}
+            icon={icon}
+            value={fiatStore.getSymbol(value)}
+            readonly={readonly}
+          />
+          <AddTokenButton onClick={bridgeStore.addToken}>
+            <Image src='/static/plus.svg' alt='placeholder' width={20} height={20} />
+          </AddTokenButton>
+        </SelectTokenContainer>
+      );
+    }
+
+    return (
+      <>
+        <SelectToken/>
         <Modal
           overlay
           title={title}
