@@ -10,6 +10,7 @@ import {NetworkIcon} from '@/core/ui/NetworkIcon';
 import {SearchBar} from '@/core/ui/SearchBar';
 import {SelectButton} from '@/core/ui/SelectButton';
 import {SxProps, Theme} from '@/core/ui/system';
+
 import { BridgeStore } from '../stores/bridgeStore';
 
 interface CommonProps {
