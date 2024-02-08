@@ -13,7 +13,7 @@ type CurrencyIconProps = {
 
 const Image = styled('img')(() => ({}));
 
-const getTokenIcon = (symbol: string): string => {
+export const getTokenIcon = (symbol: string): string => {
   switch(symbol) {
     case 'BANANA':
       return 'https://raw.githubusercontent.com/telosnetwork/token-list/master/logos/banana-logo.png';

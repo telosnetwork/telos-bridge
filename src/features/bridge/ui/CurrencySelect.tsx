@@ -1,4 +1,4 @@
-import {Currency, getNetwork, isCurrency, isNativeCurrency} from '@layerzerolabs/ui-core';
+import {Currency, getNetwork, isCurrency, isNativeCurrency, Token} from '@layerzerolabs/ui-core';
 import {observer} from 'mobx-react';
 import Image from 'next/legacy/image';
 import React, {useState} from 'react';
@@ -156,7 +156,11 @@ export const CurrencySelect: React.FC<CurrencySelectProps> = observer(
       padding: '20px 0px' 
     }));
 
-    function SelectToken(){ return isNativeCurrency(value as Currency) ? 
+    function SelectToken(){ 
+      if (!value){
+        return
+      }
+      return isNativeCurrency(value as Currency) ? 
       (
         <SelectButton
           sx={sx}
@@ -180,7 +184,7 @@ export const CurrencySelect: React.FC<CurrencySelectProps> = observer(
             value={fiatStore.getSymbol(value)}
             readonly={readonly}
           />
-          <AddTokenButton onClick={bridgeStore.addToken}>
+          <AddTokenButton onClick={() => bridgeStore.addToken(value as Token)}>
             <Image src='/static/plus.svg' alt='placeholder' width={20} height={20} />
           </AddTokenButton>
         </SelectTokenContainer>

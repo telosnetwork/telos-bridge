@@ -17,6 +17,7 @@ import {
   isNativeCurrency,
   isSolanaChainId,
   Percent,
+  Token,
   TransactionResult,
   tryGetNetwork,
   tryParseCurrencyAmount,
@@ -44,6 +45,7 @@ import {handleError} from '@/core/utils/handleError';
 import {parseWalletError} from '@/core/utils/parseWalletError';
 
 import {unclaimedStore} from './unclaimedStore';
+import { getTokenIcon } from '@/core/ui/CurrencyIcon';
 
 export enum DstNativeAmount {
   DEFAULT = 'DEFAULT',
@@ -454,6 +456,27 @@ export class BridgeStore {
   }
 
   // actions
+
+  async addToken(token: Token): Promise<void> {
+    await walletStore.evm?.switchChain(token.chainId);
+
+    try {
+      (walletStore.evm as any).provider.request({
+        method: 'wallet_watchAsset',
+        params: {
+          type: 'ERC20', 
+          options: {
+            address: token.address, 
+            symbol: token.symbol, 
+            decimals: token.decimals, 
+            image: getTokenIcon(token.symbol), 
+          },
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   async updateAllowance(): Promise<unknown> {
     this.promise.allowance = undefined;
