@@ -17,6 +17,7 @@ import {
   isEvmChainId,
   isNativeCurrency,
   isSolanaChainId,
+  Token,
   TransactionResult,
   tryGetNetwork,
   tryParseCurrencyAmount,
@@ -38,6 +39,7 @@ import {transactionStore} from '@/core/stores/transactionStore';
 import {uiStore} from '@/core/stores/uiStore';
 import {getWalletBalance} from '@/core/stores/utils';
 import {walletStore} from '@/core/stores/walletStore';
+import { getTokenIcon } from '@/core/ui/CurrencyIcon';
 import {Toast} from '@/core/ui/Toast';
 import {FromPromise, fromPromiseValue} from '@/core/utils/fromPromise';
 import {handleError} from '@/core/utils/handleError';
@@ -487,6 +489,27 @@ export class BridgeStore {
 
   findTelosOftTransferApi(api: any ): boolean {
     return api.config.proxy.some((p: ProxyConfig) => p.address === telosNativeOft.proxy.address);
+  }
+
+  async addToken(token: Token): Promise<void> {
+    try {
+      await walletStore.evm?.switchChain(token.chainId);
+
+      (walletStore.evm as any).provider.request({
+        method: 'wallet_watchAsset',
+        params: {
+          type: 'ERC20', 
+          options: {
+            address: token.address, 
+            symbol: token.symbol, 
+            decimals: token.decimals, 
+            image: getTokenIcon(token.symbol), 
+          },
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async updateAllowance(): Promise<unknown> {
