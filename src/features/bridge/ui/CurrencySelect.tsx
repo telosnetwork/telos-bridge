@@ -152,10 +152,12 @@ export const CurrencySelect: React.FC<CurrencySelectProps> = observer(
       backgroundColor: theme.palette.secondary.main,
     }));
 
-    const AddTokenButton = styled('div', {name: 'AddTokenButton'})(() => ({
-      padding: '16px 0px' ,
-      cursor: 'pointer',
-    }));
+    const AddTokenButton = styled('div', {name: 'AddTokenButton'})`
+      padding: 16px 0px;
+      @media (max-width: 400px) {
+        padding: 20px 0px 16px 0px;
+      }
+      cursor: pointer;`;
 
     const AddTokenLabel = styled('div', {name: 'AddTokenLabel'})`
       display: none;
