@@ -157,13 +157,15 @@ export const CurrencySelect: React.FC<CurrencySelectProps> = observer(
       cursor: 'pointer',
     }));
 
-    const AddTokenLabel = styled('div', {name: 'AddTokenLabel'})(() => ({
-      display: 'inline-block',
-      fontSize: '12px',
-      marginLeft: '8px',
-      wordWrap: 'break-word',
-      width: '50px',
-    }));
+    const AddTokenLabel = styled('div', {name: 'AddTokenLabel'})`
+      display: none;
+      @media (min-width: 400px) {
+        display: inline-block;
+      }
+      font-size: 12px;
+      margin-left: 8px;
+      word-wrap: break-word;
+      width: 50px;`;
 
     return (
       <>
