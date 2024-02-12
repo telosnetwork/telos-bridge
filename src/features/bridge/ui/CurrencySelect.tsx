@@ -153,7 +153,7 @@ export const CurrencySelect: React.FC<CurrencySelectProps> = observer(
     }));
 
     const AddTokenButton = styled('div', {name: 'AddTokenButton'})(() => ({
-      padding: '18px 0px' ,
+      padding: '16px 0px' ,
     }));
 
     const AddTokenLabel = styled('div', {name: 'AddTokenLabel'})(() => ({
