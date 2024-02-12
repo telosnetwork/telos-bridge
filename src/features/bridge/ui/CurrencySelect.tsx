@@ -152,22 +152,24 @@ export const CurrencySelect: React.FC<CurrencySelectProps> = observer(
       backgroundColor: theme.palette.secondary.main,
     }));
 
-    const AddTokenButton = styled('div', {name: 'AddTokenButton'})`
-      padding: 16px 0px;
-      @media (max-width: 400px) {
-        padding: 20px 0px 16px 0px;
-      }
-      cursor: pointer;`;
+    const AddTokenButton = styled('div', {name: 'AddTokenButton'})(() => ({
+      padding: '16px 0px' ,
+      '@media (max-width: 400px)': {
+        padding: '20px 0px 16px 0px'
+      },
+      cursor: 'pointer',
+    }));
 
-    const AddTokenLabel = styled('div', {name: 'AddTokenLabel'})`
-      display: none;
-      @media (min-width: 400px) {
-        display: inline-block;
-      }
-      font-size: 12px;
-      margin-left: 8px;
-      word-wrap: break-word;
-      width: 50px;`;
+    const AddTokenLabel = styled('div', {name: 'AddTokenLabel'})(() => ({
+      display: 'none',
+      '@media (min-width: 400px)': {
+        display: 'inline-block'
+      },
+      fontSize: '12px',
+      marginLeft: '8px',
+      wordWrap: 'break-word',
+      width: '50px',
+    }));
 
     return (
       <>
