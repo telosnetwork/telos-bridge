@@ -154,6 +154,7 @@ export const CurrencySelect: React.FC<CurrencySelectProps> = observer(
 
     const AddTokenButton = styled('div', {name: 'AddTokenButton'})(() => ({
       padding: '16px 0px' ,
+      cursor: 'pointer',
     }));
 
     const AddTokenLabel = styled('div', {name: 'AddTokenLabel'})(() => ({
