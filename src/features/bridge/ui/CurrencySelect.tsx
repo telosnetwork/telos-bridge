@@ -153,7 +153,15 @@ export const CurrencySelect: React.FC<CurrencySelectProps> = observer(
     }));
 
     const AddTokenButton = styled('div', {name: 'AddTokenButton'})(() => ({
-      padding: '20px 0px' 
+      padding: '18px 0px' ,
+    }));
+
+    const AddTokenLabel = styled('div', {name: 'AddTokenLabel'})(() => ({
+      display: 'inline-block',
+      fontSize: '12px',
+      marginLeft: '8px',
+      wordWrap: 'break-word',
+      width: '50px',
     }));
 
     return (
@@ -184,7 +192,11 @@ export const CurrencySelect: React.FC<CurrencySelectProps> = observer(
           />
           <AddTokenButton onClick={() => bridgeStore.addToken(value as Token)}>
             <Image src='/static/plus.svg' alt='placeholder' width={20} height={20} />
+            <AddTokenLabel>
+              add to wallet
+            </AddTokenLabel>
           </AddTokenButton>
+
         </SelectTokenContainer>
       )}
         <Modal
