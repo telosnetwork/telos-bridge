@@ -194,7 +194,7 @@ export const CurrencySelect: React.FC<CurrencySelectProps> = observer(
           <AddTokenButton onClick={() => bridgeStore.addToken(value as Token)}>
             <Image src='/static/plus.svg' alt='placeholder' width={20} height={20} />
             <AddTokenLabel>
-              add to wallet
+              Add to wallet
             </AddTokenLabel>
           </AddTokenButton>
 
