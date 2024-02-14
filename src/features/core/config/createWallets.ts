@@ -1,4 +1,5 @@
 import {ChainId} from '@layerzerolabs/lz-sdk';
+import { toEvmChainId } from '@layerzerolabs/ui-core';
 import {Wallet} from '@layerzerolabs/ui-wallet';
 import {
   BraveWallet,
@@ -6,6 +7,7 @@ import {
   CoreWallet,
   MetaMaskWallet,
   PhantomWallet as PhantomWalletEvm,
+  WalletConnect,
 } from '@layerzerolabs/ui-wallet-evm';
 
 type ArrayOneOrMore<T> = {
@@ -30,7 +32,6 @@ export function createWallets(chains: ChainId[]): Record<string, Wallet<unknown>
 
   const evmChains = chains.map(toEvmChainId) as ArrayOneOrMore<number>;
 
-  // Get projectId from WalletConnect cloud https://docs.walletconnect.com/advanced/migration-from-v1.x/dapps#ethereum-provider
   wallets.walletConnect = new WalletConnect({
     projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID as string,
     showQrModal: true,
