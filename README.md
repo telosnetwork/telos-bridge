@@ -38,8 +38,8 @@ git clone https://github.com/LayerZero-Labs/factory.git && cd factory
 # Install required dependencies
 yarn
 
-# add a local env file
-echo NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID=\"a56bbc7e54dbcaffd408a2e8b618a31f\" > .env.local
+# set up .env
+cp .env.example .env
 
 # After a fresh clone, you'll need to run an initial build
 yarn build
