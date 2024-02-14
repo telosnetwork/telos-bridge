@@ -1,5 +1,4 @@
 import {ChainId} from '@layerzerolabs/lz-sdk';
-import {toEvmChainId} from '@layerzerolabs/ui-core';
 import {Wallet} from '@layerzerolabs/ui-wallet';
 import {
   BraveWallet,
@@ -7,7 +6,6 @@ import {
   CoreWallet,
   MetaMaskWallet,
   PhantomWallet as PhantomWalletEvm,
-  WalletConnect,
 } from '@layerzerolabs/ui-wallet-evm';
 
 type ArrayOneOrMore<T> = {

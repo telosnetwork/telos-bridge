@@ -17,7 +17,6 @@ import {WalletDetails} from '@/core/ui/WalletDetails';
 import {Alerts} from './Alerts';
 import {GasOnDestinationButton} from './GasOnDestinationButton';
 import {NetworkSelect} from './NetworkSelect';
-import {SlippageButton} from './SlippageButton';
 
 export const Bridge = observer(() => {
   const {
@@ -155,11 +154,7 @@ export const Bridge = observer(() => {
               : nativeFee
               ? nativeFee.toSignificant(8) + ' ' + fiatStore.getSymbol(nativeFee.currency)
               : '--',
-          },
-          {
-            label: 'Slippage tolerance',
-            value: <SlippageButton />,
-          },
+          }
         ]}
       />
       {srcWallet?.address && dstAddress ? (

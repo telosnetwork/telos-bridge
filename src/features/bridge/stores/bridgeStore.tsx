@@ -16,12 +16,11 @@ import {
   isEvmChainId,
   isNativeCurrency,
   isSolanaChainId,
-  Percent,
+  Token,
   TransactionResult,
   tryGetNetwork,
   tryParseCurrencyAmount,
   tryParseNumber,
-  tryParsePercent,
 } from '@layerzerolabs/ui-core';
 import {ONE_ADDRESS} from '@layerzerolabs/ui-evm';
 import {assertWallet, Wallet} from '@layerzerolabs/ui-wallet';
@@ -38,6 +37,7 @@ import {transactionStore} from '@/core/stores/transactionStore';
 import {uiStore} from '@/core/stores/uiStore';
 import {getWalletBalance} from '@/core/stores/utils';
 import {walletStore} from '@/core/stores/walletStore';
+import { getTokenIcon } from '@/core/ui/CurrencyIcon';
 import {Toast} from '@/core/ui/Toast';
 import {FromPromise, fromPromiseValue} from '@/core/utils/fromPromise';
 import {handleError} from '@/core/utils/handleError';
@@ -61,7 +61,6 @@ export class BridgeStore {
   isRegistering = false;
 
   form: BridgeFrom = {
-    slippage: '0.5', // 0.5%
     srcCurrency: undefined,
     dstCurrency: undefined,
     srcChainId: undefined,
@@ -99,6 +98,13 @@ export class BridgeStore {
       },
       {autoBind: true},
     );
+  }
+
+  // preferred order of network selection list
+  static chainOrder = [ChainId.TELOS, ChainId.ETHEREUM, ChainId.BSC, ChainId.POLYGON, ChainId.ZKSYNC, ChainId.ZKCONSENSYS, ChainId.AVALANCHE,  ChainId.ARBITRUM];
+
+  static sortChains(chains: ChainId[]): ChainId[] {
+    return chains.sort((a,b) => this.chainOrder.indexOf(b) - this.chainOrder.indexOf(a));
   }
 
   // views
@@ -144,7 +150,8 @@ export class BridgeStore {
   }
 
   get chains(): ChainId[] {
-    return Array.from(new Set(this.currencies.map((c) => c.chainId)));
+    const chainList = Array.from(new Set(this.currencies.map((c) => c.chainId)));
+    return BridgeStore.sortChains(chainList);
   }
 
   get srcCurrencyOptions(): CurrencyOption[] {
@@ -219,7 +226,9 @@ export class BridgeStore {
   }
 
   get srcNetworkOptions(): ChainOption[] {
-    const chains = Array.from(new Set(this.srcCurrencyOptions.map((c) => c.currency.chainId)));
+    const chainList = Array.from(new Set(this.srcCurrencyOptions.map((c) => c.currency.chainId)));
+    const chains = BridgeStore.sortChains(chainList);
+
     return chains.map((chainId) => ({
       chainId,
       disabled: false,
@@ -330,22 +339,13 @@ export class BridgeStore {
   get outputAmount(): CurrencyAmount | undefined {
     return this.output?.amount;
   }
-  get slippage(): Percent | undefined {
-    const slippage = tryParsePercent(this.form.slippage);
-    if (!slippage) return undefined;
-    if (slippage.lessThan(0)) return undefined;
-    if (slippage.greaterThan(new Percent(50, 100))) return undefined;
-    return slippage;
-  }
   get minAmount(): CurrencyAmount | undefined {
-    const {slippage, amount} = this;
+    const {amount} = this;
     const {dstCurrency} = this.form;
-    if (!slippage) return undefined;
     if (!amount) return undefined;
     if (!dstCurrency) return undefined;
-    const afterSlippage = amount.multiply(new Percent(100, 100).subtract(slippage));
     // minAmount and outputAmount must be always in dstCurrency
-    return castCurrencyAmountUnsafe(afterSlippage, dstCurrency);
+    return castCurrencyAmountUnsafe(amount, dstCurrency);
   }
   get dstNativeAmount(): CurrencyAmount | undefined {
     const {dstNativeAmount, dstChainId} = this.form;
@@ -412,11 +412,6 @@ export class BridgeStore {
     ) {
       addError('Gas too large');
     }
-
-    if (minAmount && outputAmount?.lessThan(minAmount)) {
-      addError('Increase slippage');
-    }
-
     // sanity checks
     if (srcChainId && srcCurrency && srcChainId !== srcCurrency.chainId) {
       addError('Select other pair');
@@ -427,7 +422,6 @@ export class BridgeStore {
     if (srcCurrency && dstCurrency && !isValidPair(srcCurrency, dstCurrency)) {
       addError('Select other pair');
     }
-    if (!this.slippage) addError('Set valid slippage');
     if (!this.messageFee) addError('Checking fee ...');
     if (!this.output) addError('Checking fee ...');
     if (!limitAmount) addError('Checking limit...');
@@ -461,6 +455,27 @@ export class BridgeStore {
 
   // actions
 
+  async addToken(token: Token): Promise<void> {
+    try {
+      await walletStore.evm?.switchChain(token.chainId);
+
+      (walletStore.evm as any).provider.request({
+        method: 'wallet_watchAsset',
+        params: {
+          type: 'ERC20', 
+          options: {
+            address: token.address, 
+            symbol: token.symbol, 
+            decimals: token.decimals, 
+            image: getTokenIcon(token.symbol), 
+          },
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async updateAllowance(): Promise<unknown> {
     this.promise.allowance = undefined;
     const {transferApi, srcAddress} = this;
@@ -471,12 +486,6 @@ export class BridgeStore {
     return (this.promise.allowance = fromPromise(
       transferApi.getAllowance(srcCurrency, srcAddress),
     ));
-  }
-
-  setSlippage(amount: string) {
-    if (tryParseNumber(amount) !== undefined) {
-      this.form.slippage = amount;
-    }
   }
 
   setAmount(amount: string) {
@@ -807,6 +816,7 @@ export class BridgeStore {
 
     const {srcCurrency, dstCurrency} = this.form;
     const {transferApi, adapterParams} = this;
+
     if (!srcCurrency) return;
     if (!dstCurrency) return;
     if (!transferApi) return;
@@ -946,7 +956,6 @@ type BridgeFrom = {
   srcChainId: ChainId | undefined;
   dstChainId: ChainId | undefined;
   amount: string;
-  slippage: string;
   dstNativeAmount: DstNativeAmount | string;
 };
 

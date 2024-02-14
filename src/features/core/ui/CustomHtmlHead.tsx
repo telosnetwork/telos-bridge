@@ -9,7 +9,7 @@ interface CustomHtmlHeadProps {
 }
 
 
-const defaultDescription = '';
+const defaultDescription = 'The LayerZero Telos bridge enables seamless asset transfers between Telos and other blockchains. Connect your source and destination wallets to facilitate the seamless transfer of assets between Telos and external ecosystems, alleviating the risk of wrapped asset bridges.';
 const keywords = 'telos, tlos, blockchain, crypto, message, transaction, omnichain, bridge';
 
 export const CustomHtmlHead = (props: CustomHtmlHeadProps) => {
