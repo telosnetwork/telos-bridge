@@ -14,13 +14,20 @@ type ArrayOneOrMore<T> = {
   0: T;
 } & Array<T>;
 
-const SAFEPAL = 'SafePal';
+export enum WalletType {
+  SAFEPAL = 'SafePal',
+  PHANTOM = 'Phantom',
+  METAMASK = 'MetaMask',
+  COINBASE = 'CoinBase',
+  BRAVE = 'Brave',
+  CORE = 'Core'
+}
 
 // if icon is not available at https://icons-ckg.pages.dev/lz-dark/wallets/<wallet-name-to-lower>.svg 
 // e.g. https://icons-ckg.pages.dev/lz-dark/wallets/metamask.svg, use provided icon url 
-export const useIconUrl = [SAFEPAL]
+export const useIconUrl = [WalletType.SAFEPAL]
 class SafePal extends InjectedWallet {
-  type = SAFEPAL;
+  type = WalletType.SAFEPAL;
   identityFlag = ProviderIdentityFlag.SafePal;
   readonly url = "https://www.safepal.com/";
   readonly icon = "https://pbs.twimg.com/profile_images/1676254262505123840/NhRRmBnl_400x400.png";

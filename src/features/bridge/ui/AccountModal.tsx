@@ -17,6 +17,7 @@ import {formatAddress} from '@/core/utils/formatAddress';
 import {isMobile} from '@/core/utils/platform';
 
 import {TransactionItem} from './TransactionItem';
+import { WalletType } from '@/core/config/createWallets';
 
 export type AccountModalProps = Omit<ModalProps, 'title' | 'children'> & {title?: string};
 
@@ -167,7 +168,7 @@ const WalletItem: React.FC<{
   } else if (wallet.isConnected && wallet.address) {
     buttonText = `${formatAddress(wallet.address, 16)}`;
   // handle safepal extension conflict
-  }else if (wallet.type === 'MetaMask' && isSafePal){
+  }else if (wallet.type === WalletType.METAMASK && isSafePal){
     buttonText = `Get MetaMask Wallet`;
   } else if (wallet.isAvailable) {
     buttonText = `Connect ${wallet.type}`;
@@ -183,7 +184,7 @@ const WalletItem: React.FC<{
       return;
     }
     // handle safepal extension conflict
-    if (wallet.type === 'MetaMask' && isSafePal){
+    if (wallet.type === WalletType.METAMASK && isSafePal){
       window.open('https://metamask.app.link/dapp/bridge.telos.net');
       return;
     }
@@ -192,13 +193,13 @@ const WalletItem: React.FC<{
       return;
     }
 
-    if (wallet.type === 'MetaMask') {
+    if (wallet.type === WalletType.METAMASK) {
       window.open('https://metamask.app.link/dapp/bridge.telos.net');
-    } else if (wallet.type ==='CoinBase') {
+    } else if (wallet.type === WalletType.COINBASE) {
       window.open('https://go.cb-w.com/dapp?cb_url=bridge.telos.net');
-    } else if (wallet.type === 'Phantom') {
+    } else if (wallet.type === WalletType.PHANTOM) {
       window.open('https://phantom.app/ul/');
-    }else if (wallet.type === 'SafePal'){
+    }else if (wallet.type === WalletType.SAFEPAL){
       window.open('https://www.safepal.com/en/download');
     }
   }
