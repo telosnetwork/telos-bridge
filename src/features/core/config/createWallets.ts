@@ -24,8 +24,9 @@ export enum WalletType {
 }
 
 // if icon is not available at https://icons-ckg.pages.dev/lz-dark/wallets/<wallet-name-to-lower>.svg 
-// e.g. https://icons-ckg.pages.dev/lz-dark/wallets/metamask.svg, use provided icon url 
-export const useIconUrl = [WalletType.SAFEPAL]
+// e.g. https://icons-ckg.pages.dev/lz-dark/wallets/metamask.svg, 
+// add wallet type to list to use the provided icon url  
+export const useIconUrl = [WalletType.SAFEPAL as string]
 class SafePal extends InjectedWallet {
   type = WalletType.SAFEPAL;
   identityFlag = ProviderIdentityFlag.SafePal;
