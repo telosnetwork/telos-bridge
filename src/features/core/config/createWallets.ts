@@ -17,7 +17,7 @@ type ArrayOneOrMore<T> = {
 const SAFEPAL = 'SafePal';
 
 // if icon is not available at https://icons-ckg.pages.dev/lz-dark/wallets/<wallet-name-to-lower>.svg 
-// e.g. https://icons-ckg.pages.dev/lz-dark/wallets/metamask.svg, use provided icon url in WalletIcon component
+// e.g. https://icons-ckg.pages.dev/lz-dark/wallets/metamask.svg, use provided icon url 
 export const useIconUrl = [SAFEPAL]
 class SafePal extends InjectedWallet {
   type = SAFEPAL;

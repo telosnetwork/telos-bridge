@@ -160,10 +160,15 @@ const WalletItem: React.FC<{
 
   let buttonText;
 
+  const isSafePal = (window as any).ethereum.isSafePal;
+
   if (wallet.isConnecting) {
     buttonText = 'Connecting...';
   } else if (wallet.isConnected && wallet.address) {
     buttonText = `${formatAddress(wallet.address, 16)}`;
+  // handle safepal extension conflict
+  }else if (wallet.type === 'MetaMask' && isSafePal){
+    buttonText = `Get MetaMask Wallet`;
   } else if (wallet.isAvailable) {
     buttonText = `Connect ${wallet.type}`;
   } else if (!mobile) {
@@ -177,6 +182,11 @@ const WalletItem: React.FC<{
       wallet.disconnect();
       return;
     }
+    // handle safepal extension conflict
+    if (wallet.type === 'MetaMask' && isSafePal){
+      window.open('https://metamask.app.link/dapp/bridge.telos.net');
+      return;
+    }
     if (wallet.isAvailable) {
       wallet.connect();
       return;
@@ -188,6 +198,8 @@ const WalletItem: React.FC<{
       window.open('https://go.cb-w.com/dapp?cb_url=bridge.telos.net');
     } else if (wallet.type === 'Phantom') {
       window.open('https://phantom.app/ul/');
+    }else if (wallet.type === 'SafePal'){
+      window.open('https://www.safepal.com/en/download');
     }
   }
 
