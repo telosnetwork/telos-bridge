@@ -205,7 +205,7 @@ const WalletItem: React.FC<{
         mb: 1,
       }}
     >
-      <WalletIcon type={wallet.type} />
+      <WalletIcon type={wallet.type} iconUrl={(wallet as any).icon} />
       <Box typography='p2' sx={{ml: 2}}>
         {buttonText}
       </Box>
