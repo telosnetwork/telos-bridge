@@ -3,6 +3,7 @@ import {groupBy} from 'lodash-es';
 import {observer} from 'mobx-react';
 import React, {useEffect, useRef, useState} from 'react';
 
+import { WalletType } from '@/core/config/createWallets';
 import {transactionStore} from '@/core/stores/transactionStore';
 import {uiStore, WalletTab} from '@/core/stores/uiStore';
 import {walletStore} from '@/core/stores/walletStore';
@@ -17,7 +18,7 @@ import {formatAddress} from '@/core/utils/formatAddress';
 import {isMobile} from '@/core/utils/platform';
 
 import {TransactionItem} from './TransactionItem';
-import { WalletType } from '@/core/config/createWallets';
+import { BraveWallet } from '@layerzerolabs/ui-wallet-evm';
 
 export type AccountModalProps = Omit<ModalProps, 'title' | 'children'> & {title?: string};
 
@@ -154,7 +155,7 @@ const WalletItem: React.FC<{
 }> = observer(({wallet}) => {
   const mobile = isMobile();
 
-  if (wallet.type === 'Brave' || (wallet.type === 'Core' && mobile)) {
+  if ((wallet.type === 'Core' && mobile)) {
     // https://github.com/telosnetwork/telos-bridge/issues/20
     return null;
   }
@@ -162,15 +163,17 @@ const WalletItem: React.FC<{
   let buttonText;
 
   const isSafePal = (window as any).ethereum.isSafePal;
+  const isBraveBrowser = (window as any).navigator.brave;
+  const isBraveWallet = (window as any).ethereum.isBraveWallet;
 
   if (wallet.isConnecting) {
     buttonText = 'Connecting...';
   } else if (wallet.isConnected && wallet.address) {
     buttonText = `${formatAddress(wallet.address, 16)}`;
   // handle safepal extension conflict
-  }else if (wallet.type === WalletType.METAMASK && isSafePal){
+  } else if (wallet.type === WalletType.METAMASK && isSafePal){
     buttonText = `Get MetaMask Wallet`;
-  } else if (wallet.isAvailable) {
+  } else if (wallet.isAvailable || (wallet.type === WalletType.BRAVE && isBraveWallet)) {
     buttonText = `Connect ${wallet.type}`;
   } else if (!mobile) {
     buttonText = `Get ${wallet.type} Wallet`;
@@ -188,7 +191,10 @@ const WalletItem: React.FC<{
       window.open('https://metamask.app.link/dapp/bridge.telos.net');
       return;
     }
-    if (wallet.isAvailable) {
+    if (isBraveBrowser){
+      (wallet as any).setProvider(WalletType.BRAVE, (window as any).ethereum);
+    }
+    if (wallet.isAvailable || isBraveWallet) {
       wallet.connect();
       return;
     }
@@ -201,6 +207,8 @@ const WalletItem: React.FC<{
       window.open('https://phantom.app/ul/');
     }else if (wallet.type === WalletType.SAFEPAL){
       window.open('https://www.safepal.com/en/download');
+    }else if (wallet.type === WalletType.BRAVE){
+      window.open((wallet as any).url);
     }
   }
 

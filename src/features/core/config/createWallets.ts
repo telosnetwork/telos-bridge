@@ -1,9 +1,9 @@
 import {ChainId} from '@layerzerolabs/lz-sdk';
 import {Wallet} from '@layerzerolabs/ui-wallet';
 import {
-  BraveWallet,
   CoinbaseWallet,
   CoreWallet,
+  ExternalWallet,
   InjectedWallet,
   MetaMaskWallet,
   PhantomWallet as PhantomWalletEvm,
@@ -32,6 +32,13 @@ class SafePal extends InjectedWallet {
   identityFlag = ProviderIdentityFlag.SafePal;
   readonly url = "https://www.safepal.com/";
   readonly icon = "https://pbs.twimg.com/profile_images/1676254262505123840/NhRRmBnl_400x400.png";
+}
+
+class BraveWallet extends ExternalWallet {
+  type = WalletType.BRAVE;
+  identityFlag = ProviderIdentityFlag.BraveWallet;
+  readonly url = "https://brave.com/wallet/";
+  readonly icon = "https://icons-ckg.pages.dev/lz-light/wallets/brave.svg";
 }
 
 export function createWallets(chains: ChainId[]): Record<string, Wallet<unknown>> {
