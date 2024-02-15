@@ -14,11 +14,13 @@ type ArrayOneOrMore<T> = {
   0: T;
 } & Array<T>;
 
-const TELOS_MAINNET_CHAIN_ID = 40;
-const POLYGON_MAINNET_CHAIN_ID = 137;
-const ARBITRUM_ONE_MAINNET_CHAIN_ID = 42161;
-const BNB_MAINNET_CHAIN_ID = 56;
-const AVALANCHE_MAINNET_CHAIN_ID = 43114;
+enum ChainListId {
+  TELOS = 40,
+  POLYGON = 137,
+  ARBITRUM = 42161,
+  BNB = 56,
+  AVALANCHE = 43114
+}
 
 export function createWallets(chains: ChainId[]): Record<string, Wallet<unknown>> {
   const wallets: Record<string, Wallet<unknown>> = {};
@@ -37,11 +39,11 @@ export function createWallets(chains: ChainId[]): Record<string, Wallet<unknown>
     showQrModal: true,
     optionalChains: evmChains,
     rpcMap: {
-      [TELOS_MAINNET_CHAIN_ID]: 'https://mainnet.telos.net:443/evm',
-      [POLYGON_MAINNET_CHAIN_ID]: 'https://polygon-rpc.com/',
-      [ARBITRUM_ONE_MAINNET_CHAIN_ID]: 'https://arb1.arbitrum.io/rpc',
-      [BNB_MAINNET_CHAIN_ID]: 'https://bsc-dataseed.binance.org/',
-      [AVALANCHE_MAINNET_CHAIN_ID]: 'https://api.avax.network/ext/bc/C/rpc',
+      [ChainListId.TELOS]: 'https://mainnet.telos.net:443/evm',
+      [ChainListId.POLYGON]: 'https://polygon-rpc.com/',
+      [ChainListId.ARBITRUM]: 'https://arb1.arbitrum.io/rpc',
+      [ChainListId.BNB]: 'https://bsc-dataseed.binance.org/',
+      [ChainListId.AVALANCHE]: 'https://api.avax.network/ext/bc/C/rpc',
     },
   });
 
