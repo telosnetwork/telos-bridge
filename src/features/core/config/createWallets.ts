@@ -10,10 +10,6 @@ import {
   ProviderIdentityFlag,
 } from '@layerzerolabs/ui-wallet-evm';
 
-type ArrayOneOrMore<T> = {
-  0: T;
-} & Array<T>;
-
 export enum WalletType {
   SAFEPAL = 'SafePal',
   PHANTOM = 'Phantom',
@@ -34,7 +30,7 @@ class SafePal extends InjectedWallet {
   readonly icon = "https://pbs.twimg.com/profile_images/1676254262505123840/NhRRmBnl_400x400.png";
 }
 
-class BraveWallet extends ExternalWallet {
+export class BraveWallet extends ExternalWallet {
   type = WalletType.BRAVE;
   identityFlag = ProviderIdentityFlag.BraveWallet;
   readonly url = "https://brave.com/wallet/";

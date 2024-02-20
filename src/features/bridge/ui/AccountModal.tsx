@@ -3,7 +3,7 @@ import {groupBy} from 'lodash-es';
 import {observer} from 'mobx-react';
 import React, {useEffect, useRef, useState} from 'react';
 
-import { WalletType } from '@/core/config/createWallets';
+import { BraveWallet, WalletType } from '@/core/config/createWallets';
 import {transactionStore} from '@/core/stores/transactionStore';
 import {uiStore, WalletTab} from '@/core/stores/uiStore';
 import {walletStore} from '@/core/stores/walletStore';
@@ -18,7 +18,6 @@ import {formatAddress} from '@/core/utils/formatAddress';
 import {isMobile} from '@/core/utils/platform';
 
 import {TransactionItem} from './TransactionItem';
-import { BraveWallet } from '@layerzerolabs/ui-wallet-evm';
 
 export type AccountModalProps = Omit<ModalProps, 'title' | 'children'> & {title?: string};
 
@@ -155,16 +154,17 @@ const WalletItem: React.FC<{
 }> = observer(({wallet}) => {
   const mobile = isMobile();
 
-  if ((wallet.type === 'Core' && mobile)) {
+  if (wallet.type === 'Core' && mobile) {
     // https://github.com/telosnetwork/telos-bridge/issues/20
     return null;
   }
 
   let buttonText;
+  const win = window as any;
 
-  const isSafePal = (window as any).ethereum.isSafePal;
-  const isBraveBrowser = (window as any).navigator.brave;
-  const isBraveWallet = (window as any).ethereum.isBraveWallet;
+  const isSafePal = win.ethereum.isSafePal;
+  const isBraveBrowser = win.navigator.brave;
+  const isBraveWallet = win.ethereum.isBraveWallet;
 
   if (wallet.isConnecting) {
     buttonText = 'Connecting...';
@@ -192,7 +192,7 @@ const WalletItem: React.FC<{
       return;
     }
     if (isBraveBrowser){
-      (wallet as any).setProvider(WalletType.BRAVE, (window as any).ethereum);
+      (wallet as BraveWallet).setProvider(WalletType.BRAVE, win.ethereum);
     }
     if (wallet.isAvailable || isBraveWallet) {
       wallet.connect();
