@@ -10,10 +10,6 @@ import {
   ProviderIdentityFlag,
 } from '@layerzerolabs/ui-wallet-evm';
 
-type ArrayOneOrMore<T> = {
-  0: T;
-} & Array<T>;
-
 export enum WalletType {
   SAFEPAL = 'SafePal',
   PHANTOM = 'Phantom',

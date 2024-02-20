@@ -3,6 +3,7 @@ import {groupBy} from 'lodash-es';
 import {observer} from 'mobx-react';
 import React, {useEffect, useRef, useState} from 'react';
 
+import { WalletType } from '@/core/config/createWallets';
 import {transactionStore} from '@/core/stores/transactionStore';
 import {uiStore, WalletTab} from '@/core/stores/uiStore';
 import {walletStore} from '@/core/stores/walletStore';
@@ -17,7 +18,6 @@ import {formatAddress} from '@/core/utils/formatAddress';
 import {isMobile} from '@/core/utils/platform';
 
 import {TransactionItem} from './TransactionItem';
-import { WalletType } from '@/core/config/createWallets';
 
 export type AccountModalProps = Omit<ModalProps, 'title' | 'children'> & {title?: string};
 
