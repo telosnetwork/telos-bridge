@@ -26,7 +26,7 @@ export const WalletDetails = observer((props: WalletDetailsProps) => {
         sx={{display: 'flex', alignItems: 'center', cursor: 'pointer'}}
         onClick={openWalletModal}
       >
-        <WalletIcon type={wallet?.type} size={10} />
+        <WalletIcon type={wallet?.type} iconUrl={(wallet as any)?.icon} size={10} />
         <Box typography='p3' color='text.secondary' sx={{ml: 1}}>
           {wallet?.address && formatAddress(wallet.address, 9)}
         </Box>

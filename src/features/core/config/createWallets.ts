@@ -5,14 +5,36 @@ import {
   BraveWallet,
   CoinbaseWallet,
   CoreWallet,
+  InjectedWallet,
   MetaMaskWallet,
   PhantomWallet as PhantomWalletEvm,
+  ProviderIdentityFlag,
   WalletConnect,
 } from '@layerzerolabs/ui-wallet-evm';
 
 type ArrayOneOrMore<T> = {
   0: T;
 } & Array<T>;
+
+export enum WalletType {
+  SAFEPAL = 'SafePal',
+  PHANTOM = 'Phantom',
+  METAMASK = 'MetaMask',
+  COINBASE = 'CoinBase',
+  BRAVE = 'Brave',
+  CORE = 'Core'
+}
+
+// if icon is not available at https://icons-ckg.pages.dev/lz-dark/wallets/<wallet-name-to-lower>.svg 
+// e.g. https://icons-ckg.pages.dev/lz-dark/wallets/metamask.svg, 
+// add wallet type to list to use the provided icon url  
+export const useIconUrl = [WalletType.SAFEPAL as string]
+class SafePal extends InjectedWallet {
+  type = WalletType.SAFEPAL;
+  identityFlag = ProviderIdentityFlag.SafePal;
+  readonly url = "https://www.safepal.com/";
+  readonly icon = "https://pbs.twimg.com/profile_images/1676254262505123840/NhRRmBnl_400x400.png";
+}
 
 enum ChainListId {
   TELOS = 40,
@@ -31,6 +53,7 @@ export function createWallets(chains: ChainId[]): Record<string, Wallet<unknown>
   wallets.coreWallet = new CoreWallet();
   wallets.braveWallet = new BraveWallet();
   wallets.phantomEvm = new PhantomWalletEvm();
+  wallets.safePal = new SafePal();
 
   const evmChains = chains.map(toEvmChainId) as ArrayOneOrMore<number>;
 

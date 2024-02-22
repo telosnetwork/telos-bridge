@@ -3,6 +3,7 @@ import {groupBy} from 'lodash-es';
 import {observer} from 'mobx-react';
 import React, {useEffect, useRef, useState} from 'react';
 
+import { WalletType } from '@/core/config/createWallets';
 import {transactionStore} from '@/core/stores/transactionStore';
 import {uiStore, WalletTab} from '@/core/stores/uiStore';
 import {walletStore} from '@/core/stores/walletStore';
@@ -160,10 +161,15 @@ const WalletItem: React.FC<{
 
   let buttonText;
 
+  const isSafePal = (window as any).ethereum.isSafePal;
+
   if (wallet.isConnecting) {
     buttonText = 'Connecting...';
   } else if (wallet.isConnected && wallet.address) {
     buttonText = `${formatAddress(wallet.address, 16)}`;
+  // handle safepal extension conflict
+  }else if (wallet.type === WalletType.METAMASK && isSafePal){
+    buttonText = `Get MetaMask Wallet`;
   } else if (wallet.isAvailable) {
     buttonText = `Connect ${wallet.type}`;
   } else if (!mobile) {
@@ -177,17 +183,24 @@ const WalletItem: React.FC<{
       wallet.disconnect();
       return;
     }
+    // handle safepal extension conflict
+    if (wallet.type === WalletType.METAMASK && isSafePal){
+      window.open('https://metamask.app.link/dapp/bridge.telos.net');
+      return;
+    }
     if (wallet.isAvailable) {
       wallet.connect();
       return;
     }
 
-    if (wallet.type === 'MetaMask') {
+    if (wallet.type === WalletType.METAMASK) {
       window.open('https://metamask.app.link/dapp/bridge.telos.net');
-    } else if (wallet.type ==='CoinBase') {
+    } else if (wallet.type === WalletType.COINBASE) {
       window.open('https://go.cb-w.com/dapp?cb_url=bridge.telos.net');
-    } else if (wallet.type === 'Phantom') {
+    } else if (wallet.type === WalletType.PHANTOM) {
       window.open('https://phantom.app/ul/');
+    }else if (wallet.type === WalletType.SAFEPAL){
+      window.open('https://www.safepal.com/en/download');
     }
   }
 
@@ -205,7 +218,7 @@ const WalletItem: React.FC<{
         mb: 1,
       }}
     >
-      <WalletIcon type={wallet.type} />
+      <WalletIcon type={wallet.type} iconUrl={(wallet as any).icon} />
       <Box typography='p2' sx={{ml: 2}}>
         {buttonText}
       </Box>
