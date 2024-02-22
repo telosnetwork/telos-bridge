@@ -2,15 +2,16 @@ import {ChainId} from '@layerzerolabs/lz-sdk';
 import { toEvmChainId } from '@layerzerolabs/ui-core';
 import {Wallet} from '@layerzerolabs/ui-wallet';
 import {
-  BraveWallet,
   CoinbaseWallet,
   CoreWallet,
+  ExternalWallet,
   InjectedWallet,
   MetaMaskWallet,
   PhantomWallet as PhantomWalletEvm,
   ProviderIdentityFlag,
   WalletConnect,
 } from '@layerzerolabs/ui-wallet-evm';
+import { isMobile } from '../utils/platform';
 
 type ArrayOneOrMore<T> = {
   0: T;
@@ -36,6 +37,13 @@ class SafePal extends InjectedWallet {
   readonly icon = "https://pbs.twimg.com/profile_images/1676254262505123840/NhRRmBnl_400x400.png";
 }
 
+export class BraveWallet extends ExternalWallet {
+  type = WalletType.BRAVE;
+  identityFlag = ProviderIdentityFlag.BraveWallet;
+  readonly url = "https://brave.com/wallet/";
+  readonly icon = "https://icons-ckg.pages.dev/lz-light/wallets/brave.svg";
+}
+
 enum ChainListId {
   TELOS = 40,
   POLYGON = 137,
@@ -51,7 +59,10 @@ export function createWallets(chains: ChainId[]): Record<string, Wallet<unknown>
   wallets.metamaskWallet = new MetaMaskWallet();
   wallets.coinbaseWallet = new CoinbaseWallet();
   wallets.coreWallet = new CoreWallet();
-  wallets.braveWallet = new BraveWallet();
+  // Brave wallet only supported on mobile at the moment, see https://github.com/telosnetwork/teloscan/issues/544
+  if (isMobile()){
+    wallets.braveWallet = new BraveWallet();
+  }
   wallets.phantomEvm = new PhantomWalletEvm();
   wallets.safePal = new SafePal();
 
