@@ -1,4 +1,5 @@
 import {ChainId} from '@layerzerolabs/lz-sdk';
+import { toEvmChainId } from '@layerzerolabs/ui-core';
 import {Wallet} from '@layerzerolabs/ui-wallet';
 import {
   CoinbaseWallet,
@@ -8,7 +9,12 @@ import {
   MetaMaskWallet,
   PhantomWallet as PhantomWalletEvm,
   ProviderIdentityFlag,
+  WalletConnect,
 } from '@layerzerolabs/ui-wallet-evm';
+
+type ArrayOneOrMore<T> = {
+  0: T;
+} & Array<T>;
 
 export enum WalletType {
   SAFEPAL = 'SafePal',
@@ -37,6 +43,14 @@ export class BraveWallet extends ExternalWallet {
   readonly icon = "https://icons-ckg.pages.dev/lz-light/wallets/brave.svg";
 }
 
+enum ChainListId {
+  TELOS = 40,
+  POLYGON = 137,
+  ARBITRUM = 42161,
+  BNB = 56,
+  AVALANCHE = 43114
+}
+
 export function createWallets(chains: ChainId[]): Record<string, Wallet<unknown>> {
   const wallets: Record<string, Wallet<unknown>> = {};
 
@@ -48,14 +62,20 @@ export function createWallets(chains: ChainId[]): Record<string, Wallet<unknown>
   wallets.phantomEvm = new PhantomWalletEvm();
   wallets.safePal = new SafePal();
 
-  // const evmChains = chains.map(toEvmChainId) as ArrayOneOrMore<number>;
+  const evmChains = chains.map(toEvmChainId) as ArrayOneOrMore<number>;
 
-  // Get projectId from WalletConnect cloud https://docs.walletconnect.com/advanced/migration-from-v1.x/dapps#ethereum-provider
-  // wallets.walletConnect = new WalletConnect({
-  //   projectId: '',
-  //   showQrModal: true,
-  //   optionalChains: evmChains,
-  // });
+  wallets.walletConnect = new WalletConnect({
+    projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID as string,
+    showQrModal: true,
+    optionalChains: evmChains,
+    rpcMap: {
+      [ChainListId.TELOS]: 'https://mainnet.telos.net:443/evm',
+      [ChainListId.POLYGON]: 'https://polygon-rpc.com/',
+      [ChainListId.ARBITRUM]: 'https://arb1.arbitrum.io/rpc',
+      [ChainListId.BNB]: 'https://bsc-dataseed.binance.org/',
+      [ChainListId.AVALANCHE]: 'https://api.avax.network/ext/bc/C/rpc',
+    },
+  });
 
   if (typeof window !== 'undefined') {
     Object.values(wallets).forEach((wallet) => wallet.autoConnect());
