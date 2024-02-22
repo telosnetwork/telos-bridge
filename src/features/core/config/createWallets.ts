@@ -11,6 +11,7 @@ import {
   ProviderIdentityFlag,
   WalletConnect,
 } from '@layerzerolabs/ui-wallet-evm';
+import { isMobile } from '../utils/platform';
 
 type ArrayOneOrMore<T> = {
   0: T;
@@ -58,7 +59,10 @@ export function createWallets(chains: ChainId[]): Record<string, Wallet<unknown>
   wallets.metamaskWallet = new MetaMaskWallet();
   wallets.coinbaseWallet = new CoinbaseWallet();
   wallets.coreWallet = new CoreWallet();
-  wallets.braveWallet = new BraveWallet();
+  // Brave wallet only supported on mobile at the moment, see https://github.com/telosnetwork/teloscan/issues/544
+  if (isMobile()){
+    wallets.braveWallet = new BraveWallet();
+  }
   wallets.phantomEvm = new PhantomWalletEvm();
   wallets.safePal = new SafePal();
 

@@ -191,7 +191,7 @@ const WalletItem: React.FC<{
       window.open('https://metamask.app.link/dapp/bridge.telos.net');
       return;
     }
-    if (isBraveBrowser){
+    if (isBraveBrowser && isBraveWallet){
       (wallet as BraveWallet).setProvider(WalletType.BRAVE, win.ethereum);
     }
     if (wallet.isAvailable || isBraveWallet) {
