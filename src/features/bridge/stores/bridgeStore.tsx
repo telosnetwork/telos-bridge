@@ -424,7 +424,7 @@ export class BridgeStore {
     }
     if (!this.messageFee) addError('Checking fee ...');
     if (!this.output) addError('Checking fee ...');
-    if (!limitAmount) addError('Checking limit...');
+    // if (!limitAmount) addError('Checking limit...');
     return errors;
   }
   get unclaimed(): CurrencyAmount[] {

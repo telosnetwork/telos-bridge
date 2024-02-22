@@ -162,9 +162,9 @@ const WalletItem: React.FC<{
   let buttonText;
   const win = window as any;
 
-  const isSafePal = win.ethereum.isSafePal;
+  const isSafePal = win.ethereum?.isSafePal;
   const isBraveBrowser = win.navigator.brave;
-  const isBraveWallet = win.ethereum.isBraveWallet;
+  const isBraveWallet = win.ethereum?.isBraveWallet;
 
   if (wallet.isConnecting) {
     buttonText = 'Connecting...';
