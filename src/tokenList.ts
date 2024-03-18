@@ -1,6 +1,16 @@
 import {TokenListItem} from '@layerzerolabs/ui-core';
 
+import { TLOS_SYMBOL } from './config';
+
 export const tokenList = createTokenList([
+  // TLOS
+  [TLOS_SYMBOL, TLOS_SYMBOL, null, 18, 'telos', 4660, 'telos'],
+  [TLOS_SYMBOL, TLOS_SYMBOL, '0x5Aa352551d39F5ce592260e0D26818e7d780867f', 18, 'ethereum', 4660, 'telos'],
+  [TLOS_SYMBOL, TLOS_SYMBOL, '0x1cF0636abbc569fB413A20bd7964712e6b4d1161', 18, 'polygon', 4660, 'telos'],
+  [TLOS_SYMBOL, TLOS_SYMBOL, '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E', 18, 'bsc', 4660, 'telos'],
+  [TLOS_SYMBOL, TLOS_SYMBOL, '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E', 18, 'avalanche', 4660, 'telos'],
+  [TLOS_SYMBOL, TLOS_SYMBOL, '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E', 18, 'arbitrum', 4660, 'telos'],
+
   // USDC
   ['USDC', 'USDC', '0x8D97Cea50351Fb4329d591682b148D43a0C3611b', 6, 'telos', 3408, 'usd-coin'],
   ['USDC', 'USDC', '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', 6, 'ethereum', 3408, 'usd-coin'],
@@ -19,9 +29,12 @@ export const tokenList = createTokenList([
 
   // ETH
   ['ETH', 'ETH', null, 18, 'ethereum', 1027, 'ethereum'],
+  ['ETH', 'ETH', null, 18, 'arbitrum', 1027, 'ethereum'],
+  ['ETH', 'ETH', '0xA0fB8cd450c8Fd3a11901876cD5f17eB47C6bc50', 18, 'telos', 1027, 'ethereum'],
+  ['ETH', 'ETH', '0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619', 18, 'polygon', 1027, 'ethereum'],
 
   // WETH
-  ['WETH', 'Wrapped Ether', '0xA0fB8cd450c8Fd3a11901876cD5f17eB47C6bc50', 18, 'telos', 2396, 'weth'], // prettier-ignore
+  // ['WETH', 'Wrapped Ether', '0xA0fB8cd450c8Fd3a11901876cD5f17eB47C6bc50', 18, 'telos', 2396, 'weth'], // prettier-ignore
   //['WETH', 'Wrapped Ether', '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2', 18, 'ethereum', 2396, 'weth'], // prettier-ignore
   ['WETH', 'Wrapped Ether', '0x82af49447d8a07e3bd95bd0d56f35241523fbab1', 18, 'arbitrum', 2396, 'weth'], // prettier-ignore
 
@@ -35,9 +48,10 @@ export const tokenList = createTokenList([
 
   // BNB
   ['BNB', 'BNB', null, 18, 'bsc', 1, 'binancecoin'],
+  ['BNB', 'BNB', '0x26Ed0F16e777C94A6FE798F9E20298034930Bae8', 18, 'telos', 1, 'binancecoin'],
 
   // WBNB
-  ['WBNB', 'WBNB', '0x26Ed0F16e777C94A6FE798F9E20298034930Bae8', 18, 'telos', 1, 'wbnb'],
+  // ['WBNB', 'WBNB', '0x26Ed0F16e777C94A6FE798F9E20298034930Bae8', 18, 'telos', 1, 'wbnb'],
   //['WBNB', 'WBNB', '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c', 18, 'bsc', 1, 'wbnb'],
 ]);
 
