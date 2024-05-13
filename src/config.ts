@@ -238,14 +238,14 @@ export const TLOS  = {
   version: 2,
   tokens: [
     new Token(ChainId.ARBITRUM, '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E', 18, TLOS_SYMBOL),
-    new Token(ChainId.AVALANCHE, '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E', 18, TLOS_SYMBOL),
+    new Token(ChainId.AVALANCHE, '0xB037eA50debc46E6F70f246cD12d48fe4f13FaFf', 18, TLOS_SYMBOL),
     new Token(ChainId.BSC, '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E', 18, TLOS_SYMBOL),
     new Token(ChainId.POLYGON, '0x1cF0636abbc569fB413A20bd7964712e6b4d1161', 18, TLOS_SYMBOL),
     new Token(ChainId.ETHEREUM, '0x5Aa352551d39F5ce592260e0D26818e7d780867f', 18, TLOS_SYMBOL),
   ],
   proxy: [
     {chainId: ChainId.ARBITRUM, address: '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E'},
-    {chainId: ChainId.AVALANCHE, address: '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E'},
+    {chainId: ChainId.AVALANCHE, address: '0xB037eA50debc46E6F70f246cD12d48fe4f13FaFf'},
     {chainId: ChainId.BSC, address: '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E'},
     {chainId: ChainId.POLYGON, address: '0x1cF0636abbc569fB413A20bd7964712e6b4d1161'},
     {chainId: ChainId.ETHEREUM, address: '0x5Aa352551d39F5ce592260e0D26818e7d780867f'},
@@ -305,5 +305,5 @@ type NativeOftConfig = {
 export const telosNativeOft: NativeOftConfig = {
   bridge: {address: '0x9c5ebCbE531aA81bD82013aBF97401f5C6111d76', chainId: ChainId.TELOS, chainListId: ChainListId.TELOS, rpc: 'https://mainnet.telos.net/evm', abi: bridgeAbi},
   token: new Coin(ChainId.TELOS, 18, TLOS_SYMBOL),
-  proxy: {chainId: ChainId.TELOS, address: '0x7B5250Ad9aE6445e75E01Cd4bB070aECBf8DB92E'}
+  proxy: {chainId: ChainId.TELOS, address: '0x685ae711Ba61084881fd9431095B6B6697573c73'}
 }
