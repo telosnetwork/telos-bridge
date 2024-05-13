@@ -249,7 +249,7 @@ export const TLOS  = {
     {chainId: ChainId.BSC, address: '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E'},
     {chainId: ChainId.POLYGON, address: '0x1cF0636abbc569fB413A20bd7964712e6b4d1161'},
     {chainId: ChainId.ETHEREUM, address: '0x5Aa352551d39F5ce592260e0D26818e7d780867f'},
-    {chainId: ChainId.TELOS, address: '0x7B5250Ad9aE6445e75E01Cd4bB070aECBf8DB92E'}
+    {chainId: ChainId.TELOS, address: '0x685ae711Ba61084881fd9431095B6B6697573c73'}
   ],
   fee: false,
   sharedDecimals: 4,
