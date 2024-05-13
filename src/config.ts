@@ -24,6 +24,7 @@ export const wrapped_mainnet: WrappedTokenBridgeConfig = {
       new Token(ChainId.ETHEREUM, '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', 6, 'USDC'),
       new Token(ChainId.ARBITRUM, '0xaf88d065e77c8cC2239327C5EDb3A432268e5831', 6, 'USDC'),
       new Token(ChainId.BSC, '0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d', 18, 'USDC'),
+      //new Token(ChainId.AVALANCHE, '0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E', 6, 'USDC'),
     ],
     [
       // ETH
@@ -157,21 +158,19 @@ export const erc1155_testnet: OnftBridgeConfig = {
 const BANANA = {
   version: 2,
   tokens: [
-    new Token(ChainId.TELOS, '0x7097Ee02465FB494841740B1a2b63c21Eed655E7', 4, 'BANANA' ),
-    new Token(ChainId.BSC, '0x7097Ee02465FB494841740B1a2b63c21Eed655E7', 4, 'BANANA')
+    new Token(ChainId.TELOS, '0x7097Ee02465FB494841740B1a2b63c21Eed655E7', 4, 'BANANA'),
+    new Token(ChainId.BSC, '0x7097Ee02465FB494841740B1a2b63c21Eed655E7', 4, 'BANANA'),
   ],
   proxy: [
     {
       chainId: ChainId.TELOS,
       address: '0x46893403C4aD778d7FDA0CdFCe355a0A7dba3333',
     },
-    { chainId: ChainId.BSC,
-      address: '0x7097Ee02465FB494841740B1a2b63c21Eed655E7'
-    }
+    {chainId: ChainId.BSC, address: '0x7097Ee02465FB494841740B1a2b63c21Eed655E7'},
   ],
   fee: false,
   sharedDecimals: 4,
-}
+};
 
 const LVC = {
   version: 1,
@@ -180,12 +179,10 @@ const LVC = {
     new Token(ChainId.TELOS, '0x7d637d806b750B9C9f5d8e4e3634AA6639246924', 18, 'LVC'),
   ],
   proxy: [
-    { chainId: ChainId.TELOS,
-      address: '0x7d637d806b750B9C9f5d8e4e3634AA6639246924',
-    },
+    {chainId: ChainId.TELOS, address: '0x7d637d806b750B9C9f5d8e4e3634AA6639246924'},
     {
       chainId: ChainId.ZKCONSENSYS,
-      address: '0x48D9CDF4343d95E3B8d8F2BfcFdAE9d495f90cCA', 
+      address: '0x48D9CDF4343d95E3B8d8F2BfcFdAE9d495f90cCA',
     },
   ],
   fee: false,
@@ -203,15 +200,13 @@ const VC = {
       chainId: ChainId.TELOS,
       address: '0xcB61BC4aE1613abf8662B7003BaD0E2aa3F7D746',
     },
-    { chainId: ChainId.ZKSYNC,
-      address: '0x038b198152a83102F6380ee17d9Fbd69cde9797F',
-    }
+    {chainId: ChainId.ZKSYNC, address: '0x038b198152a83102F6380ee17d9Fbd69cde9797F'},
   ],
   fee: false,
   sharedDecimals: 4,
 };
 
-const RF  = {
+const RF = {
   version: 1,
   tokens: [
     new Token(ChainId.ZKSYNC, '0x5f7CBcb391d33988DAD74D6Fd683AadDA1123E4D', 18, 'RF'),
@@ -222,23 +217,38 @@ const RF  = {
       chainId: ChainId.TELOS,
       address: '0xb99C43d3bce4c8Ad9B95a4A178B04a7391b2a6EB',
     },
-    { chainId: ChainId.ZKSYNC,
-      address: '0xF5430284e7418891E3A0477D7598a3aA861D5c1D',
-    }
+    {chainId: ChainId.ZKSYNC, address: '0xF5430284e7418891E3A0477D7598a3aA861D5c1D'},
   ],
   fee: false,
   sharedDecimals: 4,
-}
+};
+
+// const USDV = {
+//   version: 2,
+//   tokens: [
+//     new Token(ChainId.ETHEREUM, '0x35E8d1DA73e927fA6E9B01892de0cAB468f647dF', 6, 'USDV'),
+//     new Token(ChainId.TELOS, '0xa4b23A34C63404C13Dd5f03DD0E9CDF7F981D073', 6, 'USDV'),
+//      new Token(ChainId.AVALANCHE, '0x323665443CEf804A3b5206103304BD4872EA4253', 6, 'USDV'),
+//   ],
+//   proxy: [
+//     {
+//       chainId: ChainId.TELOS,
+//       address: '0x4befaE8c5eC5a2ACd493f3Ca38c823fe61b3d20e',
+//     },
+//     {chainId: ChainId.ETHEREUM, address: '0x0E573Ce2736Dd9637A0b21058352e1667925C7a8'},
+//     {
+//       chainId: ChainId.AVALANCHE,
+//       address: '0x35E8d1DA73e927fA6E9B01892de0cAB468f647dF',
+//     },
+//   ],
+//   fee: false,
+//   sharedDecimals: 4,
+// };
 
 export const appConfig: AppConfig = createAppConfig({
   bridge: {
     aptos: [],
-    oft: [
-      BANANA,
-      LVC,
-      VC,
-      RF,
-    ],
+    oft: [BANANA, LVC, VC, RF], //USDV
     wrappedToken: [
       wrapped_mainnet,
       // wrapped_testnet,

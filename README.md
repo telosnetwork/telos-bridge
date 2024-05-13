@@ -17,7 +17,7 @@
   </a>
 </p>
 
-An example LayerZero dApp built on top of next.js
+An example LayerZero dApp built on top of Next.js
 
 ## Quick Start
 

@@ -31,7 +31,7 @@ const Title = styled('div', {name: 'PanelTitle'})(({theme}) => ({
   color: theme.palette.text.secondary,
   alignItems: 'center',
   marginBottom: 24,
-  ...theme.typography.p1,
+  ...theme.typography.h1,
 }));
 
 const PanelContent = styled('div', {name: 'PanelContent'})(() => ({

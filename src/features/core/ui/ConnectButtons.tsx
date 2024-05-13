@@ -15,9 +15,9 @@ export const ConnectButtons = observer(() => {
   const {isConnected} = walletStore;
 
   return (
-    <Box sx={{display: 'flex', gap: 1}}>
+    <Box sx={{display: 'flex', gap: 1, zIndex: 10, border: '1px solid rgba(0, 0, 0, 0.12)'}}>
       {address && pendingTransactions.length > 0 && (
-        <Button size='md' onClick={openTransactionsModal}>
+        <Button size='lg' onClick={openTransactionsModal}>
           <DesktopOnly display='inline'>Pending&nbsp;</DesktopOnly>
           <Icon type='spinner' size={16} />
         </Button>
@@ -27,8 +27,8 @@ export const ConnectButtons = observer(() => {
           Connect
         </Button>
       )}
-      {address && (
-        <Button variant='secondary' size='md' onClick={openConnectModal}>
+      {address && pendingTransactions.length == 0 &&(
+        <Button variant='secondary' size='lg' onClick={openConnectModal}>
           {formatAddress(address)}
         </Button>
       )}
