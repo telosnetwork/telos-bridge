@@ -15,7 +15,7 @@ export const defaultBreakpoints = {
 } as BreakpointsOptions;
 
 export const defaultTypography = {
-  fontFamily: '"Roboto Mono", monospace',
+  fontFamily: '"Silka", monospace',
   h1: {
     fontSize: 28,
     lineHeight: '36px',
