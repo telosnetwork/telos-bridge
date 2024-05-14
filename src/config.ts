@@ -238,14 +238,14 @@ export const TLOS  = {
   version: 2,
   tokens: [
     new Token(ChainId.ARBITRUM, '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E', 18, TLOS_SYMBOL),
-    new Token(ChainId.AVALANCHE, '0xe8eaca8d99119548B1887932d9E95cdceA6172d2', 18, TLOS_SYMBOL),
+    new Token(ChainId.AVALANCHE, '0x276B2D865Cc809DDFbC780A03fC81537a499a8e5', 18, TLOS_SYMBOL),
     new Token(ChainId.BSC, '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E', 18, TLOS_SYMBOL),
     new Token(ChainId.POLYGON, '0x1cF0636abbc569fB413A20bd7964712e6b4d1161', 18, TLOS_SYMBOL),
     new Token(ChainId.ETHEREUM, '0x5Aa352551d39F5ce592260e0D26818e7d780867f', 18, TLOS_SYMBOL),
   ],
   proxy: [
     {chainId: ChainId.ARBITRUM, address: '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E'},
-    {chainId: ChainId.AVALANCHE, address: '0xe8eaca8d99119548B1887932d9E95cdceA6172d2'},
+    {chainId: ChainId.AVALANCHE, address: '0x276B2D865Cc809DDFbC780A03fC81537a499a8e5'},
     {chainId: ChainId.BSC, address: '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E'},
     {chainId: ChainId.POLYGON, address: '0x1cF0636abbc569fB413A20bd7964712e6b4d1161'},
     {chainId: ChainId.ETHEREUM, address: '0x5Aa352551d39F5ce592260e0D26818e7d780867f'},
