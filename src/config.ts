@@ -237,19 +237,19 @@ const RF  = {
 export const TLOS  = {
   version: 2,
   tokens: [
-    new Token(ChainId.ARBITRUM, '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E', 18, TLOS_SYMBOL),
-    new Token(ChainId.AVALANCHE, '0x276B2D865Cc809DDFbC780A03fC81537a499a8e5', 18, TLOS_SYMBOL),
-    new Token(ChainId.BSC, '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E', 18, TLOS_SYMBOL),
-    new Token(ChainId.POLYGON, '0x1cF0636abbc569fB413A20bd7964712e6b4d1161', 18, TLOS_SYMBOL),
-    new Token(ChainId.ETHEREUM, '0x5Aa352551d39F5ce592260e0D26818e7d780867f', 18, TLOS_SYMBOL),
+    new Token(ChainId.ARBITRUM, '0x193f4A4a6ea24102F49b931DEeeb931f6E32405d', 18, TLOS_SYMBOL),
+    new Token(ChainId.AVALANCHE, '0xed667dC80a45b77305Cc395DB56D997597Dc6DdD', 18, TLOS_SYMBOL),
+    new Token(ChainId.BSC, '0x193f4A4a6ea24102F49b931DEeeb931f6E32405d', 18, TLOS_SYMBOL),
+    new Token(ChainId.POLYGON, '0x193f4A4a6ea24102F49b931DEeeb931f6E32405d', 18, TLOS_SYMBOL),
+    new Token(ChainId.ETHEREUM, '0x193f4A4a6ea24102F49b931DEeeb931f6E32405d', 18, TLOS_SYMBOL),
   ],
   proxy: [
-    {chainId: ChainId.ARBITRUM, address: '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E'},
-    {chainId: ChainId.AVALANCHE, address: '0x276B2D865Cc809DDFbC780A03fC81537a499a8e5'},
-    {chainId: ChainId.BSC, address: '0x5e3a61B39FfffA983b1E7133e408545A21Ca1C3E'},
-    {chainId: ChainId.POLYGON, address: '0x1cF0636abbc569fB413A20bd7964712e6b4d1161'},
-    {chainId: ChainId.ETHEREUM, address: '0x5Aa352551d39F5ce592260e0D26818e7d780867f'},
-    {chainId: ChainId.TELOS, address: '0x685ae711Ba61084881fd9431095B6B6697573c73'}
+    {chainId: ChainId.ARBITRUM, address: '0x193f4A4a6ea24102F49b931DEeeb931f6E32405d'},
+    {chainId: ChainId.AVALANCHE, address: '0xed667dC80a45b77305Cc395DB56D997597Dc6DdD'},
+    {chainId: ChainId.BSC, address: '0x193f4A4a6ea24102F49b931DEeeb931f6E32405d'},
+    {chainId: ChainId.POLYGON, address: '0x193f4A4a6ea24102F49b931DEeeb931f6E32405d'},
+    {chainId: ChainId.ETHEREUM, address: '0x193f4A4a6ea24102F49b931DEeeb931f6E32405d'},
+    {chainId: ChainId.TELOS, address: '0x02Ea28694Ae65358Be92bAFeF5Cb8C211f33Db1A'}
   ],
   fee: false,
   sharedDecimals: 4,
