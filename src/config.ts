@@ -305,5 +305,5 @@ type NativeOftConfig = {
 export const telosNativeOft: NativeOftConfig = {
   bridge: {address: '0x9c5ebCbE531aA81bD82013aBF97401f5C6111d76', chainId: ChainId.TELOS, chainListId: ChainListId.TELOS, rpc: 'https://mainnet.telos.net/evm', abi: bridgeAbi},
   token: new Coin(ChainId.TELOS, 18, TLOS_SYMBOL),
-  proxy: {chainId: ChainId.TELOS, address: '0x685ae711Ba61084881fd9431095B6B6697573c73'}
+  proxy: {chainId: ChainId.TELOS, address: '0x02Ea28694Ae65358Be92bAFeF5Cb8C211f33Db1A'}
 }
