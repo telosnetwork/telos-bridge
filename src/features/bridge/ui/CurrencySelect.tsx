@@ -152,26 +152,6 @@ export const CurrencySelect: React.FC<CurrencySelectProps> = observer(
       // backgroundColor: theme.palette.secondary.contrastText,
     }));
 
-    // const AddTokenButton = styled('div', {name: 'AddTokenButton'})(() => ({
-    //   // padding: '16px 0px',
-    //   // '@media (max-width: 400px)': {
-    //   //   padding: '20px 0px 16px 0px',
-    //   // },
-    //   cursor: 'pointer',
-    // }));
-
-    // const AddTokenLabel = styled('div', {name: 'AddTokenLabel'})(({theme}) => ({
-    //   display: 'none',
-    //   '@media (min-width: 400px)': {
-    //     display: 'inline-block',
-    //   },
-    //   //fontSize: '12px',
-    //   marginLeft: '8px',
-    //   wordWrap: 'break-word',
-    //   ...theme.typography.p2,
-    //   //width: '100px',
-    // }));
-
     return (
       <>
         {!value || isNativeCurrency(value) ? (
@@ -196,11 +176,6 @@ export const CurrencySelect: React.FC<CurrencySelectProps> = observer(
               value={fiatStore.getSymbol(value)}
               readonly={readonly}
             />
-
-            {/* <AddTokenButton onClick={() => bridgeStore.addToken(value as Token)}>
-              <Image src='/static/icons/plus.svg' alt='placeholder' width={20} height={20} />
-              <AddTokenLabel>Add to wallet</AddTokenLabel>
-            </AddTokenButton> */}
           </SelectTokenContainer>
         )}
         <Modal

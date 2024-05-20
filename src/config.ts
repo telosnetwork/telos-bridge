@@ -24,7 +24,6 @@ export const wrapped_mainnet: WrappedTokenBridgeConfig = {
       new Token(ChainId.ETHEREUM, '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', 6, 'USDC'),
       new Token(ChainId.ARBITRUM, '0xaf88d065e77c8cC2239327C5EDb3A432268e5831', 6, 'USDC'),
       new Token(ChainId.BSC, '0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d', 18, 'USDC'),
-      //new Token(ChainId.AVALANCHE, '0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E', 6, 'USDC'),
     ],
     [
       // ETH
@@ -223,32 +222,15 @@ const RF = {
   sharedDecimals: 4,
 };
 
-// const USDV = {
-//   version: 2,
-//   tokens: [
-//     new Token(ChainId.ETHEREUM, '0x35E8d1DA73e927fA6E9B01892de0cAB468f647dF', 6, 'USDV'),
-//     new Token(ChainId.TELOS, '0xa4b23A34C63404C13Dd5f03DD0E9CDF7F981D073', 6, 'USDV'),
-//      new Token(ChainId.AVALANCHE, '0x323665443CEf804A3b5206103304BD4872EA4253', 6, 'USDV'),
-//   ],
-//   proxy: [
-//     {
-//       chainId: ChainId.TELOS,
-//       address: '0x4befaE8c5eC5a2ACd493f3Ca38c823fe61b3d20e',
-//     },
-//     {chainId: ChainId.ETHEREUM, address: '0x0E573Ce2736Dd9637A0b21058352e1667925C7a8'},
-//     {
-//       chainId: ChainId.AVALANCHE,
-//       address: '0x35E8d1DA73e927fA6E9B01892de0cAB468f647dF',
-//     },
-//   ],
-//   fee: false,
-//   sharedDecimals: 4,
-// };
-
 export const appConfig: AppConfig = createAppConfig({
   bridge: {
     aptos: [],
-    oft: [BANANA, LVC, VC, RF], //USDV
+    oft: [
+      BANANA,
+      LVC,
+      VC,
+      RF
+    ],
     wrappedToken: [
       wrapped_mainnet,
       // wrapped_testnet,
