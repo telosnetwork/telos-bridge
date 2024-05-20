@@ -3,6 +3,7 @@ import {groupBy} from 'lodash-es';
 import {observer} from 'mobx-react';
 import React, {useEffect, useRef, useState} from 'react';
 
+import { BraveWallet, WalletType } from '@/core/config/createWallets';
 import {transactionStore} from '@/core/stores/transactionStore';
 import {uiStore, WalletTab} from '@/core/stores/uiStore';
 import {walletStore} from '@/core/stores/walletStore';
@@ -153,18 +154,26 @@ const WalletItem: React.FC<{
 }> = observer(({wallet}) => {
   const mobile = isMobile();
 
-  if (wallet.type === 'Brave' || (wallet.type === 'Core' && mobile)) {
+  if (wallet.type === 'Core' && mobile) {
     // https://github.com/telosnetwork/telos-bridge/issues/20
     return null;
   }
 
   let buttonText;
+  const win = window as any;
+
+  const isSafePal = win.ethereum?.isSafePal;
+  const isBraveBrowser = win.navigator.brave;
+  const isBraveWallet = win.ethereum?.isBraveWallet;
 
   if (wallet.isConnecting) {
     buttonText = 'Connecting...';
   } else if (wallet.isConnected && wallet.address) {
     buttonText = `${formatAddress(wallet.address, 16)}`;
-  } else if (wallet.isAvailable) {
+  // handle safepal extension conflict
+  } else if (wallet.type === WalletType.METAMASK && isSafePal){
+    buttonText = `Get MetaMask Wallet`;
+  } else if (wallet.isAvailable || (wallet.type === WalletType.BRAVE && isBraveWallet)) {
     buttonText = `Connect ${wallet.type}`;
   } else if (!mobile) {
     buttonText = `Get ${wallet.type} Wallet`;
@@ -177,17 +186,29 @@ const WalletItem: React.FC<{
       wallet.disconnect();
       return;
     }
-    if (wallet.isAvailable) {
+    // handle safepal extension conflict
+    if (wallet.type === WalletType.METAMASK && isSafePal){
+      window.open('https://metamask.app.link/dapp/bridge.telos.net');
+      return;
+    }
+    if (isBraveBrowser && isBraveWallet){
+      (wallet as BraveWallet).setProvider(WalletType.BRAVE, win.ethereum);
+    }
+    if (wallet.isAvailable || isBraveWallet) {
       wallet.connect();
       return;
     }
 
-    if (wallet.type === 'MetaMask') {
+    if (wallet.type === WalletType.METAMASK) {
       window.open('https://metamask.app.link/dapp/bridge.telos.net');
-    } else if (wallet.type ==='CoinBase') {
+    } else if (wallet.type === WalletType.COINBASE) {
       window.open('https://go.cb-w.com/dapp?cb_url=bridge.telos.net');
-    } else if (wallet.type === 'Phantom') {
+    } else if (wallet.type === WalletType.PHANTOM) {
       window.open('https://phantom.app/ul/');
+    }else if (wallet.type === WalletType.SAFEPAL){
+      window.open('https://www.safepal.com/en/download');
+    }else if (wallet.type === WalletType.BRAVE){
+      window.open((wallet as any).url);
     }
   }
 
@@ -205,7 +226,7 @@ const WalletItem: React.FC<{
         mb: 1,
       }}
     >
-      <WalletIcon type={wallet.type} />
+      <WalletIcon type={wallet.type} iconUrl={(wallet as any).icon} />
       <Box typography='p2' sx={{ml: 2}}>
         {buttonText}
       </Box>
