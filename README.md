@@ -38,6 +38,9 @@ git clone https://github.com/LayerZero-Labs/factory.git && cd factory
 # Install required dependencies
 yarn
 
+# set up .env
+cp .env.example .env
+
 # After a fresh clone, you'll need to run an initial build
 yarn build
 
