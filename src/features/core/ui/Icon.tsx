@@ -14,6 +14,7 @@ import Globe from '@/public/static/icons/globe.svg';
 import Grid from '@/public/static/icons/grid.svg';
 import Info from '@/public/static/icons/info.svg';
 import Link from '@/public/static/icons/link.svg';
+import LinkFA from '@/public/static/icons/linkfa.svg';
 import List from '@/public/static/icons/list.svg';
 import Minus from '@/public/static/icons/minus.svg';
 import Pencil from '@/public/static/icons/pencil.svg';
@@ -99,6 +100,7 @@ const ICONS = {
   file: File,
   globe: Globe,
   link: Link,
+  linkfa: LinkFA,
 };
 
 type Icons = typeof ICONS;

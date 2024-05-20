@@ -50,6 +50,7 @@ const toastTheme = (
         height: 32,
         borderRadius: '100%',
         animationName: progress(theme),
+        background: theme.palette.background.default,
         '&::after': {
           content: '""',
           background: theme.palette.background.default,

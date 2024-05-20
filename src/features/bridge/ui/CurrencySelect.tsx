@@ -3,7 +3,7 @@ import {observer} from 'mobx-react';
 import Image from 'next/legacy/image';
 import React, {useState} from 'react';
 
-import {bridgeStore,CurrencyOption, OptionGroup} from '@/bridge/stores/bridgeStore';
+import {bridgeStore, CurrencyOption, OptionGroup} from '@/bridge/stores/bridgeStore';
 import {useToggle} from '@/core/hooks/useToggle';
 import {fiatStore} from '@/core/stores/fiatStore';
 import {getWalletBalance} from '@/core/stores/utils';
@@ -151,48 +151,15 @@ export const CurrencySelect: React.FC<CurrencySelectProps> = observer(
     const content = groups ? getGroupsContent(groups) : getOptionsContent(options.map(toOption));
 
     const SelectTokenContainer = styled('div', {name: 'SelectTokenContainer'})(({theme}) => ({
-      width: '95%',
+      width: '100%',
       height: '100%',
-      backgroundColor: theme.palette.secondary.main,
-    }));
-
-    const AddTokenButton = styled('div', {name: 'AddTokenButton'})(() => ({
-      padding: '16px 0px' ,
-      '@media (max-width: 400px)': {
-        padding: '20px 0px 16px 0px'
-      },
-      cursor: 'pointer',
-    }));
-
-    const AddTokenLabel = styled('div', {name: 'AddTokenLabel'})(() => ({
-      display: 'none',
-      '@media (min-width: 400px)': {
-        display: 'inline-block'
-      },
-      fontSize: '12px',
-      marginLeft: '8px',
-      wordWrap: 'break-word',
-      width: '50px',
+      // backgroundColor: theme.palette.secondary.contrastText,
     }));
 
     return (
       <>
-        {!value || isNativeCurrency(value) ? 
-      (
-        <SelectButton
-          sx={sx}
-          title={label}
-          chevron={!readonly}
-          onClick={readonly ? undefined : modal.value ? close : modal.open}
-          icon={icon}
-          value={fiatStore.getSymbol(value)}
-          readonly={readonly}
-        />
-      ) :
-      (
-        <SelectTokenContainer>
+        {!value || isNativeCurrency(value) ? (
           <SelectButton
-            style={{width: '60%', float: 'left', paddingRight: '0'}}
             sx={sx}
             title={label}
             chevron={!readonly}
@@ -201,15 +168,20 @@ export const CurrencySelect: React.FC<CurrencySelectProps> = observer(
             value={fiatStore.getSymbol(value)}
             readonly={readonly}
           />
-          <AddTokenButton onClick={() => bridgeStore.addToken(value as Token)}>
-            <Image src='/static/plus.svg' alt='placeholder' width={20} height={20} />
-            <AddTokenLabel>
-              Add to wallet
-            </AddTokenLabel>
-          </AddTokenButton>
-
-        </SelectTokenContainer>
-      )}
+        ) : (
+          <SelectTokenContainer>
+            <SelectButton
+              style={{width: '100%', float: 'left', paddingRight: '0'}}
+              sx={sx}
+              title={label}
+              chevron={!readonly}
+              onClick={readonly ? undefined : modal.value ? close : modal.open}
+              icon={icon}
+              value={fiatStore.getSymbol(value)}
+              readonly={readonly}
+            />
+          </SelectTokenContainer>
+        )}
         <Modal
           overlay
           title={title}
