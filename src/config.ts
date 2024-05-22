@@ -202,7 +202,10 @@ const VC = {
       chainId: ChainId.TELOS,
       address: '0xcB61BC4aE1613abf8662B7003BaD0E2aa3F7D746',
     },
-    {chainId: ChainId.ZKSYNC, address: '0x038b198152a83102F6380ee17d9Fbd69cde9797F'},
+    {
+      chainId: ChainId.ZKSYNC,
+      address: '0x038b198152a83102F6380ee17d9Fbd69cde9797F'
+    },
   ],
   fee: false,
   sharedDecimals: 4,
