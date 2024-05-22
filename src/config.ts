@@ -222,7 +222,10 @@ const RF = {
       chainId: ChainId.TELOS,
       address: '0xb99C43d3bce4c8Ad9B95a4A178B04a7391b2a6EB',
     },
-    {chainId: ChainId.ZKSYNC, address: '0xF5430284e7418891E3A0477D7598a3aA861D5c1D'},
+    {
+      chainId: ChainId.ZKSYNC,
+      address: '0xF5430284e7418891E3A0477D7598a3aA861D5c1D'
+    },
   ],
   fee: false,
   sharedDecimals: 4,
