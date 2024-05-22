@@ -153,7 +153,6 @@ export const CurrencySelect: React.FC<CurrencySelectProps> = observer(
     const SelectTokenContainer = styled('div', {name: 'SelectTokenContainer'})(({theme}) => ({
       width: '100%',
       height: '100%',
-      // backgroundColor: theme.palette.secondary.contrastText,
     }));
 
     return (

@@ -169,7 +169,10 @@ const BANANA = {
       chainId: ChainId.TELOS,
       address: '0x46893403C4aD778d7FDA0CdFCe355a0A7dba3333',
     },
-    {chainId: ChainId.BSC, address: '0x7097Ee02465FB494841740B1a2b63c21Eed655E7'},
+    {
+      chainId: ChainId.BSC,
+      address: '0x7097Ee02465FB494841740B1a2b63c21Eed655E7'
+    },
   ],
   fee: false,
   sharedDecimals: 4,
@@ -203,7 +206,10 @@ const VC = {
       chainId: ChainId.TELOS,
       address: '0xcB61BC4aE1613abf8662B7003BaD0E2aa3F7D746',
     },
-    {chainId: ChainId.ZKSYNC, address: '0x038b198152a83102F6380ee17d9Fbd69cde9797F'},
+    {
+      chainId: ChainId.ZKSYNC,
+      address: '0x038b198152a83102F6380ee17d9Fbd69cde9797F'
+    },
   ],
   fee: false,
   sharedDecimals: 4,
@@ -220,7 +226,10 @@ const RF = {
       chainId: ChainId.TELOS,
       address: '0xb99C43d3bce4c8Ad9B95a4A178B04a7391b2a6EB',
     },
-    {chainId: ChainId.ZKSYNC, address: '0xF5430284e7418891E3A0477D7598a3aA861D5c1D'},
+    {
+      chainId: ChainId.ZKSYNC,
+      address: '0xF5430284e7418891E3A0477D7598a3aA861D5c1D'
+    },
   ],
   fee: false,
   sharedDecimals: 4,

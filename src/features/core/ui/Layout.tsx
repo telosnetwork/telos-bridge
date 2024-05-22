@@ -87,7 +87,6 @@ export const AppMenu = observer(() => {
               >
                 <Link href='/bridge' passHref legacyBehavior>
                   <NavLink
-                    //sx={{margin: {xs: 'auto'}, width: {xs: '100%', md: 'unset'}}}
                     pathname={pathname}
                     style={logoStyle}
                   >
@@ -198,7 +197,6 @@ export const AppMenu = observer(() => {
                   >
                     <Link href='/bridge' passHref legacyBehavior>
                       <NavLink
-                        //sx={{margin: {xs: 'auto'}, width: {xs: '100%', md: 'unset'}}}
                         pathname={pathname}
                         style={logoStyle}
                       >
@@ -320,14 +318,6 @@ export const AppFooter = () => {
   return (
     <Bar style={{display: 'flex', justifyContent: 'space-between'}}>
       <Bar.Section style={{zIndex: 10}}>
-        {/* <MobileOnly>
-          <Bar.Section>
-            <ConnectButtons />
-          </Bar.Section>
-        </MobileOnly>
-        <a href='https://layerzero.network' target='_blank' rel='noreferrer'>
-          <Logo src={'/static/layerzero.svg'} height={24} width={88} alt='logo' />
-        </a> */}
       </Bar.Section>
       <Bar.Section sx={{typography: 'p3'}}>
         <Box

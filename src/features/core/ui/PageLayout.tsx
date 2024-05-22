@@ -15,7 +15,6 @@ const LayoutRoot = styled('div', {name: 'Layout'})(({theme}) => ({
   height: '100%',
   display: 'flex',
   flexDirection: 'column',
-  //backgroundColor: 'theme.palette.background.default',
   overflow: 'auto',
   fontFamily: (theme.typography as TypographyProps).fontFamily,
   position: 'relative',
