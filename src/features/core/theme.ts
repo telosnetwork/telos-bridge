@@ -1,7 +1,6 @@
 import {BreakpointsOptions, createTheme, ThemeOptions} from '@/core/ui/system';
 
 import * as Palettes from './colorPalettes';
-// import '../../../styles/silka/silka.css';
 
 export const defaultBreakpoints = {
   keys: ['xs', 'sm', 'md', 'lg', 'xl'],

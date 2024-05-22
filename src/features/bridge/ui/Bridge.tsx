@@ -45,9 +45,6 @@ export const Bridge = observer(() => {
 
   const AddTokenButton = styled('div', {name: 'AddTokenButton'})(() => ({
     padding: '6px 0px',
-    // '@media (max-width: 400px)': {
-    //   padding: '20px 0px 16px 0px',
-    // },
     cursor: 'pointer',
     display: 'flex',
     alignItems: 'center',
@@ -58,11 +55,9 @@ export const Bridge = observer(() => {
     '@media (min-width: 400px)': {
       display: 'inline-block',
     },
-    //fontSize: '12px',
     marginLeft: '8px',
     wordWrap: 'break-word',
     ...theme.typography.p2,
-    //width: '100px',
   }));
 
   return (
