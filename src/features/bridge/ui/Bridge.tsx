@@ -51,10 +51,7 @@ export const Bridge = observer(() => {
   }));
 
   const AddTokenLabel = styled('div', {name: 'AddTokenLabel'})(({theme}) => ({
-    display: 'none',
-    '@media (min-width: 400px)': {
-      display: 'inline-block',
-    },
+    display: 'inline-block',
     marginLeft: '8px',
     wordWrap: 'break-word',
     ...theme.typography.p2,
