@@ -165,7 +165,10 @@ const BANANA = {
       chainId: ChainId.TELOS,
       address: '0x46893403C4aD778d7FDA0CdFCe355a0A7dba3333',
     },
-    {chainId: ChainId.BSC, address: '0x7097Ee02465FB494841740B1a2b63c21Eed655E7'},
+    {
+      chainId: ChainId.BSC,
+      address: '0x7097Ee02465FB494841740B1a2b63c21Eed655E7'
+    },
   ],
   fee: false,
   sharedDecimals: 4,
