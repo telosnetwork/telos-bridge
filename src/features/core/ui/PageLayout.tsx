@@ -5,6 +5,7 @@ interface PageLayoutProps {
   children: React.ReactNode;
   footer?: React.ReactNode;
   header?: React.ReactNode;
+  sidebar?: React.ReactNode;
   mainBackground?: React.ReactNode;
   pageBackground?: React.ReactNode;
 }
@@ -14,29 +15,35 @@ const LayoutRoot = styled('div', {name: 'Layout'})(({theme}) => ({
   height: '100%',
   display: 'flex',
   flexDirection: 'column',
-  backgroundColor: theme.palette.background.default,
   overflow: 'auto',
   fontFamily: (theme.typography as TypographyProps).fontFamily,
   position: 'relative',
+  backgroundImage: 'url(/static/bk-img2.svg)', //static/bk-img.jpg
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
 }));
 
 const Main = styled('main', {name: 'LayoutMain', shouldForwardProp: (prop) => prop !== 'centered'})<
   Pick<PageLayoutProps, 'centered'>
->(({...props}) => ({
+>(({theme, ...props}) => ({
   display: 'flex',
   flexDirection: 'column',
   alignItems: props.centered ? 'center' : 'flex-start',
   justifyContent: props.centered ? 'center' : 'flex-start',
   flex: 1,
   position: 'relative',
+  [theme.breakpoints.up('md')]: {
+    marginLeft: '300px',
+  },
 }));
 
 export const PageLayout = (props: PageLayoutProps) => {
-  const {children, centered, header, footer, mainBackground, pageBackground} = props;
+  const {children, centered, header, footer, mainBackground, pageBackground, sidebar} = props;
   return (
     <LayoutRoot>
       {header}
       <Main centered={centered}>
+        {sidebar}
         {mainBackground}
         {children}
       </Main>

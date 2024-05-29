@@ -22,12 +22,12 @@ const Item = styled('div', {name: 'DetailsItem'})(({theme}) => ({
 }));
 
 const Key = styled('div', {name: 'Details-ItemKey'})(({theme}) => ({
-  ...theme.typography.p3,
+  ...theme.typography.p2,
   color: theme.palette.text.secondary,
 }));
 
 const Value = styled('div', {name: 'Details-ItemValue'})(({theme}) => ({
-  ...theme.typography.p3,
+  ...theme.typography.p2,
   color: theme.palette.text.primary,
 }));
 

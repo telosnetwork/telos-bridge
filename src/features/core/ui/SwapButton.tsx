@@ -47,7 +47,8 @@ const swipeUp = keyframes({
 });
 
 const Button = styled('button', {name: 'SwapButton'})(({theme}) => ({
-  height: '88px',
+  height: '60px',
+  margin: '15px 0px',
   backgroundColor: 'transparent',
   border: '0',
   display: 'flex',
@@ -68,7 +69,7 @@ const Button = styled('button', {name: 'SwapButton'})(({theme}) => ({
 }));
 
 export const SwapButton = (props: SwapButtonProps) => {
-  const {iconSize = 24} = props;
+  const {iconSize = 50} = props;
   return (
     <Button {...props}>
       <svg
