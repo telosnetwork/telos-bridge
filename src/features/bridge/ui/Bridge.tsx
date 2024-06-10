@@ -1,4 +1,6 @@
+import {Token} from '@layerzerolabs/ui-core';
 import {observer} from 'mobx-react';
+import Image from 'next/legacy/image';
 import {useCallback, useState} from 'react';
 
 import {useDefaultSrcCurrency} from '@/bridge/hooks/useDefaultSrcCurrency';
@@ -11,7 +13,7 @@ import {Details} from '@/core/ui/Details';
 import {Input, InputAdornment} from '@/core/ui/Input';
 import {InputsGroup} from '@/core/ui/InputsGroup';
 import {SwapButton} from '@/core/ui/SwapButton';
-import {Box} from '@/core/ui/system';
+import {Box, styled} from '@/core/ui/system';
 import {WalletDetails} from '@/core/ui/WalletDetails';
 
 import {Alerts} from './Alerts';
@@ -28,6 +30,7 @@ export const Bridge = observer(() => {
     dstWallet,
     dstAddress,
     messageFee,
+    addToken,
   } = bridgeStore;
   const [error] = errors;
   const nativeFee = messageFee?.nativeFee;
@@ -39,6 +42,20 @@ export const Bridge = observer(() => {
 
   const handleSetUsd = useCallback(() => setFiatSymbol(FiatSymbol.USD), [setFiatSymbol]);
   const handleSetEur = useCallback(() => setFiatSymbol(FiatSymbol.EUR), [setFiatSymbol]);
+
+  const AddTokenButton = styled('div', {name: 'AddTokenButton'})(() => ({
+    padding: '6px 0px',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+  }));
+
+  const AddTokenLabel = styled('div', {name: 'AddTokenLabel'})(({theme}) => ({
+    display: 'inline-block',
+    marginLeft: '8px',
+    wordWrap: 'break-word',
+    ...theme.typography.p2,
+  }));
 
   return (
     <Box display='flex' flexDirection='column'>
@@ -65,17 +82,17 @@ export const Bridge = observer(() => {
             placeholder='0'
             startAdornment={
               <Button size='xs' variant='tertiary' onClick={bridgeStore.setMaxAmount}>
-                Max
+                MAX
               </Button>
             }
             onChange={(event) => bridgeStore.setAmount(event.target.value)}
             value={bridgeStore.form.amount}
             endAdornment={
               <InputAdornment>
-                <Box color='text.secondary' typography='p3'>
+                <Box color='text.secondary' typography='p2'>
                   Balance
                 </Box>
-                <Box color='text.secondary' typography='p3'>
+                <Box color='text.secondary' typography='p2'>
                   {bridgeStore.srcBalance?.toExact() ?? '--'}
                 </Box>
               </InputAdornment>
@@ -83,6 +100,12 @@ export const Bridge = observer(() => {
           />
         </InputsGroup.Bottom>
       </InputsGroup>
+
+      <AddTokenButton onClick={() => addToken(bridgeStore.form.srcCurrency as Token)}>
+        <Image src='/static/icons/plus.svg' alt='placeholder' width={20} height={20} />
+        <AddTokenLabel>Add to wallet</AddTokenLabel>
+      </AddTokenButton>
+
       <SwapButton onClick={bridgeStore.switch} />
       <WalletDetails wallet={dstWallet} />
       <InputsGroup>
@@ -108,7 +131,7 @@ export const Bridge = observer(() => {
             readOnly
             endAdornment={
               <InputAdornment>
-                <Box typography='p3' sx={{gap: 1, display: 'flex'}}>
+                <Box typography='p2' sx={{gap: 1, display: 'flex'}}>
                   <Box
                     component='span'
                     color={fiatSymbol === FiatSymbol.USD ? 'text.primary' : 'text.secondary'}
@@ -126,7 +149,7 @@ export const Bridge = observer(() => {
                     EUR
                   </Box>
                 </Box>
-                <Box color='text.secondary' typography='p3'>
+                <Box color='text.secondary' typography='p2'>
                   {outputFiat?.value.toFixed(2) ?? '--'}
                 </Box>
               </InputAdornment>
@@ -134,6 +157,12 @@ export const Bridge = observer(() => {
           />
         </InputsGroup.Bottom>
       </InputsGroup>
+
+      <AddTokenButton onClick={() => addToken(bridgeStore.form.dstCurrency as Token)}>
+        <Image src='/static/icons/plus.svg' alt='placeholder' width={20} height={20} />
+        <AddTokenLabel>Add to wallet</AddTokenLabel>
+      </AddTokenButton>
+
       <Details
         sx={{my: '24px'}}
         items={[
@@ -154,7 +183,7 @@ export const Bridge = observer(() => {
               : nativeFee
               ? nativeFee.toSignificant(8) + ' ' + fiatStore.getSymbol(nativeFee.currency)
               : '--',
-          }
+          },
         ]}
       />
       {srcWallet?.address && dstAddress ? (

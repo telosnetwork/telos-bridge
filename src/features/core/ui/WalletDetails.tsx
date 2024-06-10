@@ -27,7 +27,7 @@ export const WalletDetails = observer((props: WalletDetailsProps) => {
         onClick={openWalletModal}
       >
         <WalletIcon type={wallet?.type} iconUrl={(wallet as any)?.icon} size={10} />
-        <Box typography='p3' color='text.secondary' sx={{ml: 1}}>
+        <Box typography='p2' color='text.secondary' sx={{ml: 1}}>
           {wallet?.address && formatAddress(wallet.address, 9)}
         </Box>
       </Box>
@@ -35,7 +35,7 @@ export const WalletDetails = observer((props: WalletDetailsProps) => {
         typography='link'
         color='text.secondary'
         onClick={wallet ? () => wallet.disconnect() : openWalletModal}
-        sx={(t) => t.typography.p3}
+        sx={(t) => t.typography.p2}
       >
         {wallet ? 'Disconnect' : 'Connect'}
       </Box>

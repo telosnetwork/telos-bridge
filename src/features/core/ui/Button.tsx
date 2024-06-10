@@ -48,14 +48,14 @@ export const Button = styled('button', {name: 'LzButton', label: 'LzButton'})<Ba
       },
     },
     ...(variant === 'primary' && {
-      backgroundColor: theme.palette.primary.main,
+      backgroundColor: theme.palette.accent.main,
       color: theme.palette.primary.contrastText,
       '&:hover:not(:disabled)': {
-        backgroundColor: theme.palette.primary.light,
+        backgroundColor: theme.palette.accent.light,
       },
       '&:focus': {
         outline: 0,
-        backgroundColor: theme.palette.primary.light,
+        backgroundColor: theme.palette.accent.light,
       },
     }),
     ...(variant === 'secondary' && {
@@ -74,13 +74,15 @@ export const Button = styled('button', {name: 'LzButton', label: 'LzButton'})<Ba
       padding: '4px 9px',
       fontSize: 12,
       // not sure why that size ?
-      backgroundColor: theme.palette.secondary.main,
-      color: theme.palette.secondary.contrastText,
+      backgroundColor: theme.palette.accent.main,
+      border: `1px solid ${theme.palette.divider}`,
+      borderRadius: theme.shape.borderRadius,
+      color: theme.palette.text.contrast,
       '&:hover:not(:disabled)': {
-        backgroundColor: theme.palette.secondary.light,
+        backgroundColor: theme.palette.accent.light,
       },
       '&:focus': {
-        backgroundColor: theme.palette.secondary.light,
+        backgroundColor: theme.palette.accent.light,
         outline: 0,
       },
     }),
