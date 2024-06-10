@@ -1,4 +1,4 @@
-import {Currency, getNetwork, isCurrency, isNativeCurrency, Token} from '@layerzerolabs/ui-core';
+import {Currency, CurrencyAmount, FiatAmount, getNetwork, isCurrency, isNativeCurrency, Token} from '@layerzerolabs/ui-core';
 import {observer} from 'mobx-react';
 import Image from 'next/legacy/image';
 import React, {useState} from 'react';
@@ -13,6 +13,8 @@ import {Modal} from '@/core/ui/Modal';
 import {SearchBar} from '@/core/ui/SearchBar';
 import {SelectButton} from '@/core/ui/SelectButton';
 import {styled, SxProps, Theme} from '@/core/ui/system';
+
+import { TLOS_SYMBOL } from '../../../config';
 
 interface CommonProps {
   theme?: Theme;
@@ -110,6 +112,8 @@ export const CurrencySelect: React.FC<CurrencySelectProps> = observer(
           if (bBalance === undefined) bBalance = -1;
           return aBalance - bBalance;
         })
+        .sort(sortTokenQuantity) // order tokens w/out fiat value by token quantity          
+        .sort(sortTlos) // TLOS to top
         .sort((a) => (a.option.disabled ? 1 : -1));
 
       return (
@@ -195,6 +199,35 @@ function matchSearch(currency: Currency, query?: string) {
   if (!query) return true;
   const text = query.toLowerCase();
   return currency.symbol.toLowerCase().includes(text);
+}
+
+type NestedCurrencyOption = {
+  option: CurrencyOption;
+}
+// sort TLOS tokens to top of list
+function sortTlos(a:NestedCurrencyOption, b:NestedCurrencyOption){
+  return (a.option.currency.symbol === TLOS_SYMBOL && b.option.currency.symbol !== TLOS_SYMBOL) ? 1 
+    : (a.option.currency.symbol !== TLOS_SYMBOL && b.option.currency.symbol === TLOS_SYMBOL ? -1 
+    : 0)
+}
+
+type TokenOption = {
+  option: CurrencyOption;
+  balance: CurrencyAmount<Currency> | undefined;
+  fiatBalance: FiatAmount | undefined;
+}
+
+function sortTokenQuantity(a: TokenOption, b: TokenOption){
+  if (a.fiatBalance?.value === undefined && b.fiatBalance?.value === undefined){
+    let aBalance = a.balance?.quotient;
+    let bBalance = b.balance?.quotient;
+    if (aBalance === undefined) aBalance = 0n;
+    if (bBalance === undefined) bBalance = 0n;
+    return aBalance - bBalance > 0 ? -1 
+      : aBalance - bBalance < 0 ? 1 
+      : 0
+  }
+  return 0;
 }
 
 function toOption(option: CurrencyOption | Currency): CurrencyOption {

@@ -3,6 +3,7 @@ import {Currency, getCurrencyIcon} from '@layerzerolabs/ui-core';
 import {styled} from '@/core/ui/system';
 import {overrideImageSrcOnError} from '@/core/utils/overrideImageSrcOnError';
 
+import { TLOS_SYMBOL } from '../../../config';
 import {fiatStore} from '../stores/fiatStore';
 import {Icon} from './Icon';
 
@@ -23,6 +24,8 @@ export const getTokenIcon = (symbol: string): string => {
       return 'https://raw.githubusercontent.com/telosnetwork/token-list/master/logos/RF.webp';
     case 'VC':
       return 'https://raw.githubusercontent.com/telosnetwork/token-list/master/logos/VC.png';
+    case TLOS_SYMBOL:
+      return 'https://raw.githubusercontent.com/telosnetwork/token-list/main/logos/telos.png';
     default:
       return getCurrencyIcon(symbol);
   }

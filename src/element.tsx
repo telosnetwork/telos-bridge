@@ -29,7 +29,7 @@ const failoverProvider = createFailoverProviderFactory();
 const multicallProvider = createMulticallProviderFactory(failoverProvider);
 
 class LzTrackerElement extends HTMLElement {
-  private root: Root = null!;
+  private root: Root | undefined;
 
   connectedCallback() {
     this.root = createRoot(this);
@@ -37,11 +37,13 @@ class LzTrackerElement extends HTMLElement {
   }
 
   private render() {
-    this.root.render(
-      <TrackerLayout>
-        <BridgeTracker />
-      </TrackerLayout>,
-    );
+    if (this.root) {
+      this.root.render(
+        <TrackerLayout>
+          <BridgeTracker />
+        </TrackerLayout>,
+      );
+    }
   }
 }
 
