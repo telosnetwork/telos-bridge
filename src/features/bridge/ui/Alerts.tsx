@@ -22,12 +22,12 @@ export const Alerts = observer(() => {
             : bridgeStore.isRegistering
             ? 'Register token first'
             : bridgeStore.isResetting
-            ? 'Resetting approvals'
+            ? 'Setting Allowance'
             : bridgeStore.isApproving
-            ? 'Approving transaction'
+            ? 'Awaiting Allowance Confirmation'
             : bridgeStore.isMining
             ? 'Submitting transaction'
-            : 'Confirm in your wallet'
+            : 'Confirm Bridge Transaction'
         }
       >
         <div>
