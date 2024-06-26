@@ -21,11 +21,13 @@ export const Alerts = observer(() => {
             ? 'Switch chain'
             : bridgeStore.isRegistering
             ? 'Register token first'
+            : bridgeStore.isResetting
+            ? 'Setting Allowance'
             : bridgeStore.isApproving
-            ? 'Approving transaction'
+            ? 'Awaiting Allowance Confirmation'
             : bridgeStore.isMining
             ? 'Submitting transaction'
-            : 'Confirm in your wallet'
+            : 'Confirm Bridge Transaction'
         }
       >
         <div>
@@ -50,6 +52,8 @@ export const Alerts = observer(() => {
             'Please check pending wallet actions if you did not receive a transaction prompt.'
           ) : bridgeStore.isRegistering ? (
             'Confirm this transaction in your wallet'
+          ) : bridgeStore.isResetting ? (
+            'First approve this reset transaction in your wallet.'
           ) : bridgeStore.isApproving ? (
             'Approve this transaction in your wallet.'
           ) : bridgeStore.isSigning ? (

@@ -60,6 +60,7 @@ export class BridgeStore {
   isSigning = false;
   isMining = false;
   isExecuting = false;
+  isResetting = false;
   isApproving = false;
   isRegistering = false;
 
@@ -655,6 +656,8 @@ export class BridgeStore {
         }
       }
 
+      yield this.updateAllowance();
+
       if (!this.srcIsNativeTelos && !this.isApproved) {
         yield this.approve();
       }
@@ -858,6 +861,15 @@ export class BridgeStore {
         chainId: amount.currency.chainId,
         address: srcAddress,
       });
+
+      const allowance: CurrencyAmount = yield this.updateAllowance();
+      if (allowance.numerator !== 0n) {
+        this.isResetting = true;
+        const zero = CurrencyAmount.fromRawAmount(amount.currency, 0);
+        const unsignedResetTrx: Awaited<ReturnType<typeof transferApi['approve']>> = yield transferApi.approve(zero);
+        yield unsignedResetTrx.signAndSubmitTransaction(srcWallet.signer);
+        this.isResetting = false;
+      }
 
       const unsignedTransaction: Awaited<ReturnType<typeof transferApi['approve']>> =
         yield transferApi.approve(amount);
@@ -1157,7 +1169,7 @@ export function initBridgeStore() {
     const {evm} = walletStore;
     const {srcCurrency} = bridgeStore.form;
     const {transferApi} = bridgeStore;
-    bridgeStore.updateAllowance();
+    bridgeStore.updateAllowance(); //.then((allowance) => {;
   };
 
   const handlers = [
