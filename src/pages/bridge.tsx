@@ -33,7 +33,7 @@ BridgePage.getLayout = (page) => (
     footer={<AppFooter />}
     sidebar={<AppMenu />}
   >
-    <CustomHtmlHead />
+    <CustomHtmlHead title='Telos Bridge' />
     {page}
   </PageLayout>
 );

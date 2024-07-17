@@ -13,8 +13,8 @@ const defaultDescription = 'The LayerZero Telos bridge enables seamless asset tr
 const keywords = 'telos, tlos, blockchain, crypto, message, transaction, omnichain, bridge';
 
 export const CustomHtmlHead = (props: CustomHtmlHeadProps) => {
-  const {description = defaultDescription, url} = props;
-  const metaTitle = 'Telos Bridge';
+  const {description = defaultDescription, title, url} = props;
+  const metaTitle = title || 'Telos Bridge';
   const theme = useTheme();
   return (
     <Head>
