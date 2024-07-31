@@ -138,7 +138,7 @@ export const AppMenu = observer(() => {
                     height={22}
                     style={{filter: 'invert(100%)', marginRight: '10px'}}
                   />
-                  Bridge TLOS (pToken)
+                  pToken Bridge (Deprecated)
                 </NavLink>
               </div>
               <div style={{position: 'absolute', bottom: '24px', left: '24px', width: '100%'}}>
@@ -253,7 +253,7 @@ export const AppMenu = observer(() => {
                     rel='noreferrer'
                   >
                     <Icon type='link' size={28} style={{marginRight: '10px'}} />
-                    Bridge TLOS (pToken)
+                    pToken Bridge (Deprecated)
                   </NavLink>
                 </div>
 
